@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    MDBAnimation,
+    Animation,
     MDBContainer,
     MDBRow,
     MDBInput,
@@ -12,6 +12,7 @@ import {
     MDBCardHeader,
     MDBBtn
 } from "mdbreact";
+// import {DatePicker as MaterialDatePicker } from 'material-ui-pickers';
 import CommonUtil from "../../lib/commontUtil";
 
 
@@ -20,7 +21,12 @@ export default class Registration extends Component {
     state = {
         email: '',
         password: '',
-        passwordAgain: ''
+        passwordAgain: '',
+        username: '',
+        firstName: '',
+        secondName: '',
+        birthDay: '',
+        companyName: ''
     };
 
     changeInput = (event) => {
@@ -45,13 +51,18 @@ export default class Registration extends Component {
     addUser = () => {
         if (this.validate) {
             let formData = new FormData();
-            formData.append('email', CommonUtil.getStringFromUnknownObject(this.state.email));
+            formData.append('username', CommonUtil.getStringFromUnknownObject(this.state.username));
+            formData.append('firstName', CommonUtil.getStringFromUnknownObject(this.state.firstName));
+            formData.append('secondName', CommonUtil.getStringFromUnknownObject(this.state.secondName));
+            formData.append('birthDate', CommonUtil.getStringFromUnknownObject(this.state.birthDay));
             formData.append('password', CommonUtil.getStringFromUnknownObject(this.state.password));
-            fetch('/api/registration', {method: 'post', body: formData}).then(response => {
+            formData.append('companyName', CommonUtil.getStringFromUnknownObject(this.state.companyName));
+            fetch('/registration', {method: 'post', body: formData}).then(response => {
                 return response.json();
             }).then(data => {
+                console.log(data);
                 if (data.error === undefined) {
-                    history.pushState('/');
+                    // history.pushState('/');
                 }
             })
         }
@@ -74,18 +85,68 @@ export default class Registration extends Component {
                                             </h3>
                                         </MDBCardHeader>
                                         <MDBInput
+                                            label="Company name"
+                                            onChange={this.changeInput}
+                                            id={'companyName'}
+                                            group
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <MDBInput
                                             label="Email"
                                             onChange={this.changeInput}
                                             id={'email'}
                                             group
-                                            type="email"
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <MDBInput
+                                            label="username"
+                                            onChange={this.changeInput}
+                                            id={'username'}
+                                            group
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <MDBInput
+                                            label="First name"
+                                            onChange={this.changeInput}
+                                            id={'firstName'}
+                                            group
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <MDBInput
+                                            label="Second name"
+                                            onChange={this.changeInput}
+                                            id={'secondName'}
+                                            group
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <MDBInput
+                                            // label="Birth date"
+                                            onChange={this.changeInput}
+                                            id={'birthDay'}
+                                            group
+                                            type="date"
                                             validate
                                             error="wrong"
                                             success="right"
                                         />
                                         <MDBInput
                                             label="Password"
-                                            nChange={this.changeInput}
+                                            onChange={this.changeInput}
                                             id={'password'}
                                             group
                                             type="password"
@@ -94,8 +155,8 @@ export default class Registration extends Component {
                                             success="right"
                                         />
                                         <MDBInput
-                                            label="Submit password"
-                                            nChange={this.changeInput}
+                                            label="Password again"
+                                            onChange={this.changeInput}
                                             id={'passwordAgain'}
                                             group
                                             type="password"

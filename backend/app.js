@@ -12,7 +12,9 @@ const adminRouter = require('./routes/admin');
 const app = express();
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
+const cors = require('cors');
 
+app.use(cors());
 app.use(fileUpload());
 app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: { maxAge: 60000 }}));
 app.set('views', path.join(__dirname, 'views'));
@@ -33,9 +35,11 @@ app.use('/registration', registrationRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 //URLS
+app.use('/js', (req,resp)=>{
+    resp.json({message: 'hello'});
+});
 
-
-
+// app.options('*', cors());
 
 app.use((req, res, next) =>  {
   next(createError(404));
@@ -47,7 +51,7 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  res.render('error');
+  res.json({'error': `something went wrong: ${err.message}`});
 });
 
 module.exports = app;
