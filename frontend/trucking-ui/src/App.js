@@ -10,6 +10,8 @@ import {Route} from 'react-router';
 import allReducers from "./reducers/allReducers";
 import {createStore} from "redux";
 import Auth from "./components/roleAnon/auth";
+import NavBar from "./components/common/navbars/navBar";
+import IndexPage from "./components/common/index/indexComponent";
 
 
 class App extends Component {
@@ -17,6 +19,8 @@ class App extends Component {
     return <Provider store={store}>
       <Router>
         <div>
+          <Route path={'/'} component={NavBar}/>
+          <Route path={'/'} component={IndexPage}/>
           <Route exact path={'/registration'} component={Registration}/>
           <Route exact path={'/auth'} component={Auth}/>
         </div>

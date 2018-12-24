@@ -1,6 +1,4 @@
 const mysql = require('mysql');
-// const pgp = require('pg-promise');
-// const db = pgp("postgres://postgres:0@localhost:5432/truck");
 
 let config = {
     host: 'localhost',
@@ -14,11 +12,14 @@ class Database {
         this.connection = mysql.createConnection(config);
     }
 
-    // executeQuery(sql){
-    //     db.one(sql).then(rows=>{
-    //         resolve(rows);
-    //     })
-    // }
+
+    executeQuery(sql, args) {
+        return this.query(sql,args).then(data=>{
+            return data
+        }).then(data=>{
+            return data;
+        })
+    }
 
     query(sql, args) {
         return new Promise((resolve, reject) => {
@@ -31,8 +32,8 @@ class Database {
         });
     }
 
-    execute(sql, args){
-        this.connection.query(sql, args, (err)=>{
+    execute(sql, args) {
+        this.connection.query(sql, args, (err) => {
             if (err) console.log(err);
             console.log(sql);
         })
@@ -49,6 +50,4 @@ class Database {
     }
 }
 
-module.exports.Database = Database;
-// module.exports.execute = execute;
-// module.exports.executeQuery = executeQuery;
+module.exports = Database;

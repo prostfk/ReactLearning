@@ -4,6 +4,7 @@ export default (state = [], action) => {
 
     switch (action.type) {
         case AUTH_SUCCESS:
+            console.log(action.payload);
             return [
                 {
                     userRole: action.payload[0],

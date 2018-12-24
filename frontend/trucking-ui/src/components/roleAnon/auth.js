@@ -60,7 +60,7 @@ class Auth extends Component {
                     ref.props.authUser([
                         data.userRole,data.token, data.userId, data.companyId
                     ]);
-
+                    localStorage.setItem('role', data.userRole);
                     this.props.history.push('/');
                 }else{
                     document.getElementById('pass-span').innerText = data.error;
