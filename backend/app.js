@@ -9,6 +9,7 @@ const usersRouter = require('./routes/users');
 const registrationRouter = require('./routes/registration');
 const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
+const ownerRotuer = require('./routes/owner');
 const app = express();
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
@@ -29,11 +30,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //URLS
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/registration', registrationRouter);
-app.use('/users', usersRouter);
-app.use('/admin', adminRouter);
+app.use('/api', indexRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/registration', registrationRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/owner', ownerRotuer);
 //URLS
 app.use('/js', (req,resp)=>{
     resp.json({message: 'hello'});

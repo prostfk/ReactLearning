@@ -6,10 +6,29 @@ import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 export default class OwnerIndexPage extends Component {
 
 
-    state = {
-        users: [{
+    constructor(props) {
+        super(props);
+        this.state = {
+            users: []
+        }
+    }
 
-        }]
+
+    componentDidMount(){
+        this.updateUsers();
+    }
+
+    updateUsers = () => {
+        fetch('http://localhost:3001/api/owner/users',{headers:{'Auth-token': localStorage.getItem('Auth-token')}}).then(response=>{
+            return response.json();
+        }).then(data=>{
+            console.log(data);
+            if (data.error!==undefined){
+                this.setState({
+                    users: data
+                });
+            }
+        })
     };
 
     render() {
@@ -21,36 +40,28 @@ export default class OwnerIndexPage extends Component {
                         {this.state.users.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr>
-                                    <th>#</th>
-                                    <th>First</th>
-                                    <th>Last</th>
-                                    <th>Handle</th>
+                                    <th>id</th>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Role</th>
                                 </tr>
                             </TableHead>
                             <TableBody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
+                                {
+                                    this.state.users.map((user, index) => {
+                                        return <tr>
+                                            <td>{index}</td>
+                                            <td>{user.firstName}</td>
+                                            <td>{user.secondName}</td>
+                                            <td>{user.role}</td>
+                                        </tr>
+                                    })
+                                }
                             </TableBody>
                         </Table> : <h1>No users yet</h1>}
                     </MDBCol>
                     <MDBCol>
-                        <CreateUser/>
+                        <CreateUser renderUsers={this.updateUsers}/>
                     </MDBCol>
                 </MDBRow>
             </>

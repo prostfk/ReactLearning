@@ -52,7 +52,7 @@ class Auth extends Component {
             formData.append('password', CommonUtil.getStringFromUnknownObject(this.state.password));
             console.log(CommonUtil.getStringFromUnknownObject(this.state.password));
             console.log(CommonUtil.getStringFromUnknownObject(this.state.passwordAgain));
-            fetch('http://localhost:3001/auth', {method: 'post', body: formData}).then(response => {
+            fetch('http://localhost:3001/api/auth', {method: 'post', body: formData}).then(response => {
                 return response.json();
             }).then(data => {
                 console.log(data);
@@ -61,6 +61,7 @@ class Auth extends Component {
                         data.userRole,data.token, data.userId, data.companyId
                     ]);
                     localStorage.setItem('role', data.userRole);
+                    localStorage.setItem('authorization', data.token);
                     this.props.history.push('/');
                 }else{
                     document.getElementById('pass-span').innerText = data.error;

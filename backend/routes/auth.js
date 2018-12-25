@@ -24,15 +24,15 @@ router.post('/', (req, resp) => {
                 bcrypt.compare(password, user[0].password, (err, res) => {
                     console.log(res);
                     if (res) {
-                        // let opts = {expiresIn: 120};
                         let secret = 'SECRET';
-                        let token = jwt.sign(username, secret);
-                        return resp.status(200).json({
-                            message: "success",
-                            token,
-                            userId: user[0].id,
-                            userRole: user[0].role,
-                            companyId: user[0].company_id
+                        jwt.sign({id: user[0].id, username: user[0].username, role: user[0].role}, secret, (err, token) => {
+                            return resp.status(200).json({
+                                message: "success",
+                                token,
+                                userId: user[0].id,
+                                userRole: user[0].role,
+                                companyId: user[0].company_id
+                            });
                         });
                     } else {
                         console.log("failed");

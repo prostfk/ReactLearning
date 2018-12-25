@@ -28,8 +28,21 @@ export default class CreateUser extends Component {
         });
     };
 
-    saveUser = () => {
+    validateUser = () => {
+        return true;
+    };
 
+    saveUser = () => {
+        if (this.validateUser){
+            let formData = new FormData();
+            fetch('http://localhost:3001/addUser', {method: 'post', body: formData, headers: {'Auth-token': localStorage.getItem('Auth-token')}}).then(response=>{
+                return response.json();
+            }).then(data=>{
+                if (data.error === undefined){
+                    this.props.renderUsers();
+                }
+            })
+        }
     };
 
     render() {
@@ -144,7 +157,7 @@ export default class CreateUser extends Component {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={this.toggle}>Close</Button>{' '}
-                            <Button color="primary">Add user</Button>
+                            <Button color="primary" onClick={this.saveUser}>Add user</Button>
                         </ModalFooter>
                     </Modal>
                 </Container>
