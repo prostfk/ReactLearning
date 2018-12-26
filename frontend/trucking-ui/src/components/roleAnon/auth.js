@@ -15,7 +15,6 @@ import {
 import CommonUtil from "../../lib/commontUtil";
 import {connect} from "react-redux";
 import {AUTH_SUCCESS} from "../../constants/userActionType";
-// import CommonUtil from "../../lib/commontUtil";
 
 
 class Auth extends Component {
@@ -28,7 +27,7 @@ class Auth extends Component {
 
     changeInput = (event) => {
         this.setState({
-            [event.target.id]: [event.target.value]
+            [event.target.id]: event.target.value
         });
     };
 
@@ -50,8 +49,6 @@ class Auth extends Component {
             let formData = new FormData();
             formData.append('username', CommonUtil.getStringFromUnknownObject(this.state.username));
             formData.append('password', CommonUtil.getStringFromUnknownObject(this.state.password));
-            console.log(CommonUtil.getStringFromUnknownObject(this.state.password));
-            console.log(CommonUtil.getStringFromUnknownObject(this.state.passwordAgain));
             fetch('http://localhost:3001/api/auth', {method: 'post', body: formData}).then(response => {
                 return response.json();
             }).then(data => {

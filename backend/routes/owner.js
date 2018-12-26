@@ -35,7 +35,8 @@ router.get('/users', verifyToken, (req, resp, next) => {
             role: 'ROLE_ADMIN'
         },
     ])
-
 });
+
+router.get('/addUser')
 
 module.exports = router;

@@ -9,7 +9,8 @@ const usersRouter = require('./routes/users');
 const registrationRouter = require('./routes/registration');
 const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
-const ownerRotuer = require('./routes/owner');
+const ownerRouter = require('./routes/owner');
+const ownerAndAdminRouter = require('./routes/adminAndOwner');
 const app = express();
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
@@ -35,7 +36,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/registration', registrationRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/admin', adminRouter);
-app.use('/api/owner', ownerRotuer);
+app.use('/api/owner', ownerRouter);
+app.use('/api/ownerAndAdmin', ownerAndAdminRouter);
 //URLS
 app.use('/js', (req,resp)=>{
     resp.json({message: 'hello'});

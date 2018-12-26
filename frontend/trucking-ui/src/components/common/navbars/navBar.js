@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import OwnerNavBar from "./ownerNavBar";
 import AnonNavBar from "./anonNavBar";
+import {NotificationContainer} from "react-notifications";
 
 export default class NavBar extends Component {
 
@@ -11,7 +12,9 @@ export default class NavBar extends Component {
         }
     };
 
-    render(){return <div style={{width: '100%'}}>
+    render(){
+        return <div>
+        <NotificationContainer/>
         {this.getNav()}
     </div>
     }

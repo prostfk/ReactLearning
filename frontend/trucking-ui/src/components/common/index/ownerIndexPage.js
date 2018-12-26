@@ -1,39 +1,40 @@
 import React, {Component} from 'react';
 import CreateUser from "../adminAndOwner/createUser";
-import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
+import {MDBRow, MDBCol, Table, TableBody, TableHead, MDBIcon} from 'mdbreact';
 
 
 export default class OwnerIndexPage extends Component {
 
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            users: []
-        }
-    }
-
+    state = {
+        users: []
+    };
 
     componentDidMount(){
         this.updateUsers();
     }
+
+
 
     updateUsers = () => {
         fetch('http://localhost:3001/api/owner/users',{headers:{'Auth-token': localStorage.getItem('Auth-token')}}).then(response=>{
             return response.json();
         }).then(data=>{
             console.log(data);
-            if (data.error!==undefined){
+            if (data.error===undefined){
                 this.setState({
                     users: data
                 });
+                console.log(this.state)
+            }else{
+                console.log('error')
             }
         })
     };
 
     render() {
         return (
-            <>
+            <div className={'container'}>
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'6'}>
@@ -44,16 +45,18 @@ export default class OwnerIndexPage extends Component {
                                     <th>Name</th>
                                     <th>Surname</th>
                                     <th>Role</th>
+                                    <th>Edit</th>
                                 </tr>
                             </TableHead>
                             <TableBody>
                                 {
                                     this.state.users.map((user, index) => {
-                                        return <tr>
-                                            <td>{index}</td>
+                                        return <tr key={index}>
+                                            <td>{index + 1}</td>
                                             <td>{user.firstName}</td>
                                             <td>{user.secondName}</td>
-                                            <td>{user.role}</td>
+                                            <td>{this.__processRole(user.role)}</td>
+                                            <td><MDBIcon icon="edit" /></td>
                                         </tr>
                                     })
                                 }
@@ -64,8 +67,14 @@ export default class OwnerIndexPage extends Component {
                         <CreateUser renderUsers={this.updateUsers}/>
                     </MDBCol>
                 </MDBRow>
-            </>
+            </div>
         );
+    }
+
+
+    __processRole = (role) => {
+        let array = role.split('_');
+        return array[1].toLowerCase();
     }
 
 

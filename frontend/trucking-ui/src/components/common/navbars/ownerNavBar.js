@@ -4,11 +4,15 @@ import LogoutButton from "./logoutButton";
 
 export default class OwnerNavBar extends Component {
 
-    state = {
-        isOpen: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            isOpen: false
+        };
+    }
 
-    toggleCollapse = this.setState({ isOpen: !this.state.isOpen });
+
+    toggleCollapse = () => this.setState({ isOpen: !this.state.isOpen });
 
 
     render(){

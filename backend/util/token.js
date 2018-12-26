@@ -1,3 +1,4 @@
+
 const jwt = require('jsonwebtoken');
 
 verifyToken = (req,resp, next) => {
@@ -13,6 +14,23 @@ verifyToken = (req,resp, next) => {
         resp.sendStatus(403);
     }
 
+};
+
+getDetails = async (req,resp, next) => {
+    const token = req.headers['authorization'];
+    console.log("headers", req.headers);
+    console.log("token", token);
+    if (typeof token !== 'undefined'){
+        jwt.verify(token, 'SECRET', (err, authData)=>{
+            if (err) {
+                return 'No details';
+            }else {
+                return authData;
+            }
+        })
+    }else {
+        return 'No details'
+    }
 };
 
 roleFilter = (req,resp,next, role) => {
@@ -32,5 +50,6 @@ roleFilter = (req,resp,next, role) => {
     })
 };
 
+module.exports = getDetails;
 module.exports = verifyToken;
 module.exports = roleFilter;

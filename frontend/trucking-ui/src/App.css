@@ -33,4 +33,13 @@
 
 .error-span {
     color: red;
+    font-size: 12px;
+}
+
+.container {
+    margin-top: 3%;
+}
+
+.is-invalid {
+    border: 1px solid red;
 }
