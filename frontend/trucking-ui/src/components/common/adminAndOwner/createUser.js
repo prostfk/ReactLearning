@@ -61,7 +61,7 @@ export default class CreateUser extends Component {
             document.getElementById('newUserUsername').classList.remove("is-invalid");
             document.getElementById('error-username-span').innerText = '';
         }
-        if (!passwordVal) {
+        if (!passwordVal && this.state.password === this.state.passwordAgain) {
             document.getElementById('newUserPassword').classList.add("is-invalid");
             document.getElementById('error-password-span').innerText = 'Password must be between 6 and 20 characters.';
         } else {
@@ -108,17 +108,18 @@ export default class CreateUser extends Component {
             formData.append('email', this.state.newUserEmail);
             formData.append('username', this.state.newUserUsername);
             formData.append('role', this.state.newUserRole);
-            formData.append('password', this.state.newUserPassport);
-            formData.append('birthDate', this.state.newUserBirthDate);
-            formData.append('firstName', this.state.newUserFirstName);
-            formData.append('secondName', this.state.newUserSecondName);
+            formData.append('password', this.state.newUserPassword);
+            formData.append('birth_day', this.state.newUserBirthDate);
+            formData.append('name', this.state.newUserFirstName);
+            formData.append('surname', this.state.newUserSecondName);
             formData.append('passport', this.state.newUserPassport);
             fetch('/api/ownerAndAdmin/addUser', {body: formData,method: 'post', headers:{authorization: localStorage.getItem('authorization')}}).then(response=>{
                 return response.json();
             }).then(data=>{
                 console.log(data);
                 if (data.error === undefined){
-                    // ref.props.renderUsers();
+                    this.toggle();
+                    ref.props.renderUsers();
                     NotificationManager.success(data.status);
                 }else{
                     NotificationManager.error(data.error);

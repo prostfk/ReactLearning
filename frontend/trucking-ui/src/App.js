@@ -12,14 +12,17 @@ import {createStore} from "redux";
 import Auth from "./components/roleAnon/auth";
 import NavBar from "./components/common/navbars/navBar";
 import IndexPage from "./components/common/index/indexComponent";
-
+import Notifications from "./components/common/index/notifications";
+import 'react-notifications/lib/notifications.css';
+import './css/animate.css'
 
 class App extends Component {
   render() {
     return <Provider store={store}>
       <Router>
         <div>
-          <Route path={'/'} component={NavBar}/>
+          <Route path={'/*'} component={NavBar}/>
+          <Route path={'/*'} component={Notifications}/>
           <Route exact path={'/'} component={IndexPage}/>
           <Route exact path={'/registration'} component={Registration}/>
           <Route exact path={'/auth'} component={Auth}/>

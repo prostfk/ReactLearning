@@ -7,7 +7,6 @@ import {
     MDBCol,
     MDBCard,
     MDBCardBody,
-    MDBModalFooter,
     MDBIcon,
     MDBCardHeader,
     MDBBtn
@@ -36,7 +35,7 @@ export default class Registration extends Component {
     };
 
     validate = () => {
-        let email = CommonUtil.getStringFromUnknownObject(this.state.email);
+        // let email = CommonUtil.getStringFromUnknownObject(this.state.email);
         let pass = CommonUtil.getStringFromUnknownObject(this.state.password);
         let passAgain = CommonUtil.getStringFromUnknownObject(this.state.passwordAgain);
         if (pass !== passAgain) {

@@ -14,7 +14,6 @@ export default class NavBar extends Component {
 
     render(){
         return <div>
-        <NotificationContainer/>
         {this.getNav()}
     </div>
     }

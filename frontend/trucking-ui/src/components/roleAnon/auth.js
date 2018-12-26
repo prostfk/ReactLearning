@@ -7,7 +7,6 @@ import {
     MDBCol,
     MDBCard,
     MDBCardBody,
-    MDBModalFooter,
     MDBIcon,
     MDBCardHeader,
     MDBBtn

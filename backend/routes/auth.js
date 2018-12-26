@@ -25,7 +25,7 @@ router.post('/', (req, resp) => {
                     console.log(res);
                     if (res) {
                         let secret = 'SECRET';
-                        jwt.sign({id: user[0].id, username: user[0].username, role: user[0].role}, secret, (err, token) => {
+                        jwt.sign({id: user[0].id, username: user[0].username, role: user[0].role, companyId: user[0].company_id}, secret, (err, token) => {
                             return resp.status(200).json({
                                 message: "success",
                                 token,

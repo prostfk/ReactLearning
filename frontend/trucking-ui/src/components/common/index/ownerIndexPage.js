@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import CreateUser from "../adminAndOwner/createUser";
 import {MDBRow, MDBCol, Table, TableBody, TableHead, MDBIcon} from 'mdbreact';
+import {NotificationManager} from "react-notifications";
 
 
 export default class OwnerIndexPage extends Component {
@@ -17,7 +18,7 @@ export default class OwnerIndexPage extends Component {
 
 
     updateUsers = () => {
-        fetch('http://localhost:3001/api/owner/users',{headers:{'Auth-token': localStorage.getItem('Auth-token')}}).then(response=>{
+        fetch('http://localhost:3001/api/owner/users',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
             return response.json();
         }).then(data=>{
             console.log(data);
@@ -51,10 +52,10 @@ export default class OwnerIndexPage extends Component {
                             <TableBody>
                                 {
                                     this.state.users.map((user, index) => {
-                                        return <tr key={index}>
+                                        return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{user.firstName}</td>
-                                            <td>{user.secondName}</td>
+                                            <td>{user.name}</td>
+                                            <td>{user.surname}</td>
                                             <td>{this.__processRole(user.role)}</td>
                                             <td><MDBIcon icon="edit" /></td>
                                         </tr>

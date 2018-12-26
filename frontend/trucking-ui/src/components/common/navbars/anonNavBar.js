@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import { Navbar, NavbarBrand, NavbarNav, NavItem, NavLink, NavbarToggler, Collapse, FormInline, Dropdown, DropdownToggle, DropdownMenu,  DropdownItem } from "mdbreact";
-import LogoutButton from "./logoutButton";
+import { Navbar, NavbarBrand, NavbarNav, NavItem, NavLink, NavbarToggler, Collapse} from "mdbreact";
 
 export default class AnonNavBar extends Component {
 
