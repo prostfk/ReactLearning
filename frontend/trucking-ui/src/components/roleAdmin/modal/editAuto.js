@@ -1,13 +1,22 @@
 import React, {Component} from 'react';
 import {
-    Container, Button, Modal, ModalBody, ModalHeader, ModalFooter, MDBRow, MDBCol,
-    MDBCard, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput, Animation, MDBContainer
+    Container,
+    MDBRow,
+    MDBCol,
+    Animation,
+    MDBCard,
+    MDBCardBody,
+    MDBCardHeader,
+    MDBIcon,
+    MDBInput,
+    MDBContainer,
 } from 'mdbreact';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
 import {NotificationManager} from "react-notifications";
 
-export default class CreateAuto extends Component {
+export default class EditAuto extends Component {
 
     constructor(props) {
         super(props);
@@ -15,7 +24,7 @@ export default class CreateAuto extends Component {
             modal: false,
             newAutoName: '',
             newAutoNumber: '',
-            newAutoType: 'Hatchback',
+            newAutoType: '',
             newAutoFuel: ''
         };
     }
@@ -31,6 +40,18 @@ export default class CreateAuto extends Component {
             [event.target.id]: event.target.value
         });
     };
+
+    componentDidMount(){
+        let auto = this.props.auto;
+        if (auto){
+            this.setState({
+                newAutoName: auto.name,
+                newAutoNumber: auto.carNumber,
+                newAutoType: auto.type,
+                newAutoFuel: auto.fuelConsumption.toString()
+            });
+        }
+    }
 
     validateUser = () => {
         let nameVal = ValidationUtil.validateStringForLength(this.state.newAutoName, 3, 49);
@@ -68,7 +89,6 @@ export default class CreateAuto extends Component {
         return nameVal && carNumberVal && typeVal && fuelVal;
     };
 
-
     saveAuto = () => {
         let ref = this;
         if (this.validateUser()) {
@@ -77,13 +97,14 @@ export default class CreateAuto extends Component {
             formData.append('fuel', this.state.newAutoFuel);
             formData.append('number', this.state.newAutoNumber);
             formData.append('type', this.state.newAutoType);
-            fetch('/api/admin/addAuto', {body: formData, method: 'post', headers:{authorization: localStorage.getItem('authorization')}}).then(response=>{
+            formData.append('id', this.props.auto.id);
+            fetch('/api/admin/editAuto', {body: formData, method: 'post', headers:{authorization: localStorage.getItem('authorization')}}).then(response=>{
                 return response.json();
             }).then(data=>{
                 if (data.error === undefined){
-                    ref.props.renderAutos();
                     this.toggle();
-                    NotificationManager.success('Auto added');
+                    ref.props.renderAutos();
+                    NotificationManager.success(data.status);
                 }else{
                     NotificationManager.error(data.error);
                 }
@@ -97,9 +118,9 @@ export default class CreateAuto extends Component {
         return (
             <div className={'animated fadeIn'}>
                 <Container>
-                    <Button color="success" onClick={this.toggle}>Create auto</Button>
+                    <MDBIcon icon="edit" onClick={this.toggle}/>
                     <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                        <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+                        <ModalHeader toggle={this.toggle}>Edit auto</ModalHeader>
                         <ModalBody>
                             <form>
                                 <MDBContainer>
@@ -116,6 +137,7 @@ export default class CreateAuto extends Component {
                                                         label="Name"
                                                         onChange={this.changeInput}
                                                         id={'newAutoName'}
+                                                        value={this.state.newAutoName}
                                                         group
                                                         type="text"
                                                         validate
@@ -127,6 +149,7 @@ export default class CreateAuto extends Component {
                                                         label="Car number"
                                                         onChange={this.changeInput}
                                                         id={'newAutoNumber'}
+                                                        value={this.state.newAutoNumber}
                                                         group
                                                         type="text"
                                                         validate
@@ -138,6 +161,7 @@ export default class CreateAuto extends Component {
                                                         label="Fuel consumption"
                                                         onChange={this.changeInput}
                                                         id={'newAutoFuel'}
+                                                        value={this.state.newAutoFuel}
                                                         group
                                                         type="number"
                                                         validate
@@ -171,7 +195,7 @@ export default class CreateAuto extends Component {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={this.toggle}>Close</Button>{' '}
-                            <Button color="primary" onClick={this.saveAuto}>Add Auto</Button>
+                            <Button color="primary" onClick={this.saveAuto}>Edit Auto</Button>
                         </ModalFooter>
                     </Modal>
                 </Container>

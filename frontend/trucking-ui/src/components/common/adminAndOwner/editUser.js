@@ -1,13 +1,22 @@
 import React, {Component} from 'react';
 import {
-    Container, Button, Modal, ModalBody, ModalHeader, ModalFooter, MDBRow, MDBCol, Animation,
-    MDBCard, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput, MDBContainer,
+    Container,
+    MDBRow,
+    MDBCol,
+    Animation,
+    MDBCard,
+    MDBCardBody,
+    MDBCardHeader,
+    MDBIcon,
+    MDBInput,
+    MDBContainer,
 } from 'mdbreact';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
 import {NotificationManager} from "react-notifications";
 
-export default class CreateUser extends Component {
+export default class EditUser extends Component {
 
     constructor(props) {
         super(props);
@@ -16,8 +25,6 @@ export default class CreateUser extends Component {
             newUserRole: 'ROLE_ADMIN',
             newUserEmail: '',
             newUserUsername: '',
-            newUserPassword: '',
-            newUserPasswordAgain: '',
             newUserBirthDate: '',
             newUserFirstName: '',
             newUserSecondName: '',
@@ -37,18 +44,31 @@ export default class CreateUser extends Component {
         });
     };
 
+    componentDidMount() {
+        let user = this.props.user;
+        if (user) {
+            this.setState({
+                newUserRole: user.role,
+                newUserEmail: user.email,
+                newUserUsername: user.username,
+                // newUserBirthDate: user.birth_day,
+                newUserFirstName: user.name,
+                newUserSecondName: user.surname,
+                newUserPassport: user.passport === null ? '' : user.passport
+            });
+        }
+    }
+
     validateUser = () => {
         let emailVal = ValidationUtil.validateEmailForPattern(this.state.newUserEmail);
         let userNameVal = ValidationUtil.validateStringForLength(this.state.newUserUsername, 5, 20);
-        let passwordVal = ValidationUtil.validateStringForLength(this.state.newUserPassword, 6, 20);
         let dateVal = true;//ValidationUtil.validateDateForNotThisYear(this.state.newUserBirthDate);
         let nameVal = ValidationUtil.validateStringForLength(this.state.newUserFirstName, 2, 40);
         let surnameVal = ValidationUtil.validateStringForLength(this.state.newUserSecondName, 4, 40);
-        let passportVal = this.state.newUserRole === 'ROLE_DRIVER' ? ValidationUtil.validateStringForLength(this.state.newUserPassport, 5, 20) : true;
-        if (!emailVal){
+        if (!emailVal) {
             document.getElementById('newUserEmail').classList.add('is-invalid');
             document.getElementById('error-email-span').innerText = 'Email is incorrect';
-        }else{
+        } else {
             document.getElementById('newUserEmail').classList.remove("is-invalid");
             document.getElementById('error-email-span').innerText = '';
         }
@@ -58,13 +78,6 @@ export default class CreateUser extends Component {
         } else {
             document.getElementById('newUserUsername').classList.remove("is-invalid");
             document.getElementById('error-username-span').innerText = '';
-        }
-        if (!passwordVal && this.state.password === this.state.passwordAgain) {
-            document.getElementById('newUserPassword').classList.add("is-invalid");
-            document.getElementById('error-password-span').innerText = 'Password must be between 6 and 20 characters.';
-        } else {
-            document.getElementById('newUserPassword').classList.remove("is-invalid");
-            document.getElementById('error-password-span').innerText = '';
         }
         if (!dateVal) {
             document.getElementById('newUserBirthDate').classList.add("is-invalid");
@@ -87,16 +100,8 @@ export default class CreateUser extends Component {
             document.getElementById('newUserSecondName').classList.remove("is-invalid");
             document.getElementById('error-surname-span').innerText = '';
         }
-        if (!passportVal) {
-            document.getElementById('newUserPassport').classList.add("is-invalid");
-            document.getElementById('error-passport-span').innerText = 'From 5 to 20 chars';
-        } else {
-            document.getElementById('newUserPassport').classList.remove("is-invalid");
-            document.getElementById('error-passport-span').innerText = '';
-        }
-        return emailVal && userNameVal && passwordVal && dateVal && nameVal && surnameVal && passportVal;
+        return emailVal && userNameVal && dateVal && nameVal && surnameVal;
     };
-
 
     saveUser = () => {
         let ref = this;
@@ -105,34 +110,38 @@ export default class CreateUser extends Component {
             formData.append('email', this.state.newUserEmail);
             formData.append('username', this.state.newUserUsername);
             formData.append('role', this.state.newUserRole);
-            formData.append('password', this.state.newUserPassword);
             formData.append('birth_day', this.state.newUserBirthDate);
             formData.append('name', this.state.newUserFirstName);
             formData.append('surname', this.state.newUserSecondName);
             formData.append('passport', this.state.newUserPassport);
-            fetch('/api/ownerAndAdmin/addUser', {body: formData,method: 'post', headers:{authorization: localStorage.getItem('authorization')}}).then(response=>{
+            formData.append('id', this.props.user.id);
+            fetch(`/api/ownerAndAdmin/editUser`, {
+                body: formData,
+                method: 'post',
+                headers: {authorization: localStorage.getItem('authorization')}
+            }).then(response => {
                 return response.json();
-            }).then(data=>{
-                if (data.error === undefined){
-                    ref.props.renderUsers();
+            }).then(data => {
+                if (data.error === undefined) {
                     this.toggle();
+                    ref.props.renderUsers();
                     NotificationManager.success(data.status);
-                }else{
+                } else {
                     NotificationManager.error(data.error);
                 }
             })
         } else {
-            NotificationManager.warn("check your data");
+            NotificationManager.warning("check your data");
         }
     };
 
     render() {
         return (
-            <div className={'animated fadeIn'} >
+            <div className={'animated fadeIn'}>
                 <Container>
-                    <Button color="success" onClick={this.toggle}>Create user</Button>
+                    <MDBIcon icon="edit" onClick={this.toggle}/>
                     <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                        <ModalHeader toggle={this.toggle}>Create user</ModalHeader>
+                        <ModalHeader toggle={this.toggle}>Edit user: {this.props.user.username}</ModalHeader>
                         <ModalBody>
                             <form>
                                 <MDBContainer>
@@ -142,13 +151,14 @@ export default class CreateUser extends Component {
                                                 <MDBCardBody>
                                                     <MDBCardHeader className="form-header warm-flame-gradient rounded">
                                                         <h3 className="my-3">
-                                                            <MDBIcon icon="lock"/> Add new user
+                                                            <MDBIcon icon="lock"/> Edit user
                                                         </h3>
                                                     </MDBCardHeader>
                                                     <MDBInput
                                                         label="Email"
                                                         onChange={this.changeInput}
                                                         id={'newUserEmail'}
+                                                        value={this.state.newUserEmail}
                                                         group
                                                         type="text"
                                                         validate
@@ -159,6 +169,7 @@ export default class CreateUser extends Component {
                                                     <MDBInput
                                                         label="Username"
                                                         onChange={this.changeInput}
+                                                        value={this.state.newUserUsername}
                                                         id={'newUserUsername'}
                                                         group
                                                         type="text"
@@ -170,6 +181,7 @@ export default class CreateUser extends Component {
                                                     <MDBInput
                                                         label="First name"
                                                         onChange={this.changeInput}
+                                                        value={this.state.newUserFirstName}
                                                         id={'newUserFirstName'}
                                                         group
                                                         type="text"
@@ -181,6 +193,7 @@ export default class CreateUser extends Component {
                                                     <MDBInput
                                                         label="Second name"
                                                         onChange={this.changeInput}
+                                                        value={this.state.newUserSecondName}
                                                         id={'newUserSecondName'}
                                                         group
                                                         type="text"
@@ -193,6 +206,7 @@ export default class CreateUser extends Component {
                                                         // label="Birth date"
                                                         onChange={this.changeInput}
                                                         id={'newUserBirthDate'}
+                                                        value={this.state.newUserBirthDate}
                                                         group
                                                         type="date"
                                                         validate
@@ -200,28 +214,6 @@ export default class CreateUser extends Component {
                                                         success="right"
                                                     />
                                                     <span className="error-span" id="error-date-span"/>
-                                                    <MDBInput
-                                                        label="Password"
-                                                        onChange={this.changeInput}
-                                                        id={'newUserPassword'}
-                                                        group
-                                                        type="password"
-                                                        validate
-                                                        error="wrong"
-                                                        success="right"
-                                                    />
-                                                    <span className="error-span" id="error-password-span"/>
-                                                    <MDBInput
-                                                        label="Password again"
-                                                        onChange={this.changeInput}
-                                                        id={'newUserPasswordAgain'}
-                                                        group
-                                                        type="password"
-                                                        validate
-                                                        error="wrong"
-                                                        success="right"
-                                                    />
-                                                    <span className="error-span" id="error-again-password-span"/>
                                                     <Select style={{width: '100%'}} id={'newUserRole'} native={true}
                                                             value={this.state.newUserRole}
                                                             onChange={this.changeInput}>
@@ -236,6 +228,7 @@ export default class CreateUser extends Component {
                                                         <MDBInput
                                                             label="Passport number"
                                                             onChange={this.changeInput}
+                                                            value={this.state.newUserPassport}
                                                             id={'newUserPassport'}
                                                             group
                                                             type="text"
@@ -245,7 +238,6 @@ export default class CreateUser extends Component {
                                                         />
                                                     </div>
 
-                                                    <span className="error-span" id="error-passport-span"/>
                                                     <Animation type="fadeIn" infinite>
                                                         <span id={'pass-span'} className="error-span"/>
                                                     </Animation>

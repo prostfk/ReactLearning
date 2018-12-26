@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {MDBRow, MDBCol, Table, TableBody, TableHead, MDBIcon} from 'mdbreact';
+import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import CreateAuto from "./modal/createAuto";
+import EditAuto from "./modal/editAuto";
 
 
 export default class AdminAutos extends Component {
@@ -14,8 +15,6 @@ export default class AdminAutos extends Component {
     componentDidMount(){
         this.getAutos();
     }
-
-
 
     getAutos = () => {
         fetch('/api/admin/autos',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
@@ -59,7 +58,7 @@ export default class AdminAutos extends Component {
                                             <td>{auto.carNumber}</td>
                                             <td>{auto.type}</td>
                                             <td>{auto.fuelConsumption}</td>
-                                            <td><MDBIcon icon="edit" /></td>
+                                            <td><EditAuto auto={auto} renderAutos={this.getAutos}/></td>
                                         </tr>
                                     })
                                 }

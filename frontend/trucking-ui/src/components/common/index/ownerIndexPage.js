@@ -1,21 +1,22 @@
 import React, {Component} from 'react';
 import CreateUser from "../adminAndOwner/createUser";
-import {MDBRow, MDBCol, Table, TableBody, TableHead, MDBIcon} from 'mdbreact';
+import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
+import EditUser from "../adminAndOwner/editUser";
 
 
 export default class OwnerIndexPage extends Component {
 
 
     state = {
-        users: []
+        users: [],
+        selectedUser: {},
+        toggle: false
     };
 
     componentDidMount(){
         this.updateUsers();
     }
-
-
 
     updateUsers = () => {
         fetch('/api/ownerAndAdmin/users',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
@@ -55,7 +56,7 @@ export default class OwnerIndexPage extends Component {
                                             <td>{user.name}</td>
                                             <td>{user.surname}</td>
                                             <td>{this.__processRole(user.role)}</td>
-                                            <td><MDBIcon icon="edit" /></td>
+                                            <td><EditUser user={user} renderUsers={this.updateUsers}/></td>
                                         </tr>
                                     })
                                 }

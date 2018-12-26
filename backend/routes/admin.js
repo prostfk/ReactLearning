@@ -32,4 +32,18 @@ router.post('/addAuto', (req,resp)=>{
     });
 });
 
+router.post('/editAuto', (req, resp)=> {
+    security.checkRole(req, resp, 'ROLE_ADMIN', () => {
+        let db = new Database();
+        let {name, fuel, number, type, id} = req.body;
+        if (ValidationUtil.validateAuto({name,fuel, number,type})){
+            db.execute('UPDATE autos SET name=?, carNumber=?, type=?, fuelConsumption=? WHERE id=?',
+                [name,number, type, fuel, id]);
+            resp.json({status: 'edited'});
+        }else{
+            resp.json({error: 'check your data'});
+        }
+    });
+});
+
 module.exports = router;
