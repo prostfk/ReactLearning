@@ -11,8 +11,8 @@ export default class LogoutButton extends Component {
     };
 
     render(){
-
-        return <MDBBtn onClick={this.logoutProcess}>Logout</MDBBtn>
+        let role = localStorage.getItem('role');
+        return <MDBBtn onClick={this.logoutProcess}>Logout({role.split('_')[1]})</MDBBtn>
 
     }
 

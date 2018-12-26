@@ -110,7 +110,7 @@ class Auth extends Component {
                                         <div className="text-center mt-4">
                                             <MDBBtn color="deep-orange" className="mb-3" type="submit"
                                                     onClick={this.addUser}>
-                                                Registration
+                                                Auth
                                             </MDBBtn>
                                         </div>
 

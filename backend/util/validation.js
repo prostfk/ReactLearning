@@ -1,11 +1,17 @@
 class ValidationUtil {
 
-    static validateUser(user){
+    static validateAuto(auto) {
+        let {name, fuel, type, number} = auto;
+        return this.validateStringForLength(name, 3, 49) && this.validateStringForLength(type, 5, 19) &&
+            this.validateStringForLength(number, 3, 20) && this.validateNumberInTheRage(fuel, 2, 50);
+    }
+
+    static validateUser(user) {
         let {username, email, role, password, birth_day, name, surname, passport} = user;
-        return this.validateEmailForPattern(email) &&  this.validateStringForLength(username,5,20)
-        && this.validateStringForLength(password, 6, 20) && this.validateStringForLength(name,2,40)
+        return this.validateEmailForPattern(email) && this.validateStringForLength(username, 5, 20)
+        && this.validateStringForLength(password, 6, 20) && this.validateStringForLength(name, 2, 40)
         && this.validateStringForLength(surname, 4, 40) && role === 'ROLE_DRIVER' ?
-            this.validateStringForLength(passport,5, 20) : true;
+            this.validateStringForLength(passport, 5, 20) : true;
     }
 
     static validateStringForLength(string, min, max) {
@@ -47,17 +53,17 @@ class ValidationUtil {
         return `${split[2]}/${split[1]}/${split[0]}`
     }
 
-    static getDateFromArrayYyyyMmDd(arr){
+    static getDateFromArrayYyyyMmDd(arr) {
         let date = `${arr[2]}-${arr[1]}-${arr[0]}`;
         return ValidationUtil.reformatDateToDateObject(date);
     }
 
-    static reformatDateToDateObject(dateStr){//dd-MM-yyyy
+    static reformatDateToDateObject(dateStr) {//dd-MM-yyyy
         let dateArr = dateStr.split('/');
         return new Date(`${dateArr[1]}/${dateArr[0]}/${dateArr[2]}`);
     }
 
-    static reformatFromDateToString(date){
+    static reformatFromDateToString(date) {
         let day = date.getDate().toString().length > 1 ? date.getDate() : `0${date.getDate().toString()}`;
         return day + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
     }

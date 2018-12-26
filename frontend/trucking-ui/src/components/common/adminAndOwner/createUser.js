@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {
-    Container, Button, Modal, ModalBody, ModalHeader, ModalFooter, MDBRow, MDBCol,
-    MDBCard, MDBSelect, MDBSelectInput, MDBSelectOptions, MDBSelectOption,
-    MDBCardBody, MDBCardHeader, MDBIcon, MDBInput, Animation, MDBBtn, MDBContainer,
+    Container, Button, Modal, ModalBody, ModalHeader, ModalFooter, MDBRow, MDBCol, Animation,
+    MDBCard, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput, MDBContainer,
 } from 'mdbreact';
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
@@ -36,7 +35,6 @@ export default class CreateUser extends Component {
         this.setState({
             [event.target.id]: event.target.value
         });
-        console.log('setstate', this.state)
     };
 
     validateUser = () => {
@@ -96,7 +94,6 @@ export default class CreateUser extends Component {
             document.getElementById('newUserPassport').classList.remove("is-invalid");
             document.getElementById('error-passport-span').innerText = '';
         }
-        console.log(emailVal, userNameVal, passwordVal, dateVal, nameVal, surnameVal);
         return emailVal && userNameVal && passwordVal && dateVal && nameVal && surnameVal && passportVal;
     };
 
@@ -116,7 +113,6 @@ export default class CreateUser extends Component {
             fetch('/api/ownerAndAdmin/addUser', {body: formData,method: 'post', headers:{authorization: localStorage.getItem('authorization')}}).then(response=>{
                 return response.json();
             }).then(data=>{
-                console.log(data);
                 if (data.error === undefined){
                     this.toggle();
                     ref.props.renderUsers();
@@ -126,13 +122,13 @@ export default class CreateUser extends Component {
                 }
             })
         } else {
-            console.log(false);
+            NotificationManager.warn("check your data");
         }
     };
 
     render() {
         return (
-            <div>
+            <div className={'animated fadeIn'} >
                 <Container>
                     <Button color="success" onClick={this.toggle}>Create user</Button>
                     <Modal isOpen={this.state.modal} toggle={this.toggle}>

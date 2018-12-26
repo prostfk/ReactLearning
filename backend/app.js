@@ -31,7 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //URLS
-app.use('/api', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/registration', registrationRouter);
 app.use('/api/users', usersRouter);

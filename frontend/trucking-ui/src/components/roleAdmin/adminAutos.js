@@ -1,33 +1,35 @@
 import React, {Component} from 'react';
-import CreateUser from "../adminAndOwner/createUser";
 import {MDBRow, MDBCol, Table, TableBody, TableHead, MDBIcon} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
+import CreateAuto from "./modal/createAuto";
 
 
-export default class OwnerIndexPage extends Component {
+export default class AdminAutos extends Component {
 
 
     state = {
-        users: []
+        autos: []
     };
 
     componentDidMount(){
-        this.updateUsers();
+        this.getAutos();
     }
 
 
 
-    updateUsers = () => {
-        fetch('/api/ownerAndAdmin/users',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
+    getAutos = () => {
+        fetch('/api/admin/autos',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
             return response.json();
         }).then(data=>{
             if (data.error===undefined){
                 this.setState({
-                    users: data
+                    autos: data
                 });
             }else{
-                NotificationManager.warn(data.error);
+                NotificationManager.error(data.error);
             }
+        }).catch(err=>{
+            NotificationManager.error(err.toString());
         })
     };
 
@@ -37,44 +39,41 @@ export default class OwnerIndexPage extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'6'}>
-                        {this.state.users.length > 0 ? <Table>
+                        {this.state.autos.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>id</th>
                                     <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Role</th>
+                                    <th>Auto Num</th>
+                                    <th>Type</th>
+                                    <th>Fuel</th>
                                     <th>Edit</th>
                                 </tr>
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.users.map((user, index) => {
+                                    this.state.autos.map((auto, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.surname}</td>
-                                            <td>{this.__processRole(user.role)}</td>
+                                            <td>{auto.name}</td>
+                                            <td>{auto.carNumber}</td>
+                                            <td>{auto.type}</td>
+                                            <td>{auto.fuelConsumption}</td>
                                             <td><MDBIcon icon="edit" /></td>
                                         </tr>
                                     })
                                 }
                             </TableBody>
-                        </Table> : <h1>No users yet</h1>}
+                        </Table> : <h1 className={'animated fadeIn'}>No autos yet</h1>}
                     </MDBCol>
                     <MDBCol>
-                        <CreateUser renderUsers={this.updateUsers}/>
+                        <CreateAuto renderAutos={this.getAutos}/>
                     </MDBCol>
                 </MDBRow>
             </div>
         );
     }
 
-
-    __processRole = (role) => {
-        let array = role.split('_');
-        return array[1].toLowerCase();
-    }
 
 
 }

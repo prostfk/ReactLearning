@@ -15,6 +15,7 @@ import IndexPage from "./components/common/index/indexComponent";
 import Notifications from "./components/common/index/notifications";
 import 'react-notifications/lib/notifications.css';
 import './css/animate.css'
+import AdminAutos from "./components/roleAdmin/adminAutos";
 
 class App extends Component {
   render() {
@@ -23,6 +24,7 @@ class App extends Component {
         <div>
           <Route path={'/*'} component={NavBar}/>
           <Route path={'/*'} component={Notifications}/>
+          <Route exact path={'/autos'} component={AdminAutos}/>
           <Route exact path={'/'} component={IndexPage}/>
           <Route exact path={'/registration'} component={Registration}/>
           <Route exact path={'/auth'} component={Auth}/>
