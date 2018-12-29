@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { Navbar, NavbarBrand, NavbarNav, NavItem, NavLink, NavbarToggler, Collapse} from "mdbreact";
-import LogoutButton from "./logoutButton";
+import LogoutButton from "../common/navbars/logoutButton";
 
-export default class OwnerNavBar extends Component {
+export default class DispatcherNavBar extends Component {
 
     constructor(props) {
         super(props);
@@ -32,13 +32,13 @@ export default class OwnerNavBar extends Component {
                 >
                     <NavbarNav left>
                         <NavItem>
-                            <NavLink to="/">Home</NavLink>
+                            <NavLink to="/">Orders</NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink to="/orders">Orders</NavLink>
+                            <NavLink to="/calendar">Calendar</NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink to="/stats">Stats</NavLink>
+                            <NavLink to="/stocks">Stocks</NavLink>
                         </NavItem>
 
                     </NavbarNav>

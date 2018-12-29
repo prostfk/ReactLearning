@@ -1,33 +1,33 @@
 import React, {Component} from 'react';
-import CreateUser from "../adminAndOwner/createUser";
+import CreateUser from "../common/adminAndOwner/createUser";
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
-import EditUser from "../adminAndOwner/editUser";
+import EditUser from "../common/adminAndOwner/editUser";
+import CreateOrder from "./modal/createOrder";
 
 
-export default class OwnerIndexPage extends Component {
+export default class DispatcherIndexPage extends Component {
 
 
     state = {
-        users: [],
-        selectedUser: {},
-        toggle: false
+        orders: [],
+        selectedOrder: {},
     };
 
-    componentDidMount(){
-        this.updateUsers();
+    componentDidMount() {
+        this.updateOrders();
     }
 
-    updateUsers = () => {
-        fetch('/api/ownerAndAdmin/users',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
+    updateOrders = () => {
+        fetch('/api/dispatcher/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
-        }).then(data=>{
-            if (data.error===undefined){
+        }).then(data => {
+            if (data.error === undefined) {
                 this.setState({
                     users: data
                 });
-            }else{
-                NotificationManager.warn(data.error);
+            } else {
+                // NotificationManager.warn(data.error);
             }
         })
     };
@@ -37,26 +37,28 @@ export default class OwnerIndexPage extends Component {
             <div className={'container'}>
                 <MDBRow>
                     <MDBCol/>
-                    <MDBCol size={'6'}>
-                        {this.state.users.length > 0 ? <Table>
+                    <MDBCol size={'8'}>
+                        {this.state.orders.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>id</th>
                                     <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Role</th>
+                                    <th>Client</th>
+                                    <th>Departure</th>
+                                    <th>Arrival</th>
                                     <th>Edit</th>
                                 </tr>
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.users.map((user, index) => {
+                                    this.state.orders.map((order, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.surname}</td>
-                                            <td>{this.__processRole(user.role)}</td>
-                                            <td><EditUser user={user} renderUsers={this.updateUsers}/></td>
+                                            <td>{order.name}</td>
+                                            <td>{order.client}</td>
+                                            <td>{order.date_departure}</td>
+                                            <td>{order.date_arrival}</td>
+                                            <td><EditUser user={order} renderUsers={this.updateOrders}/></td>
                                         </tr>
                                     })
                                 }
@@ -64,7 +66,7 @@ export default class OwnerIndexPage extends Component {
                         </Table> : <h1>No users yet</h1>}
                     </MDBCol>
                     <MDBCol>
-                        <CreateUser renderUsers={this.updateUsers}/>
+                        <CreateOrder renderUsers={this.updateUsers}/>
                     </MDBCol>
                 </MDBRow>
             </div>

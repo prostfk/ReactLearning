@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import OwnerIndexPage from "./ownerIndexPage";
+import OwnerIndexPage from "../../roleOwner/ownerIndexPage";
+import DispatcherIndexPage from "../../roleDispatcher/dispatcherIndexPage";
 
 export default class IndexPage extends Component {
 
@@ -9,6 +10,8 @@ export default class IndexPage extends Component {
                 return <OwnerIndexPage/>;
             case 'ROLE_ADMIN':
                 return <OwnerIndexPage/>;
+            case 'ROLE_DISPATCHER':
+                return <DispatcherIndexPage/>;
             default:
                 return <div/>;
         }

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import OwnerNavBar from "./ownerNavBar";
+import OwnerNavBar from "../../roleOwner/ownerNavBar";
 import AnonNavBar from "./anonNavBar";
-import AdminNavBar from "./adminNavBar";
+import AdminNavBar from "../../roleAdmin/adminNavBar";
+import DispatcherNavBar from "../../roleDispatcher/dispatcherNavBar";
 
 export default class NavBar extends Component {
 
@@ -9,6 +10,7 @@ export default class NavBar extends Component {
         switch (localStorage.getItem('role')) {
             case 'ROLE_OWNER': return <OwnerNavBar/>;
             case 'ROLE_ADMIN': return <AdminNavBar/>;
+            case 'ROLE_DISPATCHER': return <DispatcherNavBar/>;
             default: return <AnonNavBar/>
         }
     };
