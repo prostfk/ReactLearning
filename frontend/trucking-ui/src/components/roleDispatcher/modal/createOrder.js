@@ -22,20 +22,28 @@ export default class CreateOrder extends Component {
         super(props);
         this.state = {
             modal: false,
-            newOrderName: 'ROLE_ADMIN',
+            newOrderName: '',
             newOrderClient: '',
             newOrderStatus: '',
             newOrderSender: '',
             newOrderReceiver: '',
-            newOrderDD: '',
-            newOrderDA: '',
+            newOrderDD: '2018-12-12',
+            newOrderDA: '2018-12-13',
+            newOrderAuto: '',
+            newOrderDriver: '',
             selectedForm: 1,
-            clients: []
+            clients: [],
+            stocks: [],
+            autos: [],
+            drivers: []
         };
     }
 
-    componentDidMount(){
-        this.loadClients();
+    componentDidMount() {
+        this.loadInfo('/api/dispatcher/clients', 'clients');
+        this.loadInfo('/api/dispatcher/stocks', 'stocks');
+        this.loadInfo(`/api/dispatcher/freeAutos?dd=${this.state.newOrderDD}&&da=${this.state.newOrderDA}`, 'autos');
+        this.loadInfo(`/api/dispatcher/freeDrivers?dd=${this.state.newOrderDD}&&da=${this.state.newOrderDA}`, 'drivers');
     }
 
     toggle = () => {
@@ -44,13 +52,13 @@ export default class CreateOrder extends Component {
         });
     };
 
-    loadClients = () => {
-        fetch('/api/dispatcher/clients', {headers: {authorization: localStorage.getItem('authorization')}}).then(resp=>{
+    loadInfo = (url, id) => {
+        fetch(url, {headers: {authorization: localStorage.getItem('authorization')}}).then(resp => {
             return resp.json();
-        }).then(data=>{
+        }).then(data => {
             this.setState({
-                clients: data
-            });
+                [id]: data
+            })
         })
     };
 
@@ -94,11 +102,12 @@ export default class CreateOrder extends Component {
     };
 
     render() {
+        console.log(this.state)
         return (
             <div className={'animated fadeIn'}>
                 <Container>
                     <Button color="success" onClick={this.toggle}>Create order</Button>
-                    <Modal isOpen={this.state.modal} toggle={this.toggle} size={'fluid'}>
+                    <Modal isOpen={this.state.modal} toggle={this.toggle} size={'lg'}>
                         <ModalHeader toggle={this.toggle}>Create order: </ModalHeader>
                         <ModalBody>
                             <form>
@@ -113,7 +122,7 @@ export default class CreateOrder extends Component {
                                                         </h3>
                                                     </MDBCardHeader>
 
-                                                    <div id={'first-form'}>
+                                                    <div id={'first-form'} className={'animated fadeIn'}>
                                                         <MDBInput
                                                             label="Name"
                                                             onChange={this.changeInput}
@@ -127,18 +136,21 @@ export default class CreateOrder extends Component {
                                                         />
                                                         <span className="error-span" id="error-email-span"/>
                                                         <label htmlFor="newOrderClient">Client</label>
-                                                        <Select style={{width: '100%'}} id={'newOrderClient'} native={true}
+                                                        <Select style={{width: '100%'}} id={'newOrderClient'}
+                                                                native={true}
                                                                 value={this.state.newOrderClient}
                                                                 onChange={this.changeInput}>
                                                             {
-                                                                this.state.clients.map((client, index)=>{
-                                                                    return <option value={client.id} key={index}>{client.name}</option>
+                                                                this.state.clients.map((client, index) => {
+                                                                    return <option value={client.id}
+                                                                                   key={index}>{client.name}</option>
                                                                 })
                                                             }
                                                         </Select>
                                                         <span className="error-span" id="error-username-span"/>
                                                         <label htmlFor="newOrderStatus">Status</label>
-                                                        <Select style={{width: '100%'}} id={'newOrderStatus'} native={true}
+                                                        <Select style={{width: '100%'}} id={'newOrderStatus'}
+                                                                native={true}
                                                                 value={this.state.newOrderStatus}
                                                                 onChange={this.changeInput}>
                                                             <option value={'1'}>Accepted</option>
@@ -147,49 +159,89 @@ export default class CreateOrder extends Component {
                                                         </Select>
                                                         <span className="error-span" id="error-name-span"/>
                                                         <label htmlFor="newOrderSender">Sender</label>
-                                                        <Select style={{width: '100%'}} id={'newOrderSender'} native={true}
+                                                        <Select style={{width: '100%'}} id={'newOrderSender'}
+                                                                native={true}
                                                                 value={this.state.newOrderSender}
                                                                 onChange={this.changeInput}>
+                                                            {
+                                                                this.state.stocks.map((stock, index) => {
+                                                                    return <option value={stock.id}
+                                                                                   key={index}>{stock.name}</option>
+                                                                })
+                                                            }
                                                         </Select>
                                                         <span className="error-span" id="error-surname-span"/>
                                                         <label htmlFor="newOrderReceiver">Receiver</label>
-                                                        <Select style={{width: '100%'}} id={'newOrderReceiver'} native={true}
+                                                        <Select style={{width: '100%'}} id={'newOrderReceiver'}
+                                                                native={true}
                                                                 value={this.state.newOrderReceiver}
                                                                 onChange={this.changeInput}>
+                                                            {
+                                                                this.state.stocks.map((stock, index) => {
+                                                                    return <option value={stock.id}
+                                                                                   key={index}>{stock.name}</option>
+                                                                })
+                                                            }
                                                         </Select>
                                                         <span className="error-span" id="error-date-span"/>
-                                                        <Button color="secondary" onClick={this.validateOrder}>Continue</Button>
+                                                        <Button color="secondary"
+                                                                onClick={this.validateOrder}>Continue</Button>
                                                     </div>
 
-                                                    <div id="second-form" style={{display: 'none'}}>
-                                                        <Select style={{width: '100%'}} id={'newUserRole'} native={true}
-                                                                value={this.state.newUserRole}
+                                                    <div id="second-form" className={'animated fadeIn'}
+                                                         style={{display: 'none'}}>
+                                                        <MDBInput
+                                                            label="Departure"
+                                                            onChange={this.changeInput}
+                                                            id={'newOrderDD'}
+                                                            value={this.state.newOrderDD}
+                                                            group
+                                                            type="text"
+                                                            validate
+                                                            error="wrong"
+                                                            success="right"
+                                                        />
+                                                        <MDBInput
+                                                            label="Arrival"
+                                                            onChange={this.changeInput}
+                                                            id={'newOrderDA'}
+                                                            value={this.state.newOrderDA}
+                                                            group
+                                                            type="text"
+                                                            validate
+                                                            error="wrong"
+                                                            success="right"
+                                                        />
+                                                        <label htmlFor="newOrderAuto">Auto</label>
+                                                        <Select style={{width: '100%'}} id={'newOrderAuto'}
+                                                                native={true}
+                                                                value={this.state.newOrderAuto}
                                                                 onChange={this.changeInput}>
-                                                            <option value={'ROLE_ADMIN'}>Admin</option>
-                                                            <option value={'ROLE_DRIVER'}>Driver</option>
-                                                            <option value={'ROLE_MANAGER'}>Manager</option>
-                                                            <option value={'ROLE_DISPATCHER'}>Dispatcher</option>
+                                                            {
+                                                                this.state.autos.map((auto, index) => {
+                                                                    return <option value={auto.id}
+                                                                                   key={index}>{auto.name}</option>
+                                                                })
+                                                            }
                                                         </Select>
-                                                        <div style={this.state.newUserRole === 'ROLE_DRIVER' ?
-                                                            {display: ''} : {display: 'none'}
-                                                        }>
-                                                            <MDBInput
-                                                                label="Passport number"
-                                                                onChange={this.changeInput}
-                                                                value={this.state.newUserPassport}
-                                                                id={'newUserPassport'}
-                                                                group
-                                                                type="text"
-                                                                validate
-                                                                error="wrong"
-                                                                success="right"
-                                                            />
-                                                        </div>
-                                                        {/*<Button color="secondary" onClick={this.changeForm(1)}>Back to order</Button>*/}
-                                                        <Button color="secondary" onClick={this.validateOrder}>Continue</Button>
+                                                        <label htmlFor="newOrderDriver">Driver</label>
+                                                        <Select style={{width: '100%'}} id={'newOrderDriver'}
+                                                                native={true}
+                                                                value={this.state.newOrderDriver}
+                                                                onChange={this.changeInput}>
+                                                            {
+                                                                this.state.drivers.map((driver, index) => {
+                                                                    return <option value={driver.id}
+                                                                                   key={index}>{driver.name}</option>
+                                                                })
+                                                            }
+                                                        </Select>
 
+
+                                                        <Button color="secondary"
+                                                                onClick={this.validateOrder}>Continue</Button>
                                                     </div>
-
+                                                    {/*<Button color="secondary" onClick={this.changeForm(1)}>Back to order</Button>*/}
 
 
 
@@ -206,7 +258,7 @@ export default class CreateOrder extends Component {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="secondary" onClick={this.toggle}>Close</Button>{' '}
-                            <Button color="primary" onClick={this.saveUser}>Add user</Button>
+                            <Button color="primary" onClick={this.saveUser}>Create</Button>
                         </ModalFooter>
                     </Modal>
                 </Container>

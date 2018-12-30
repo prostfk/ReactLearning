@@ -63,7 +63,7 @@ export default class DispatcherIndexPage extends Component {
                                     })
                                 }
                             </TableBody>
-                        </Table> : <h1>No users yet</h1>}
+                        </Table> : <h1 className={'animated fadeInUp'}>No orders yet</h1>}
                     </MDBCol>
                     <MDBCol>
                         <CreateOrder renderUsers={this.updateUsers}/>

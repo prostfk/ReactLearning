@@ -16,8 +16,19 @@ router.get('/orders', (req, resp) => {
     });
 });
 
+router.get('/stocks', (req,resp)=>{
+    security.checkRole(req,resp,'ROLE_DISPATCHER', ()=>{
+        let db = new Database();
+        let userDetails = security.getUserInfo(req);
+        db.executeQuery('SELECT * FROM stock WHERE companyId=?', userDetails.companyId).then(data=>{
+            resp.json(data);
+        })
+    })
+});
+
 router.get('/freeDrivers', (req, resp) => {
-    let {dd, da} = req.params;
+    let params = require('url').parse(req.url,true).query;
+    let {dd, da} = params;
     if (dd && da) {
         let db = new Database();
         security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
@@ -27,7 +38,7 @@ router.get('/freeDrivers', (req, resp) => {
             WHERE ((w2.date_departure NOT BETWEEN ${dd} AND ${da}) AND
                    (w2.date_arrival NOT BETWEEN ${dd} AND ${da}) 
                      OR (w2.date_arrival IS NULL AND w2.date_departure IS NULL )) 
-              AND d.company_id=${userDetails.companyId}`).then(data => {
+              AND d.company_id=${userDetails.companyId} AND role='ROLE_DRIVER'`).then(data => {
                 resp.json(data);
             })
         });
@@ -47,7 +58,9 @@ router.get('/clients', (req,resp)=>{
 });
 
 router.get('/freeAutos', (req, resp) => {
-    let {dd, da} = req.params;
+    let params = require('url').parse(req.url,true).query;
+    let {dd, da} = params;
+    console.log(dd,da);
     if (dd && da) {
         let db = new Database();
         security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
