@@ -4,6 +4,7 @@ import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import EditUser from "../common/adminAndOwner/editUser";
 import CreateOrder from "./modal/createOrder";
+import { Link } from 'react-router-dom'
 
 
 export default class DispatcherIndexPage extends Component {
@@ -66,7 +67,7 @@ export default class DispatcherIndexPage extends Component {
                         </Table> : <h1 className={'animated fadeInUp'}>No orders yet</h1>}
                     </MDBCol>
                     <MDBCol>
-                        <CreateOrder renderUsers={this.updateUsers}/>
+                        <Link to={'/createOrder'} className='btn btn-success'>Create order</Link>
                     </MDBCol>
                 </MDBRow>
             </div>

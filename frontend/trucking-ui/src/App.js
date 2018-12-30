@@ -17,6 +17,7 @@ import 'react-notifications/lib/notifications.css';
 import './css/animate.css'
 import AdminAutos from "./components/roleAdmin/adminAutos";
 import OwnerClients from "./components/roleOwner/ownerClients";
+import CreateOrder from './components/roleDispatcher/modal/createOrder';
 
 class App extends Component {
   render() {
@@ -30,6 +31,7 @@ class App extends Component {
           <Route exact path={'/registration'} component={Registration}/>
           <Route exact path={'/auth'} component={Auth}/>
           <Route exact path={'/clients'} component={OwnerClients}/>
+          <Route exact path={'/createOrder'} component={CreateOrder}/>
         </div>
       </Router>
     </Provider>

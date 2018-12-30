@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79ef3931-48a7-4715-8664-8d9ccd2a8975" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/routes/dispatcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/dispatcher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/modal/createOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/modal/createOrder.js" afterDir="false" />
-    </list>
+    <list default="true" id="79ef3931-48a7-4715-8664-8d9ccd2a8975" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -162,7 +158,7 @@
     <session id="503696761">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="3" />
           <entry key="project.open.time.124" value="1" />
@@ -555,16 +551,15 @@
       <workItem from="1545723127358" duration="3973000" />
       <workItem from="1545815747826" duration="35901000" />
       <workItem from="1546108977747" duration="5684000" />
-      <workItem from="1546162843070" duration="8476000" />
+      <workItem from="1546162843070" duration="9121000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="106473000" />
+    <option name="totallyTimeSpent" value="107118000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="45" y="27" width="1875" height="1053" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28376162" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -575,7 +570,7 @@
       <window_info id="Job Explorer" order="6" weight="0.32968834" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33515283" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.33515283" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.37227073" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -583,7 +578,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.29694322" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.29694322" />
       <window_info anchor="bottom" id="Console" order="11" />
       <window_info anchor="bottom" id="DB Execution Console" order="12" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
