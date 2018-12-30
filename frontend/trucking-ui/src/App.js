@@ -16,6 +16,7 @@ import Notifications from "./components/common/index/notifications";
 import 'react-notifications/lib/notifications.css';
 import './css/animate.css'
 import AdminAutos from "./components/roleAdmin/adminAutos";
+import OwnerClients from "./components/roleOwner/ownerClients";
 
 class App extends Component {
   render() {
@@ -28,6 +29,7 @@ class App extends Component {
           <Route exact path={'/'} component={IndexPage}/>
           <Route exact path={'/registration'} component={Registration}/>
           <Route exact path={'/auth'} component={Auth}/>
+          <Route exact path={'/clients'} component={OwnerClients}/>
         </div>
       </Router>
     </Provider>

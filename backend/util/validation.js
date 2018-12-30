@@ -1,5 +1,19 @@
 class ValidationUtil {
 
+    static validateClient(client){
+        let {name, type} = client;
+        return this.validateStringForLength(name, 2, 20) && this.validateStringForLength(type,4, 50);
+    }
+
+    static validateOrder(order) {
+        let {name, client, status, sender, receiver, waybill_status, driver, auto, consignment} = order;
+        return this.validateStringForLength(name, 2, 11) &&
+            this.validateForNumber(client) && this.validateForNumber(status) &&
+            this.validateForNumber(sender) && this.validateForNumber(receiver) &&
+            this.validateForNumber(waybill_status) && this.validateForNumber(driver) &&
+            this.validateForNumber(auto) && this.validateForArray(consignment);
+    }
+
     static validateAuto(auto) {
         let {name, fuel, type, number} = auto;
         return this.validateStringForLength(name, 3, 49) && this.validateStringForLength(type, 5, 19) &&
@@ -12,6 +26,10 @@ class ValidationUtil {
         && this.validateStringForLength(password, 6, 20) && this.validateStringForLength(name, 2, 40)
         && this.validateStringForLength(surname, 4, 40) && role === 'ROLE_DRIVER' ?
             this.validateStringForLength(passport, 5, 20) : true;
+    }
+
+    static validateForArray(arr){
+        return Array.isArray(arr);
     }
 
     static validateStringForLength(string, min, max) {

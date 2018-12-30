@@ -40,6 +40,9 @@ export default class OwnerNavBar extends Component {
                         <NavItem>
                             <NavLink to="/stats">Stats</NavLink>
                         </NavItem>
+                        <NavItem>
+                            <NavLink to="/clients">Clients</NavLink>
+                        </NavItem>
 
                     </NavbarNav>
                     <NavbarNav right>

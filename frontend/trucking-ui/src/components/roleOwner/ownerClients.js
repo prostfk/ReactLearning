@@ -1,34 +1,33 @@
 import React, {Component} from 'react';
-import CreateUser from "../common/adminAndOwner/createUser";
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
-import EditUser from "../common/adminAndOwner/editUser";
+import CreateClient from "./modal/createClient";
 
 
-export default class OwnerIndexPage extends Component {
+export default class OwnerClients extends Component {
 
 
     state = {
-        users: [],
-        selectedUser: {},
-        toggle: false
+        clients: []
     };
 
     componentDidMount(){
-        this.updateUsers();
+        this.getClients();
     }
 
-    updateUsers = () => {
-        fetch('/api/ownerAndAdmin/users',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
+    getClients = () => {
+        fetch('/api/owner/clients',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
             return response.json();
         }).then(data=>{
             if (data.error===undefined){
                 this.setState({
-                    users: data
+                    clients: data
                 });
             }else{
-                NotificationManager.warn(data.error);
+                NotificationManager.error(data.error);
             }
+        }).catch(err=>{
+            NotificationManager.error(err.toString());
         })
     };
 
@@ -38,44 +37,37 @@ export default class OwnerIndexPage extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'6'}>
-                        {this.state.users.length > 0 ? <Table>
+                        {this.state.clients.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>id</th>
                                     <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Role</th>
+                                    <th>Type</th>
                                     <th>Edit</th>
                                 </tr>
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.users.map((user, index) => {
+                                    this.state.clients.map((client, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.surname}</td>
-                                            <td>{this.__processRole(user.role)}</td>
-                                            <td><EditUser user={user} renderUsers={this.updateUsers}/></td>
+                                            <td>{client.name}</td>
+                                            <td>{client.type}</td>
+                                            {/*<td><EditAuto auto={auto} renderAutos={this.getAutos}/></td>*/}
                                         </tr>
                                     })
                                 }
                             </TableBody>
-                        </Table> : <h1 className={'animated fadeInUp'}>No users yet</h1>}
+                        </Table> : <h1 className={'animated fadeIn'}>No autos yet</h1>}
                     </MDBCol>
                     <MDBCol>
-                        <CreateUser renderUsers={this.updateUsers}/>
+                        <CreateClient renderClients={this.getClients}/>
                     </MDBCol>
                 </MDBRow>
             </div>
         );
     }
 
-
-    __processRole = (role) => {
-        let array = role.split('_');
-        return array[1].toLowerCase();
-    }
 
 
 }

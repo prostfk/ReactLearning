@@ -29,14 +29,29 @@ export default class CreateOrder extends Component {
             newOrderReceiver: '',
             newOrderDD: '',
             newOrderDA: '',
-            selectedForm: 1
+            selectedForm: 1,
+            clients: []
         };
+    }
+
+    componentDidMount(){
+        this.loadClients();
     }
 
     toggle = () => {
         this.setState({
             modal: !this.state.modal
         });
+    };
+
+    loadClients = () => {
+        fetch('/api/dispatcher/clients', {headers: {authorization: localStorage.getItem('authorization')}}).then(resp=>{
+            return resp.json();
+        }).then(data=>{
+            this.setState({
+                clients: data
+            });
+        })
     };
 
     changeForm = (form) => {
@@ -82,7 +97,7 @@ export default class CreateOrder extends Component {
         return (
             <div className={'animated fadeIn'}>
                 <Container>
-                    <MDBIcon icon="edit" onClick={this.toggle}/>
+                    <Button color="success" onClick={this.toggle}>Create order</Button>
                     <Modal isOpen={this.state.modal} toggle={this.toggle} size={'fluid'}>
                         <ModalHeader toggle={this.toggle}>Create order: </ModalHeader>
                         <ModalBody>
@@ -111,18 +126,18 @@ export default class CreateOrder extends Component {
                                                             success="right"
                                                         />
                                                         <span className="error-span" id="error-email-span"/>
-                                                        <MDBInput
-                                                            label="Client"
-                                                            onChange={this.changeInput}
-                                                            value={this.state.newOrderClient}
-                                                            id={'newOrderClient'}
-                                                            group
-                                                            type="text"
-                                                            validate
-                                                            error="wrong"
-                                                            success="right"
-                                                        />
+                                                        <label htmlFor="newOrderClient">Client</label>
+                                                        <Select style={{width: '100%'}} id={'newOrderClient'} native={true}
+                                                                value={this.state.newOrderClient}
+                                                                onChange={this.changeInput}>
+                                                            {
+                                                                this.state.clients.map((client, index)=>{
+                                                                    return <option value={client.id} key={index}>{client.name}</option>
+                                                                })
+                                                            }
+                                                        </Select>
                                                         <span className="error-span" id="error-username-span"/>
+                                                        <label htmlFor="newOrderStatus">Status</label>
                                                         <Select style={{width: '100%'}} id={'newOrderStatus'} native={true}
                                                                 value={this.state.newOrderStatus}
                                                                 onChange={this.changeInput}>
@@ -131,11 +146,13 @@ export default class CreateOrder extends Component {
                                                             <option value={'3'}>Lost</option>
                                                         </Select>
                                                         <span className="error-span" id="error-name-span"/>
+                                                        <label htmlFor="newOrderSender">Sender</label>
                                                         <Select style={{width: '100%'}} id={'newOrderSender'} native={true}
                                                                 value={this.state.newOrderSender}
                                                                 onChange={this.changeInput}>
                                                         </Select>
                                                         <span className="error-span" id="error-surname-span"/>
+                                                        <label htmlFor="newOrderReceiver">Receiver</label>
                                                         <Select style={{width: '100%'}} id={'newOrderReceiver'} native={true}
                                                                 value={this.state.newOrderReceiver}
                                                                 onChange={this.changeInput}>
