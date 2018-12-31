@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Animation, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput } from 'mdbreact';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import { DatePicker } from 'material-ui-pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import { Button } from 'reactstrap';
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
@@ -40,11 +43,6 @@ export default class CreateOrder extends Component {
         this.loadInfo(`/api/dispatcher/freeDrivers?dd=${this.state.newOrderDD}&&da=${this.state.newOrderDA}`, 'drivers');
     }
 
-    toggle = () => {
-        this.setState({
-            modal: !this.state.modal
-        });
-    };
 
     loadInfo = (url, id) => {
         fetch(url, { headers: { authorization: localStorage.getItem('authorization') } }).then(resp => {
@@ -61,22 +59,36 @@ export default class CreateOrder extends Component {
             case 1:
                 document.getElementById('first-form').style.display = '';
                 document.getElementById('second-form').style.display = 'none';
+                document.getElementById('third-form').style.display = 'none';
                 break;
             case 2:
                 document.getElementById('first-form').style.display = 'none';
                 document.getElementById('second-form').style.display = '';
+                document.getElementById('third-form').style.display = 'none';
                 break;
-
+            case 3:
+                document.getElementById('first-form').style.display = 'none';
+                document.getElementById('second-form').style.display = 'none';
+                document.getElementById('third-form').style.display = '';
+                break;
         }
         this.setState({
             selectedForm: form
         });
     };
 
+    changeDate = (id, date) => {
+        this.setState({
+            [id]: date
+        })
+    };
+
     changeInput = (event) => {
+        console.log(event);
         this.setState({
             [event.target.id]: event.target.value
         });
+        console.log(this.state);
     };
 
     addProduct = () => {
@@ -89,7 +101,7 @@ export default class CreateOrder extends Component {
         this.setState({
             consignment: [...this.state.consignment, product]
         });
-    }
+    };
 
     deleteProduct(index){
         let newCons = [...this.state.consignment];
@@ -121,7 +133,7 @@ export default class CreateOrder extends Component {
             document.getElementById('error-stocks-span').innerText = '';
         }
         return clientIdValidation && nameValidation && stocksVal;
-    }
+    };
 
     validateOrder = () => {
         let sD = ValidationUtil.reformatFromDateToString(new Date(this.state.startDate));
@@ -183,10 +195,6 @@ export default class CreateOrder extends Component {
             <div className={'animated fadeIn'}>
 
                 <form className="container">
-                    {/* <MDBContainer>
-                        <MDBRow>
-                            <MDBCol md="">
-                                <MDBCard> */}
                     <MDBCardBody>
                         <MDBCardHeader className="form-header warm-flame-gradient rounded">
                             <h3 className="my-3">Create order</h3>
@@ -255,7 +263,7 @@ export default class CreateOrder extends Component {
                             <span className="error-span" id="error-stocks-span" /><br />
                             <Button color="secondary"
                                 onClick={() => {
-                                    if (this.validateFirstForm()) {
+                                    if (true) {
                                         this.changeForm(2);
                                     }
                                 }}>Continue</Button>
@@ -263,30 +271,16 @@ export default class CreateOrder extends Component {
 
                         <div id="second-form" className={'animated fadeIn'}
                             style={{ display: 'none' }}>
-                            <MDBInput
-                                label="Departure"
-                                onChange={this.changeInput}
-                                id={'newOrderDD'}
-                                value={this.state.newOrderDD}
-                                group
-                                type="text"
-                                validate
-                                error="wrong"
-                                success="right"
-                            />
-                            <span className="error-span" id="error-dd-span" /><br />
+                            <label htmlFor="dates">Dates</label>
 
-                            <MDBInput
-                                label="Arrival"
-                                onChange={this.changeInput}
-                                id={'newOrderDA'}
-                                value={this.state.newOrderDA}
-                                group
-                                type="text"
-                                validate
-                                error="wrong"
-                                success="right"
-                            />
+                            <div id="dates" style={{width: '100%'}}>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <DatePicker id={'newOrderDD'} value={this.state.newOrderDD} onChange={(e)=>this.changeDate('newOrderDD', e)} />
+                                    <DatePicker id={'newOrderDA'} value={this.state.newOrderDA} onChange={(e)=>this.changeDate('newOrderDA', e)} />
+
+                                </MuiPickersUtilsProvider>
+                            </div>
+
                             <span className="error-span" id="error-da-span" /><br />
 
                             <label htmlFor="newOrderAuto">Auto</label>
@@ -316,88 +310,99 @@ export default class CreateOrder extends Component {
                                 }
                             </Select>
                             <span className="error-span" id="error-driver-span" /><br />
-                            <div id="third-form">
-                                <div className="product-row">
-                                    <MDBInput
-                                        label="Name"
-                                        onChange={this.changeInput}
-                                        id={'newProductName'}
-                                        value={this.state.newProductName}
-                                        group
-                                        type="text"
-                                        validate
-                                        error="wrong"
-                                        success="right" />
-                                    <MDBInput
-                                        label="Description"
-                                        onChange={this.changeInput}
-                                        id={'newProductDescription'}
-                                        value={this.state.newProductDescription}
-                                        group
-                                        type="text"
-                                        validate
-                                        error="wrong"
-                                        success="right" />
-                                    <MDBInput
-                                        label="Count"
-                                        onChange={this.changeInput}
-                                        id={'newProductCount'}
-                                        value={this.state.newProductCount}
-                                        group
-                                        type="number"
-                                        validate
-                                        error="wrong"
-                                        success="right" />
-                                    <MDBInput
-                                        label="Price"
-                                        onChange={this.changeInput}
-                                        id={'newProductPrice'}
-                                        value={this.state.newProductPrice}
-                                        group
-                                        type="number"
-                                        validate
-                                        error="wrong"
-                                        success="right" />
 
-                                    <button type="button" style={{ height: '50px' }} onClick={this.addProduct} className="btn btn-success">Add product</button>
-                                </div>
-                                {
-                                    this.state.consignment.length > 0 ? <div>
-                                        <div className="product-row animated fadeInUp" style={{ backgroundColor: '#DCDCDC' }}>
-                                            <div className="col-md-2">Id</div>
-                                            <div className="col-md-2">Name</div>
-                                            <div className="col-md-2">Description</div>
-                                            <div className="col-md-2">Count</div>
-                                            <div className="col-md-2">Price</div>
-                                            <div className="col-md-1">Remove</div>
-
-                                        </div>
-                                    </div> : <div />
-                                }
-
-                                <div style={{ maxHeight: '300px', 'overflowX': 'hidden', 'overflowY': 'scroll' }}>
-                                    {
-                                        this.state.consignment.map((product, index) => {
-                                            return <div className="product-row animated fadeInUp" key={index} style={{ backgroundColor: 'white' }}>
-                                                <div className="col-md-2">{index + 1}</div>
-                                                <div className="col-md-2">{product.name}</div>
-                                                <div className="col-md-2">{product.description}</div>
-                                                <div className="col-md-2">{product.count}</div>
-                                                <div className="col-md-2">{product.price}</div>
-                                                <div className="col-md-1"><button className="table-button" style={{backgroundColor: '#F0AAAA'}} type="button" onClick={this.deleteProduct.bind(this,index)}>-</button></div>
-                                            </div>
-                                        })
-                                    }
-                                </div>
-
-
-                            </div>
+                            <button className={'btn btn-primary'} type={'button'} onClick={()=> this.changeForm(1)}>Back to order</button>
 
                             <Button color="secondary"
-                                onClick={this.validateOrder}>Continue</Button>
+                                onClick={()=>{
+                                    if (true){
+                                        this.changeForm(3);
+                                    }
+                                }}>Continue</Button>
                         </div>
 
-                        {/*<Button color="secondary" onClick={this.changeForm(1)}>Back to order</Button>*/}
+                        <div id="third-form" style={{display: 'none'}}>
+                            <div className="product-row">
+                                <MDBInput
+                                    label="Name"
+                                    onChange={this.changeInput}
+                                    id={'newProductName'}
+                                    value={this.state.newProductName}
+                                    group
+                                    type="text"
+                                    validate
+                                    error="wrong"
+                                    success="right" />
+                                <MDBInput
+                                    label="Description"
+                                    onChange={this.changeInput}
+                                    id={'newProductDescription'}
+                                    value={this.state.newProductDescription}
+                                    group
+                                    type="text"
+                                    validate
+                                    error="wrong"
+                                    success="right" />
+                                <MDBInput
+                                    label="Count"
+                                    onChange={this.changeInput}
+                                    id={'newProductCount'}
+                                    value={this.state.newProductCount}
+                                    group
+                                    type="number"
+                                    validate
+                                    error="wrong"
+                                    success="right" />
+                                <MDBInput
+                                    label="Price"
+                                    onChange={this.changeInput}
+                                    id={'newProductPrice'}
+                                    value={this.state.newProductPrice}
+                                    group
+                                    type="number"
+                                    validate
+                                    error="wrong"
+                                    success="right" />
+
+                                <button type="button" style={{ height: '50px' }} onClick={this.addProduct} className="btn btn-success">Add product</button>
+                            </div>
+                            {
+                                this.state.consignment.length > 0 ? <div>
+                                    <div className="product-row animated fadeInUp" style={{ backgroundColor: '#DCDCDC' }}>
+                                        <div className="col-md-2">Id</div>
+                                        <div className="col-md-2">Name</div>
+                                        <div className="col-md-2">Description</div>
+                                        <div className="col-md-2">Count</div>
+                                        <div className="col-md-2">Price</div>
+                                        <div className="col-md-1">Remove</div>
+
+                                    </div>
+                                </div> : <div/>
+                            }
+
+                            <div style={{ maxHeight: '300px', 'overflowX': 'hidden', 'overflowY': 'scroll' }}>
+                                {
+                                    this.state.consignment.map((product, index) => {
+                                        return <div className="product-row animated fadeInUp" key={index} style={{ backgroundColor: 'white' }}>
+                                            <div className="col-md-2">{index + 1}</div>
+                                            <div className="col-md-2">{product.name}</div>
+                                            <div className="col-md-2">{product.description}</div>
+                                            <div className="col-md-2">{product.count}</div>
+                                            <div className="col-md-2">{product.price}</div>
+                                            <div className="col-md-1">
+                                                <MDBIcon icon="remove" style={{color: 'red'}}  onClick={this.deleteProduct.bind(this,index)}/>
+                                                {/*<button className="table-button" style={{backgroundColor: '#F0AAAA'}} type="button" */}
+                                                        {/*onClick={this.deleteProduct.bind(this,index)}>-</button>*/}
+                                            </div>
+                                        </div>
+                                    })
+                                }
+                            </div>
+
+                            <button className={'btn btn-primary'} type={'button'} onClick={()=> this.changeForm(2)}>Back to waybill</button>
+                            <button className={'btn btn-success'} type={'button'}>Create</button>
+
+                        </div>
 
 
 
@@ -406,14 +411,13 @@ export default class CreateOrder extends Component {
                         </Animation>
 
                     </MDBCardBody>
-                    {/* </MDBCard>
-                            </MDBCol>
-                        </MDBRow>
-                    </MDBContainer> */}
                 </form>
 
             </div>
         );
+    }
+    getPickerValue = (value) => {
+        console.log(value);
     }
 
 }
