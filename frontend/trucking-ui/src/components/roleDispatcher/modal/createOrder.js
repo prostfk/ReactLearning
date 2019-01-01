@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Animation, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput } from 'mdbreact';
-import { MuiPickersUtilsProvider } from 'material-ui-pickers';
-import { DatePicker } from 'material-ui-pickers';
+import React, {Component} from 'react';
+import {Animation, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput} from 'mdbreact';
+import {MuiPickersUtilsProvider} from 'material-ui-pickers';
+import {DatePicker} from 'material-ui-pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { Button } from 'reactstrap';
+import {Button} from 'reactstrap';
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
-import { NotificationManager } from "react-notifications";
+import {NotificationManager} from "react-notifications";
+import CommonUtil from "../../../lib/commontUtil";
 
 export default class CreateOrder extends Component {
 
@@ -19,8 +20,8 @@ export default class CreateOrder extends Component {
             newOrderStatus: '',
             newOrderSender: '',
             newOrderReceiver: '',
-            newOrderDD: '2018-12-12',
-            newOrderDA: '2018-12-13',
+            newOrderDD: new Date(),
+            newOrderDA: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
             newOrderAuto: '',
             newOrderDriver: '',
             newProductName: '',
@@ -39,13 +40,12 @@ export default class CreateOrder extends Component {
     componentDidMount() {
         this.loadInfo('/api/dispatcher/clients', 'clients');
         this.loadInfo('/api/dispatcher/stocks', 'stocks');
-        this.loadInfo(`/api/dispatcher/freeAutos?dd=${this.state.newOrderDD}&&da=${this.state.newOrderDA}`, 'autos');
-        this.loadInfo(`/api/dispatcher/freeDrivers?dd=${this.state.newOrderDD}&&da=${this.state.newOrderDA}`, 'drivers');
+        this.loadInfo(`/api/dispatcher/freeAutos?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'autos');
+        this.loadInfo(`/api/dispatcher/freeDrivers?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'drivers');
     }
 
-
     loadInfo = (url, id) => {
-        fetch(url, { headers: { authorization: localStorage.getItem('authorization') } }).then(resp => {
+        fetch(url, {headers: {authorization: localStorage.getItem('authorization')}}).then(resp => {
             return resp.json();
         }).then(data => {
             this.setState({
@@ -80,11 +80,10 @@ export default class CreateOrder extends Component {
     changeDate = (id, date) => {
         this.setState({
             [id]: date
-        })
+        });
     };
 
     changeInput = (event) => {
-        console.log(event);
         this.setState({
             [event.target.id]: event.target.value
         });
@@ -103,10 +102,10 @@ export default class CreateOrder extends Component {
         });
     };
 
-    deleteProduct(index){
+    deleteProduct(index) {
         let newCons = [...this.state.consignment];
-        if (index !== -1){
-            newCons.splice(index,1);
+        if (index !== -1) {
+            newCons.splice(index, 1);
             this.setState({
                 consignment: newCons
             })
@@ -136,13 +135,9 @@ export default class CreateOrder extends Component {
     };
 
     validateOrder = () => {
-        let sD = ValidationUtil.reformatFromDateToString(new Date(this.state.startDate));
-        let eD = ValidationUtil.reformatFromDateToString(new Date(this.state.endDate));
         let clientIdValidation = ValidationUtil.validateForNumber(this.state.newOrderClient);
         let nameValidation = ValidationUtil.validateStringForLength(this.state.newOrderName, 3, 20);
-        let dateArrivalValidation = ValidationUtil.validateDateToPattern(eD);
-        let dateDepartureValidation = ValidationUtil.validateDateToPattern(sD);
-        let correctDates = ValidationUtil.reformatDateToDateObject(eD) > ValidationUtil.reformatDateToDateObject(sD);
+        let correctDates = this.state.newOrderDD.getTime() < this.state.newOrderDA.getTime();
         let stocksVal = this.state.newOrderSender !== this.state.newOrderReceiver;
         let validateAuto = ValidationUtil.validateForNumber(this.state.newOrderAuto);
         let validateDriver = ValidationUtil.validateForNumber(this.state.newOrderDriver);
@@ -156,10 +151,10 @@ export default class CreateOrder extends Component {
         } else {
             document.getElementById('error-name-span').innerText = "";
         }
-        if (!dateArrivalValidation || !dateDepartureValidation || !correctDates) {
-            document.getElementById('error-da-span').innerText = "Choose dates";
+        if (!correctDates) {
+            document.getElementById('error-dates-span').innerText = "Incorrect dates";
         } else {
-            document.getElementById('error-da-span').innerText = "";
+            document.getElementById('error-dates-span').innerText = "";
         }
         if (!validateAuto) {
             document.getElementById('error-auto-span').innerText = 'Choose auto';
@@ -176,18 +171,42 @@ export default class CreateOrder extends Component {
         } else {
             document.getElementById('error-stocks-span').innerText = '';
         }
-        console.log(clientIdValidation && nameValidation && dateArrivalValidation && dateDepartureValidation && validateAuto && validateDriver && correctDates);
-        console.log(clientIdValidation, nameValidation, dateArrivalValidation, dateDepartureValidation, validateAuto, validateDriver, correctDates);
-        return clientIdValidation && nameValidation && dateArrivalValidation && dateDepartureValidation && validateAuto && validateDriver && correctDates;
+        return clientIdValidation && nameValidation && validateAuto && validateDriver && correctDates;
     };
 
-    saveUser = () => {
+    saveOrder = () => {
         let ref = this;
         if (this.validateOrder) {
-
+            const formData = new FormData();
+            formData.append('name', this.state.newOrderName);
+            formData.append('client', this.state.newOrderClient);
+            formData.append('auto', this.state.newOrderAuto);
+            formData.append('driver', this.state.newOrderDriver);
+            formData.append('sender', this.state.newOrderSender);
+            formData.append('receiver', this.state.newOrderReceiver);
+            formData.append('dd', this.state.newOrderDD);
+            formData.append('da', this.state.newOrderDA);
+            formData.append('consignment', JSON.stringify(this.state.consignment));
+            fetch('/api/dispatcher/addOrder', {method: 'post', headers:{authorization: localStorage.getItem('authorization')}, body:formData}).then(resp=>{
+                return resp.json();
+            }).then(data=>{
+                console.log(data);
+            }).catch((err)=>{
+                NotificationManager.warning(err);
+            })
         } else {
             NotificationManager.warning("check your data");
         }
+    };
+
+    setDefault = () => {
+        this.setState({
+            newOrderStatus: document.getElementById('newOrderStatus'),
+            newOrderSender: document.getElementById('newOrderSender'),
+            newOrderReceiver: document.getElementById('newOrderReceiver'),
+            newOrderAuto: document.getElementById('newOrderAuto'),
+            newOrderDriver: document.getElementById('newOrderDriver')
+        })
     };
 
     render() {
@@ -212,113 +231,119 @@ export default class CreateOrder extends Component {
                                 error="wrong"
                                 success="right"
                             />
-                            <span className="error-span" id="error-name-span" /><br />
+                            <span className="error-span" id="error-name-span"/><br/>
                             <label htmlFor="newOrderClient">Client</label>
-                            <Select style={{ width: '100%' }} id={'newOrderClient'}
-                                native={true}
-                                value={this.state.newOrderClient}
-                                onChange={this.changeInput}>
+                            <Select style={{width: '100%'}} id={'newOrderClient'}
+                                    native={true}
+                                    value={this.state.newOrderClient}
+                                    onChange={this.changeInput}>
                                 {
                                     this.state.clients.map((client, index) => {
                                         return <option value={client.id}
-                                            key={index}>{client.name}</option>
+                                                       key={index}>{client.name}</option>
                                     })
                                 }
                             </Select>
-                            <span className="error-span" id="error-client-span" /><br />
+                            <span className="error-span" id="error-client-span"/><br/>
                             <label htmlFor="newOrderStatus">Status</label>
-                            <Select style={{ width: '100%' }} id={'newOrderStatus'}
-                                native={true}
-                                value={this.state.newOrderStatus}
-                                onChange={this.changeInput}>
+                            <Select style={{width: '100%'}} id={'newOrderStatus'}
+                                    native={true}
+                                    value={this.state.newOrderStatus}
+                                    onChange={this.changeInput}>
                                 <option value={'1'}>Accepted</option>
                                 <option value={'2'}>Checked</option>
                                 <option value={'3'}>Lost</option>
                             </Select>
-                            <span className="error-span" id="error-status-span" /><br />
+                            <span className="error-span" id="error-status-span"/><br/>
                             <label htmlFor="newOrderSender">Sender</label>
-                            <Select style={{ width: '100%' }} id={'newOrderSender'}
-                                native={true}
-                                value={this.state.newOrderSender}
-                                onChange={this.changeInput}>
+                            <Select style={{width: '100%'}} id={'newOrderSender'}
+                                    native={true}
+                                    value={this.state.newOrderSender}
+                                    onChange={this.changeInput}>
                                 {
                                     this.state.stocks.map((stock, index) => {
                                         return <option value={stock.id}
-                                            key={index}>{stock.name}</option>
+                                                       key={index}>{stock.name}</option>
                                     })
                                 }
                             </Select>
                             <label htmlFor="newOrderReceiver">Receiver</label>
-                            <Select style={{ width: '100%' }} id={'newOrderReceiver'}
-                                native={true}
-                                value={this.state.newOrderReceiver}
-                                onChange={this.changeInput}>
+                            <Select style={{width: '100%'}} id={'newOrderReceiver'}
+                                    native={true}
+                                    value={this.state.newOrderReceiver}
+                                    onChange={this.changeInput}>
                                 {
                                     this.state.stocks.map((stock, index) => {
                                         return <option value={stock.id}
-                                            key={index}>{stock.name}</option>
+                                                       key={index}>{stock.name}</option>
                                     })
                                 }
                             </Select>
-                            <span className="error-span" id="error-stocks-span" /><br />
+                            <span className="error-span" id="error-stocks-span"/><br/>
                             <Button color="secondary"
-                                onClick={() => {
-                                    if (true) {
-                                        this.changeForm(2);
-                                    }
-                                }}>Continue</Button>
+                                    onClick={() => {
+                                        // this.setDefault();
+                                        if (this.validateFirstForm()) {
+                                            this.changeForm(2);
+                                        }
+                                    }}>Continue</Button>
                         </div>
 
                         <div id="second-form" className={'animated fadeIn'}
-                            style={{ display: 'none' }}>
+                             style={{display: 'none'}}>
                             <label htmlFor="dates">Dates</label>
 
-                            <div id="dates" style={{width: '100%'}}>
+                            <div id="dates" style={{display: 'flex', justifyContent: 'center'}}>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker id={'newOrderDD'} value={this.state.newOrderDD} onChange={(e)=>this.changeDate('newOrderDD', e)} />
-                                    <DatePicker id={'newOrderDA'} value={this.state.newOrderDA} onChange={(e)=>this.changeDate('newOrderDA', e)} />
+                                    <DatePicker id={'newOrderDD'} value={this.state.newOrderDD}
+                                                onChange={(e) => this.changeDate('newOrderDD', e)}/>
+                                    <DatePicker id={'newOrderDA'} value={this.state.newOrderDA}
+                                                onChange={(e) => this.changeDate('newOrderDA', e)}/>
 
                                 </MuiPickersUtilsProvider>
                             </div>
 
-                            <span className="error-span" id="error-da-span" /><br />
+                            <span className="error-span" id="error-dates-span"/><br/>
 
                             <label htmlFor="newOrderAuto">Auto</label>
-                            <Select style={{ width: '100%' }} id={'newOrderAuto'}
-                                native={true}
-                                value={this.state.newOrderAuto}
-                                onChange={this.changeInput}>
+                            <Select style={{width: '100%'}} id={'newOrderAuto'}
+                                    native={true}
+                                    value={this.state.newOrderAuto}
+                                    onChange={this.changeInput}>
                                 {
                                     this.state.autos.map((auto, index) => {
                                         return <option value={auto.id}
-                                            key={index}>{auto.name}</option>
+                                                       key={index}>{auto.name}</option>
                                     })
                                 }
                             </Select>
-                            <span className="error-span" id="error-auto-span" /><br />
+                            <span className="error-span" id="error-auto-span"/><br/>
 
                             <label htmlFor="newOrderDriver">Driver</label>
-                            <Select style={{ width: '100%' }} id={'newOrderDriver'}
-                                native={true}
-                                value={this.state.newOrderDriver}
-                                onChange={this.changeInput}>
+                            <Select style={{width: '100%'}} id={'newOrderDriver'}
+                                    native={true}
+                                    value={this.state.newOrderDriver}
+                                    onChange={this.changeInput}>
                                 {
                                     this.state.drivers.map((driver, index) => {
                                         return <option value={driver.id}
-                                            key={index}>{driver.name}</option>
+                                                       key={index}>{driver.name}</option>
                                     })
                                 }
                             </Select>
-                            <span className="error-span" id="error-driver-span" /><br />
+                            <span className="error-span" id="error-driver-span"/><br/>
 
-                            <button className={'btn btn-primary'} type={'button'} onClick={()=> this.changeForm(1)}>Back to order</button>
+                            <button className={'btn btn-primary'} type={'button'}
+                                    onClick={() => this.changeForm(1)}>Back to order
+                            </button>
 
                             <Button color="secondary"
-                                onClick={()=>{
-                                    if (true){
-                                        this.changeForm(3);
-                                    }
-                                }}>Continue</Button>
+                                    onClick={() => {
+                                        // this.setDefault();
+                                        // if (this.validateOrder()) {
+                                            this.changeForm(3);
+                                        // }
+                                    }}>Continue</Button>
                         </div>
 
                         <div id="third-form" style={{display: 'none'}}>
@@ -332,7 +357,7 @@ export default class CreateOrder extends Component {
                                     type="text"
                                     validate
                                     error="wrong"
-                                    success="right" />
+                                    success="right"/>
                                 <MDBInput
                                     label="Description"
                                     onChange={this.changeInput}
@@ -342,7 +367,7 @@ export default class CreateOrder extends Component {
                                     type="text"
                                     validate
                                     error="wrong"
-                                    success="right" />
+                                    success="right"/>
                                 <MDBInput
                                     label="Count"
                                     onChange={this.changeInput}
@@ -352,7 +377,7 @@ export default class CreateOrder extends Component {
                                     type="number"
                                     validate
                                     error="wrong"
-                                    success="right" />
+                                    success="right"/>
                                 <MDBInput
                                     label="Price"
                                     onChange={this.changeInput}
@@ -362,13 +387,15 @@ export default class CreateOrder extends Component {
                                     type="number"
                                     validate
                                     error="wrong"
-                                    success="right" />
+                                    success="right"/>
 
-                                <button type="button" style={{ height: '50px' }} onClick={this.addProduct} className="btn btn-success">Add product</button>
+                                <button type="button" style={{height: '50px'}} onClick={this.addProduct}
+                                        className="btn btn-success">Add product
+                                </button>
                             </div>
                             {
                                 this.state.consignment.length > 0 ? <div>
-                                    <div className="product-row animated fadeInUp" style={{ backgroundColor: '#DCDCDC' }}>
+                                    <div className="product-row animated fadeInUp" style={{backgroundColor: '#DCDCDC'}}>
                                         <div className="col-md-2">Id</div>
                                         <div className="col-md-2">Name</div>
                                         <div className="col-md-2">Description</div>
@@ -380,34 +407,37 @@ export default class CreateOrder extends Component {
                                 </div> : <div/>
                             }
 
-                            <div style={{ maxHeight: '300px', 'overflowX': 'hidden', 'overflowY': 'scroll' }}>
+                            <div style={{maxHeight: '300px', 'overflowX': 'hidden', 'overflowY': 'scroll'}}>
                                 {
                                     this.state.consignment.map((product, index) => {
-                                        return <div className="product-row animated fadeInUp" key={index} style={{ backgroundColor: 'white' }}>
+                                        return <div className="product-row animated fadeInUp" key={index}
+                                                    style={{backgroundColor: 'white'}}>
                                             <div className="col-md-2">{index + 1}</div>
                                             <div className="col-md-2">{product.name}</div>
                                             <div className="col-md-2">{product.description}</div>
                                             <div className="col-md-2">{product.count}</div>
                                             <div className="col-md-2">{product.price}</div>
                                             <div className="col-md-1">
-                                                <MDBIcon icon="remove" style={{color: 'red'}}  onClick={this.deleteProduct.bind(this,index)}/>
+                                                <MDBIcon icon="remove" style={{color: 'red'}}
+                                                         onClick={this.deleteProduct.bind(this, index)}/>
                                                 {/*<button className="table-button" style={{backgroundColor: '#F0AAAA'}} type="button" */}
-                                                        {/*onClick={this.deleteProduct.bind(this,index)}>-</button>*/}
+                                                {/*onClick={this.deleteProduct.bind(this,index)}>-</button>*/}
                                             </div>
                                         </div>
                                     })
                                 }
                             </div>
 
-                            <button className={'btn btn-primary'} type={'button'} onClick={()=> this.changeForm(2)}>Back to waybill</button>
-                            <button className={'btn btn-success'} type={'button'}>Create</button>
+                            <button className={'btn btn-primary'} type={'button'}
+                                    onClick={() => this.changeForm(2)}>Back to waybill
+                            </button>
+                            <button className={'btn btn-success'} onClick={this.saveOrder} type={'button'}>Create</button>
 
                         </div>
 
 
-
                         <Animation type="fadeIn" infinite>
-                            <span id={'pass-span'} className="error-span" />
+                            <span id={'pass-span'} className="error-span"/>
                         </Animation>
 
                     </MDBCardBody>
@@ -416,6 +446,7 @@ export default class CreateOrder extends Component {
             </div>
         );
     }
+
     getPickerValue = (value) => {
         console.log(value);
     }
