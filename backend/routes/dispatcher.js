@@ -1,3 +1,4 @@
+const CommonUtil = require('../util/commonUtil');
 const ValidationUtil = require('../util/validation');
 const express = require('express');
 const router = express.Router();
@@ -83,25 +84,27 @@ router.get('/freeAutos', (req, resp) => {
 router.post('/addOrder', (req, resp) => {
 
     security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
-        // let {name, client, status, sender, receiver, date_departure, date_arrival, waybill_status, driver, auto, consignment} = req.body;
-        // consignment = JSON.parse(consignment);
+        let {name, client, status, sender, receiver, dd, da, waybill_status, driver, auto, consignment} = req.body;
+        consignment = JSON.parse(consignment);
+        dd = CommonUtil.reformatDate(dd);
+        da = CommonUtil.reformatDate(da);
         console.log(req.body);
-        // let userInfo = security.getUserInfo(req);
-        // if (ValidationUtil.validateOrder({name,client,status,sender,receiver,date_departure, date_arrival, waybill_status, driver, auto, consignment})){
-        //     let db = new Database();
-        //     db.query('INSERT INTO waybill(status, driver, auto, date_departure, date_arrival, user_id) VALUES (?,?,?,?,?,?)',
-        //         [status,driver,auto, date_departure,date_arrival,null]).then(data=>{
-        //             db.executeQuery('SELECT * FROM waybill ORDER BY id DESC LIMIT 1').then(data=>{
-        //                 let wayId = data.id;
-        //                 db.query('INSERT INTO orders(name, client, status, sender, receiver, date_departure, date_arrival, waybil, company) VALUES (?,?,?,?,?,?,?,?,?)',
-        //                     [name,client,status,sender,receiver,date_departure,date_arrival,wayId,userInfo.companyId]).then(data=>{
-        //                         resp.json({status: 'Saved'});
-        //                 })
-        //             });
-        //     })
-        // }else{
-        //     resp.json({error: 'Check data'});
-        // }
+        let userInfo = security.getUserInfo(req);
+        if (ValidationUtil.validateOrder({name,client,status,sender,receiver,dd, da, waybill_status, driver, auto, consignment})){
+            let db = new Database();
+            db.query('INSERT INTO waybill(status, driver, auto, date_departure, date_arrival, user_id) VALUES (?,?,?,?,?,?)',
+                [status,driver,auto, dd,da,null]).then(data=>{
+                    db.executeQuery('SELECT * FROM waybill ORDER BY id DESC LIMIT 1').then(data=>{
+                        let wayId = data[0].id;
+                        db.query('INSERT INTO orders(name, client, status, sender, receiver, date_departure, date_arrival, waybill, company) VALUES (?,?,?,?,?,?,?,?,?)',
+                            [name,client,status,sender,receiver,dd,da,wayId,userInfo.companyId]).then(data=>{
+                                resp.json({status: 'Saved'});
+                        })
+                    });
+            })
+        }else{
+            resp.json({error: 'Check data'});
+        }
     });
 
 });

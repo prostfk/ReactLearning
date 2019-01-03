@@ -25,10 +25,10 @@ export default class DispatcherIndexPage extends Component {
         }).then(data => {
             if (data.error === undefined) {
                 this.setState({
-                    users: data
+                    orders: data
                 });
             } else {
-                // NotificationManager.warn(data.error);
+                NotificationManager.warning(data.error);
             }
         })
     };
@@ -59,7 +59,7 @@ export default class DispatcherIndexPage extends Component {
                                             <td>{order.client}</td>
                                             <td>{order.date_departure}</td>
                                             <td>{order.date_arrival}</td>
-                                            <td><EditUser user={order} renderUsers={this.updateOrders}/></td>
+                                            <td>edit</td>
                                         </tr>
                                     })
                                 }

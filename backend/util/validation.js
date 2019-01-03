@@ -6,12 +6,13 @@ class ValidationUtil {
     }
 
     static validateOrder(order) {
-        let {name, client, status, sender, receiver, waybill_status, driver, auto, consignment} = order;
+        let {name, client, status, sender, receiver, driver, auto, consignment} = order;
+        console.log(this.validateForNumber(client));
         return this.validateStringForLength(name, 2, 11) &&
             this.validateForNumber(client) && this.validateForNumber(status) &&
             this.validateForNumber(sender) && this.validateForNumber(receiver) &&
-            this.validateForNumber(waybill_status) && this.validateForNumber(driver) &&
-            this.validateForNumber(auto) && this.validateForArray(consignment);
+            this.validateForNumber(driver) && this.validateForNumber(auto) &&
+            this.validateForArray(consignment);
     }
 
     static validateAuto(auto) {
