@@ -38,19 +38,30 @@ export default class CreateOrder extends Component {
     }
 
     componentDidMount() {
-        this.loadInfo('/api/dispatcher/clients', 'clients');
-        this.loadInfo('/api/dispatcher/stocks', 'stocks');
-        this.loadInfo(`/api/dispatcher/freeAutos?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'autos');
-        this.loadInfo(`/api/dispatcher/freeDrivers?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'drivers');
+        this.loadInfo('/api/dispatcher/clients', 'clients', 'newOrderClient');
+        this.loadInfo('/api/dispatcher/stocks', 'stocks', 'stock');
+        this.loadInfo(`/api/dispatcher/freeAutos?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'autos', 'newOrderAuto');
+        this.loadInfo(`/api/dispatcher/freeDrivers?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'drivers', 'newOrderDriver');
     }
 
-    loadInfo = (url, id) => {
+    loadInfo = (url, id, singleId = undefined) => {
         fetch(url, {headers: {authorization: localStorage.getItem('authorization')}}).then(resp => {
             return resp.json();
         }).then(data => {
+            if (singleId) {
+                if (singleId === 'stock'){
+                    this.setState({
+                        newOrderReceiver: data[0].id,
+                        newOrderSender: data[0].id
+                    });
+                }
+                this.setState({
+                    [singleId]: data[0].id
+                });
+            }
             this.setState({
                 [id]: data
-            })
+            });
         })
     };
 
@@ -100,6 +111,8 @@ export default class CreateOrder extends Component {
         this.setState({
             consignment: [...this.state.consignment, product]
         });
+        document.getElementById('newProductName').focus();
+
     };
 
     deleteProduct(index) {
@@ -184,14 +197,19 @@ export default class CreateOrder extends Component {
             formData.append('driver', this.state.newOrderDriver);
             formData.append('sender', this.state.newOrderSender);
             formData.append('receiver', this.state.newOrderReceiver);
-            formData.append('dd', this.state.newOrderDD);
-            formData.append('da', this.state.newOrderDA);
+            formData.append('dd', CommonUtil.dateToString(this.state.newOrderDD));
+            formData.append('da', CommonUtil.dateToString(this.state.newOrderDA));
+            formData.append('status', this.state.newOrderStatus);
             formData.append('consignment', JSON.stringify(this.state.consignment));
-            fetch('/api/dispatcher/addOrder', {method: 'post', headers:{authorization: localStorage.getItem('authorization')}, body:formData}).then(resp=>{
+            fetch('/api/dispatcher/addOrder', {
+                method: 'post',
+                headers: {authorization: localStorage.getItem('authorization')},
+                body: formData
+            }).then(resp => {
                 return resp.json();
-            }).then(data=>{
+            }).then(data => {
                 console.log(data);
-            }).catch((err)=>{
+            }).catch((err) => {
                 NotificationManager.warning(err);
             })
         } else {
@@ -237,6 +255,7 @@ export default class CreateOrder extends Component {
                                     native={true}
                                     value={this.state.newOrderClient}
                                     onChange={this.changeInput}>
+                                {/*<option disabled selected>Client</option>*/}
                                 {
                                     this.state.clients.map((client, index) => {
                                         return <option value={client.id}
@@ -340,9 +359,9 @@ export default class CreateOrder extends Component {
                             <Button color="secondary"
                                     onClick={() => {
                                         // this.setDefault();
-                                        // if (this.validateOrder()) {
-                                            this.changeForm(3);
-                                        // }
+                                        if (this.validateOrder()) {
+                                        this.changeForm(3);
+                                        }
                                     }}>Continue</Button>
                         </div>
 
@@ -431,7 +450,8 @@ export default class CreateOrder extends Component {
                             <button className={'btn btn-primary'} type={'button'}
                                     onClick={() => this.changeForm(2)}>Back to waybill
                             </button>
-                            <button className={'btn btn-success'} onClick={this.saveOrder} type={'button'}>Create</button>
+                            <button className={'btn btn-success'} onClick={this.saveOrder} type={'button'}>Create
+                            </button>
 
                         </div>
 
