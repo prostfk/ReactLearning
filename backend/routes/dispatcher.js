@@ -81,6 +81,17 @@ router.get('/freeAutos', (req, resp) => {
 
 });
 
+
+router.get('/stocks', (req,resp)=>{
+    security.checkRole(req,resp,'ROLE_DISPATCHER', ()=>{
+        let db = new Database();
+        let userInfo = security.getUserInfo(req);
+        db.executeQuery('SELECT * FROM stock WHERE companyId=? AND active=1', userInfo.companyId).then(data=>{
+            resp.send(data);
+        })
+    });
+});
+
 router.post('/addOrder', (req, resp) => {
 
     security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {

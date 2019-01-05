@@ -4,25 +4,24 @@ import {NotificationManager} from "react-notifications";
 import { Link } from 'react-router-dom'
 
 
-export default class DispatcherIndexPage extends Component {
+export default class DispatcherStocks extends Component {
 
 
     state = {
-        orders: [],
-        selectedOrder: {},
+        stocks: []
     };
 
     componentDidMount() {
-        this.updateOrders();
+        this.updateStocks();
     }
 
-    updateOrders = () => {
-        fetch('/api/dispatcher/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+    updateStocks = () => {
+        fetch('/api/dispatcher/stocks', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
             if (data.error === undefined) {
                 this.setState({
-                    orders: data
+                    stocks: data
                 });
             } else {
                 NotificationManager.warning(data.error);
@@ -36,27 +35,23 @@ export default class DispatcherIndexPage extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'8'}>
-                        {this.state.orders.length > 0 ? <Table>
+                        {this.state.stocks.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
-                                    <th>id</th>
+                                    <th>Id</th>
                                     <th>Name</th>
-                                    <th>Client</th>
-                                    <th>Departure</th>
-                                    <th>Arrival</th>
+                                    <th>Address</th>
                                     <th>Edit</th>
                                 </tr>
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.orders.map((order, index) => {
+                                    this.state.stocks.map((stock, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{order.name}</td>
-                                                <td>{order.client}</td>
-                                                <td>{order.date_departure}</td>
-                                                <td>{order.date_arrival}</td>
-                                                <td>edit</td>
+                                            <td>{index + 1}</td>
+                                            <td>{stock.name}</td>
+                                            <td>{stock.address}</td>
+                                            <td>edit</td>
                                         </tr>
                                     })
                                 }
@@ -64,7 +59,7 @@ export default class DispatcherIndexPage extends Component {
                         </Table> : <h1 className={'animated fadeInUp'}>No orders yet</h1>}
                     </MDBCol>
                     <MDBCol>
-                        <Link to={'/createOrder'} className='btn btn-success'>Create order</Link>
+                        {/*<Link to={'/createStock'} className='btn btn-success'>Add stock</Link>*/}
                     </MDBCol>
                 </MDBRow>
             </div>

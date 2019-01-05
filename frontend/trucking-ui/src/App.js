@@ -18,6 +18,7 @@ import './css/animate.css'
 import AdminAutos from "./components/roleAdmin/adminAutos";
 import OwnerClients from "./components/roleOwner/ownerClients";
 import CreateOrder from './components/roleDispatcher/modal/createOrder';
+import DispatcherStocks from "./components/roleDispatcher/dispatcherStocks";
 
 class App extends Component {
   render() {
@@ -32,6 +33,7 @@ class App extends Component {
           <Route exact path={'/auth'} component={Auth}/>
           <Route exact path={'/clients'} component={OwnerClients}/>
           <Route exact path={'/createOrder'} component={CreateOrder}/>
+          <Route exact path={'/stocks'} component={DispatcherStocks}/>
         </div>
       </Router>
     </Provider>
