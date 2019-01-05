@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79ef3931-48a7-4715-8664-8d9ccd2a8975" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherStocks.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/modal/createStock.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/constants/roles.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/driver.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDriver/driverIndexPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDriver/driverNavBar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes/dispatcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/dispatcher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/trucking-ui/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/index/indexComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/index/indexComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/anonNavBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAnon/anonNavBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/navBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/navBar.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -44,13 +47,6 @@
         <item name="truck@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="truck: schema" type="c314c289:MysqlImplModel$Schema" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="truck@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="truck: schema" type="c314c289:MysqlImplModel$Schema" />
-        <item name="stock: table" type="98d5ac3d:MysqlImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -133,14 +129,15 @@
           <entry key="css" value="6" />
           <entry key="gitignore" value="7" />
           <entry key="html" value="1" />
-          <entry key="js" value="275" />
+          <entry key="js" value="287" />
           <entry key="json" value="14" />
           <entry key="lock" value="2" />
           <entry key="orders" value="1" />
-          <entry key="sql" value="9" />
+          <entry key="sql" value="10" />
           <entry key="stock" value="1" />
           <entry key="ts" value="1" />
-          <entry key="waybill" value="1" />
+          <entry key="users" value="1" />
+          <entry key="waybill" value="2" />
           <entry key="www" value="4" />
         </counts>
       </usages-collector>
@@ -148,12 +145,12 @@
         <counts>
           <entry key="CSS" value="6" />
           <entry key="DBN-SQL" value="3" />
-          <entry key="Database Element" value="4" />
+          <entry key="Database Element" value="6" />
           <entry key="HTML" value="1" />
           <entry key="JSON" value="14" />
-          <entry key="JavaScript" value="279" />
+          <entry key="JavaScript" value="291" />
           <entry key="PLAIN_TEXT" value="7" />
-          <entry key="Scratch" value="6" />
+          <entry key="Scratch" value="7" />
           <entry key="TypeScript" value="1" />
           <entry key="yarn.lock" value="2" />
         </counts>
@@ -165,9 +162,9 @@
           <entry key="dummy" value="8" />
           <entry key="gitignore" value="9" />
           <entry key="html" value="4" />
-          <entry key="js" value="32166" />
+          <entry key="js" value="33146" />
           <entry key="json" value="86" />
-          <entry key="sql" value="966" />
+          <entry key="sql" value="1019" />
           <entry key="txt" value="11" />
           <entry key="www" value="1" />
         </counts>
@@ -178,10 +175,10 @@
           <entry key="DBN-SQL" value="73" />
           <entry key="HTML" value="4" />
           <entry key="JSON" value="86" />
-          <entry key="JavaScript" value="32145" />
+          <entry key="JavaScript" value="33125" />
           <entry key="PLAIN_TEXT" value="28" />
           <entry key="SQL" value="32" />
-          <entry key="Scratch" value="893" />
+          <entry key="Scratch" value="946" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
@@ -194,10 +191,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js">
+        <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDriver/driverIndexPage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="74" column="1" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
+            <state relative-caret-position="456">
+              <caret line="24" column="32" lean-forward="true" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -206,46 +203,37 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherStocks.js">
+        <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/common/index/indexComponent.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-146">
-              <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="57">
+              <caret line="3" column="61" selection-start-line="3" selection-start-column="61" selection-end-line="3" selection-end-column="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/schema/truck/table/waybill">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/modal/createStock.js">
+        <entry file="file://$PROJECT_DIR$/backend/routes/driver.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="228">
+              <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/backend/routes/dispatcher.js">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/console.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="90" column="10" lean-forward="true" selection-start-line="90" selection-start-column="10" selection-end-line="90" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner/modal/createClient.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="453">
+              <caret line="53" selection-start-line="53" selection-end-line="53" selection-end-column="152" />
             </state>
           </provider>
         </entry>
@@ -276,10 +264,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/backend/package.json" />
-        <option value="$PROJECT_DIR$/backend/util/database.js" />
-        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/reducers/userReducer.js" />
-        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/anonNavbar.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/navbar.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/adminOwner.createUser.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/App.css" />
@@ -305,10 +289,7 @@
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/014d6302-7009-4622-bb6a-3043889ad1b6/console.sql" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/dispatcherNavBar.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/modal/editOrder.js" />
-        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/index/indexComponent.js" />
-        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/navBar.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/lib/validationUtil.js" />
-        <option value="$PROJECT_DIR$/backend/app.js" />
         <option value="$PROJECT_DIR$/backend/util/security.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner/ownerNavBar.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner/ownerClients.js" />
@@ -316,7 +297,6 @@
         <option value="$PROJECT_DIR$/backend/routes/owner.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner/ownerIndexPage.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/public/index.html" />
-        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/console.sql" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/lib/commontUtil.js" />
         <option value="$PROJECT_DIR$/backend/util/validation.js" />
         <option value="$PROJECT_DIR$/backend/util/commonUtil.js" />
@@ -325,8 +305,16 @@
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js" />
         <option value="$PROJECT_DIR$/backend/routes/dispatcher.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/App.js" />
-        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherStocks.js" />
         <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/modal/createStock.js" />
+        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherStocks.js" />
+        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDriver/driverNavBar.js" />
+        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/navBar.js" />
+        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDriver/driverIndexPage.js" />
+        <option value="$PROJECT_DIR$/backend/app.js" />
+        <option value="$PROJECT_DIR$/backend/constants/roles.js" />
+        <option value="$PROJECT_DIR$/frontend/trucking-ui/src/components/common/index/indexComponent.js" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/console.sql" />
+        <option value="$PROJECT_DIR$/backend/routes/driver.js" />
       </list>
     </option>
   </component>
@@ -375,18 +363,6 @@
             <path>
               <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
               <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
               <item name="frontend" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -394,13 +370,6 @@
               <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
               <item name="frontend" type="462c0819:PsiDirectoryNode" />
               <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
@@ -433,7 +402,8 @@
               <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="roleAdmin" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="index" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
@@ -442,8 +412,17 @@
               <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="roleAdmin" type="462c0819:PsiDirectoryNode" />
-              <item name="modal" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="navbars" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="roleAnon" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
@@ -461,35 +440,7 @@
               <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="roleDispatcher" type="462c0819:PsiDirectoryNode" />
-              <item name="modal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="roleOwner" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="roleOwner" type="462c0819:PsiDirectoryNode" />
-              <item name="modal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="truckingjs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="truckingjs" type="462c0819:PsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="trucking-ui" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="roleDriver" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -513,18 +464,19 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner" />
-      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher" />
-      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAdmin" />
-      <recent name="$PROJECT_DIR$/backend" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/css" />
       <recent name="$PROJECT_DIR$/frontend/trucking-ui/public/css" />
       <recent name="$PROJECT_DIR$/frontend/trucking-ui/src" />
       <recent name="$PROJECT_DIR$/public/images" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAnon" />
+      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAdmin/modal" />
+      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner" />
+      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher" />
+      <recent name="$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAdmin" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -573,18 +525,18 @@
       <workItem from="1546507727017" duration="5564000" />
       <workItem from="1546546669518" duration="73000" />
       <workItem from="1546551270349" duration="5292000" />
-      <workItem from="1546686887790" duration="3561000" />
+      <workItem from="1546686887790" duration="4946000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133903000" />
+    <option name="totallyTimeSpent" value="135288000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="45" y="27" width="1875" height="1053" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.29360306" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29360306" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -593,7 +545,7 @@
       <window_info id="Job Explorer" order="6" weight="0.32968834" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.29912663" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.29912663" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.37227073" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -649,48 +601,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAnon/registration.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="6" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/routes/auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="22" column="76" lean-forward="true" selection-start-line="22" selection-start-column="76" selection-end-line="22" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAnon/auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="57" column="23" lean-forward="true" selection-start-line="57" selection-start-column="23" selection-end-line="57" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/logoutButton.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="14" column="78" selection-start-line="14" selection-start-column="78" selection-end-line="14" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/App.test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -722,7 +632,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/anonNavBar.js">
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAnon/anonNavBar.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
           <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
@@ -733,27 +643,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
           <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherNavBar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="32" column="36" lean-forward="true" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/common/index/indexComponent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/navBar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="63" selection-start-line="12" selection-start-column="63" selection-end-line="12" selection-end-column="63" />
         </state>
       </provider>
     </entry>
@@ -879,13 +768,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner/ownerClients.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="684">
@@ -893,24 +775,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/schema/truck/table/waybill">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="das://a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/schema/truck/table/orders">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/util/validation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="8" column="51" selection-start-line="8" selection-start-column="51" selection-end-line="8" selection-end-column="51" />
         </state>
       </provider>
     </entry>
@@ -935,16 +803,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner/modal/createClient.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -978,44 +836,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="74" column="1" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/routes/dispatcher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="90" column="10" lean-forward="true" selection-start-line="90" selection-start-column="10" selection-end-line="90" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="35" column="70" selection-start-line="35" selection-start-column="70" selection-end-line="35" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherStocks.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-146">
-          <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1029,13 +853,143 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/modal/createStock.js">
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleAdmin/modal/createStock.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+        <state relative-caret-position="82">
+          <caret line="71" column="13" selection-start-line="71" selection-start-column="13" selection-end-line="71" selection-end-column="13" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/constants/userActionType.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherNavBar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="55" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/common/navbars/navBar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="14" column="55" selection-start-line="14" selection-start-column="55" selection-end-line="14" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDriver/driverNavBar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="34" column="48" selection-start-line="34" selection-start-column="48" selection-end-line="34" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherStocks.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="61" column="35" selection-start-line="61" selection-start-column="33" selection-end-line="61" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleOwner/modal/createClient.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDispatcher/dispatcherIndexPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="74" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/routes/dispatcher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1773">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="42" column="37" selection-start-line="42" selection-start-column="37" selection-end-line="42" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/util/validation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1146">
+          <caret line="8" column="51" selection-start-line="8" selection-start-column="51" selection-end-line="8" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/constants/roles.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/schema/truck/table/waybill">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/schema/truck/table/users">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/common/index/indexComponent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="61" selection-start-line="3" selection-start-column="61" selection-end-line="3" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/trucking-ui/src/components/roleDriver/driverIndexPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="24" column="32" lean-forward="true" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/a4ccfbdd-2023-49ed-b17a-a6f9836f9e5d/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="53" selection-start-line="53" selection-end-line="53" selection-end-column="152" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/routes/driver.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
         </state>
       </provider>
     </entry>
