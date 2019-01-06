@@ -20,6 +20,7 @@ import OwnerClients from "./components/roleOwner/ownerClients";
 import CreateOrder from './components/roleDispatcher/modal/createOrder';
 import DispatcherStocks from "./components/roleDispatcher/dispatcherStocks";
 import DriverOrder from "./components/roleDriver/driverOrderPage";
+import ManagerOrder from "./components/roleManager/managerOrderPage";
 
 class App extends Component {
   render() {
@@ -36,6 +37,7 @@ class App extends Component {
           <Route exact path={'/createOrder'} component={CreateOrder}/>
           <Route exact path={'/stocks'} component={DispatcherStocks}/>
           <Route exact path={'/route/:id'} component={DriverOrder}/>
+          <Route exact path={'/setRoute/:id'} component={ManagerOrder}/>
         </div>
       </Router>
     </Provider>

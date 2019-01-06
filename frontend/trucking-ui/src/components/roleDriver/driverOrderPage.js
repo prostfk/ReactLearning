@@ -28,6 +28,8 @@ export default class DriverOrder extends Component {
             } else {
                 NotificationManager.warning(data.error);
             }
+        }).catch(()=>{
+            NotificationManager.warning('Cannot get data');
         })
     };
 

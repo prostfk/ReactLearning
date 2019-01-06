@@ -32,7 +32,6 @@ router.get('/order/:id', (req, resp) => {
             } else {
                 resp.json(response);
             }
-
         });
     });
 });

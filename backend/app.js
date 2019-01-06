@@ -13,6 +13,7 @@ const ownerRouter = require('./routes/owner');
 const dispatcherRouter = require('./routes/dispatcher');
 const ownerAndAdminRouter = require('./routes/adminAndOwner');
 const driverRouter = require('./routes/driver');
+const managerRouter = require('./routes/manager');
 const app = express();
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
@@ -41,6 +42,7 @@ app.use('/api/owner', ownerRouter);
 app.use('/api/dispatcher', dispatcherRouter);
 app.use('/api/ownerAndAdmin', ownerAndAdminRouter);
 app.use('/api/driver', driverRouter);
+app.use('/api/manager', managerRouter);
 //URLS
 app.use('/js', (req,resp)=>{
     resp.json({message: 'hello'});

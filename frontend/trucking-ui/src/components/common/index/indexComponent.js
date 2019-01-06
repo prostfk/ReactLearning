@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import OwnerIndexPage from "../../roleOwner/ownerIndexPage";
 import DispatcherIndexPage from "../../roleDispatcher/dispatcherIndexPage";
 import DriverIndexPage from "../../roleDriver/driverIndexPage";
+import ManagerIndexPage from "../../roleManager/managerIndexPage";
 
 
 export default class IndexPage extends Component {
@@ -16,6 +17,8 @@ export default class IndexPage extends Component {
                 return <DispatcherIndexPage/>;
             case 'ROLE_DRIVER':
                 return <DriverIndexPage/>;
+            case 'ROLE_MANAGER':
+                return <ManagerIndexPage/>;
             default:
                 return <div/>;
         }
