@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import { Link } from 'react-router-dom'
+import connect from "react-redux/es/connect/connect";
+import {LOAD_ORDERS} from "../../constants/orderActionType";
 
 
-export default class ManagerIndexPage extends Component {
+export class ManagerIndexPage extends Component {
 
 
     state = {
@@ -72,3 +74,21 @@ export default class ManagerIndexPage extends Component {
 
 
 }
+
+const mapStateToProps = state => {
+    return {
+        orders: state.orderReducer
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        loadOrders: payload => {
+            dispatch({
+                type: LOAD_ORDERS, payload: payload
+            })
+        }
+    });
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManagerIndexPage);

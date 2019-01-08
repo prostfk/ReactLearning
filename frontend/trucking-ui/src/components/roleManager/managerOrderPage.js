@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Map, Marker, MarkerLayout} from 'yandex-map-react';
 import {NotificationManager} from "react-notifications";
 
-export default class ManagerOrder extends Component {
+export default class ManagerOrder extends Component { //todo markers
 
     constructor(props) {
         super(props);

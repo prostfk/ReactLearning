@@ -2,14 +2,11 @@ import React, {Component} from 'react';
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import CreateClient from "./modal/createClient";
+import {LOAD_CLIENTS} from "../../constants/clientActionType";
+import connect from "react-redux/es/connect/connect";
 
 
-export default class OwnerClients extends Component {
-
-
-    state = {
-        clients: []
-    };
+export class OwnerClients extends Component {
 
     componentDidMount(){
         this.getClients();
@@ -20,15 +17,13 @@ export default class OwnerClients extends Component {
             return response.json();
         }).then(data=>{
             if (data.error===undefined){
-                this.setState({
-                    clients: data
-                });
+                this.props.loadClients(data);
             }else{
                 NotificationManager.error(data.error);
             }
         }).catch(err=>{
-            NotificationManager.error(err.toString());
-        })
+            NotificationManager.error('Server error');
+        });
     };
 
     render() {
@@ -37,7 +32,7 @@ export default class OwnerClients extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'6'}>
-                        {this.state.clients.length > 0 ? <Table>
+                        {this.props.clients.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>id</th>
@@ -48,7 +43,7 @@ export default class OwnerClients extends Component {
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.clients.map((client, index) => {
+                                    this.props.clients.map((client, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
                                             <td>{client.name}</td>
@@ -58,7 +53,7 @@ export default class OwnerClients extends Component {
                                     })
                                 }
                             </TableBody>
-                        </Table> : <h1 className={'animated fadeIn'}>No autos yet</h1>}
+                        </Table> : <h1 className={'animated fadeIn'}>No clients yet</h1>}
                     </MDBCol>
                     <MDBCol>
                         <CreateClient renderClients={this.getClients}/>
@@ -68,6 +63,22 @@ export default class OwnerClients extends Component {
         );
     }
 
-
-
 }
+
+const mapStateToProps = state => {
+    return {
+        clients: state.clientReducer
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        loadClients: payload => {
+            dispatch({
+                type: LOAD_CLIENTS, payload: payload
+            })
+        }
+    });
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OwnerClients);

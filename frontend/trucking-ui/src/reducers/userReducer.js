@@ -1,10 +1,8 @@
-import {AUTH_SUCCESS, LOAD_USERS} from "../constants/userActionType";
+import {AUTH_SUCCESS, LOGOUT} from "../constants/userActionType";
 
 export default (state = [], action) => {
-
     switch (action.type) {
         case AUTH_SUCCESS:
-            console.log(action.payload);
             return [
                 {
                     userRole: action.payload[0],
@@ -13,13 +11,7 @@ export default (state = [], action) => {
                     companyId: action.payload[3]
                 }, ...state
             ];
-        case LOAD_USERS:
-            return [
-                action.payload,
-                ...state
-            ];
-        default:
-            return state;
+        case LOGOUT:
+            return [];
     }
-
 }

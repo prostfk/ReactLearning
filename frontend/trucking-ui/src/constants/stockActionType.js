@@ -1,0 +1,1 @@
+export const LOAD_STOCKS = 'LOAD_STOCKS';
