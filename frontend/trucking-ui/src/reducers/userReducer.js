@@ -1,4 +1,4 @@
-import {AUTH_SUCCESS} from "../constants/userActionType";
+import {AUTH_SUCCESS, LOAD_USERS} from "../constants/userActionType";
 
 export default (state = [], action) => {
 
@@ -11,7 +11,12 @@ export default (state = [], action) => {
                     token: action.payload[1],
                     userId: action.payload[2],
                     companyId: action.payload[3]
-                }
+                }, ...state
+            ];
+        case LOAD_USERS:
+            return [
+                action.payload,
+                ...state
             ];
         default:
             return state;
