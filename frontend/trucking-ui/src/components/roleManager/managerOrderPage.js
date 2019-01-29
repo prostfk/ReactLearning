@@ -4,7 +4,7 @@ import {NotificationManager} from "react-notifications";
 import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown} from 'reactstrap';
 import MarkerModal from "./markerModal";
 
-export default class ManagerOrder extends Component {
+export default class ManagerOrder extends Component { //todo markers
 
     constructor(props) {
         super(props);

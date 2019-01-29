@@ -2,14 +2,11 @@ import React, {Component} from 'react';
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import { Link } from 'react-router-dom'
+import connect from "react-redux/es/connect/connect";
+import {LOAD_STOCKS} from "../../constants/stockActionType";
 
 
-export default class DispatcherStocks extends Component {
-
-
-    state = {
-        stocks: []
-    };
+export class DispatcherStocks extends Component {
 
     componentDidMount() {
         this.updateStocks();
@@ -20,12 +17,12 @@ export default class DispatcherStocks extends Component {
             return response.json();
         }).then(data => {
             if (data.error === undefined) {
-                this.setState({
-                    stocks: data
-                });
+                this.props.loadStocks(data);
             } else {
                 NotificationManager.warning(data.error);
             }
+        }).catch(()=>{
+            NotificationManager.warning('Server error')
         })
     };
 
@@ -35,7 +32,7 @@ export default class DispatcherStocks extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'8'}>
-                        {this.state.stocks.length > 0 ? <Table>
+                        {this.props.stocks.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>Id</th>
@@ -46,7 +43,7 @@ export default class DispatcherStocks extends Component {
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.stocks.map((stock, index) => {
+                                    this.props.stocks.map((stock, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
                                             <td>{stock.name}</td>
@@ -68,3 +65,21 @@ export default class DispatcherStocks extends Component {
 
 
 }
+
+const mapStateToProps = state => {
+    return {
+        stocks: state.stockReducer
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        loadStocks: payload => {
+            dispatch({
+                type: LOAD_STOCKS, payload: payload
+            })
+        }
+    });
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DispatcherStocks);

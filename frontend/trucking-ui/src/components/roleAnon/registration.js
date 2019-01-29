@@ -56,7 +56,7 @@ export default class Registration extends Component {
             formData.append('birthDate', CommonUtil.getStringFromUnknownObject(this.state.birthDay));
             formData.append('password', CommonUtil.getStringFromUnknownObject(this.state.password));
             formData.append('companyName', CommonUtil.getStringFromUnknownObject(this.state.companyName));
-            fetch('/registration', {method: 'post', body: formData}).then(response => {
+            fetch('/api/registration', {method: 'post', body: formData}).then(response => {
                 return response.json();
             }).then(data => {
                 console.log(data);

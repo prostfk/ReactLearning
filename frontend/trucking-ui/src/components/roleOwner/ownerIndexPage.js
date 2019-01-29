@@ -3,9 +3,11 @@ import CreateUser from "../common/adminAndOwner/createUser";
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import EditUser from "../common/adminAndOwner/editUser";
+import {LOAD_USERS} from "../../constants/workersActionType";
+import connect from "react-redux/es/connect/connect";
 
 
-export default class OwnerIndexPage extends Component {
+export class OwnerIndexPage extends Component {
 
 
     state = {
@@ -23,9 +25,7 @@ export default class OwnerIndexPage extends Component {
             return response.json();
         }).then(data=>{
             if (data.error===undefined){
-                this.setState({
-                    users: data
-                });
+                this.props.loadWorkers(data);
             }else{
                 NotificationManager.warn(data.error);
             }
@@ -38,7 +38,7 @@ export default class OwnerIndexPage extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'6'}>
-                        {this.state.users.length > 0 ? <Table>
+                        {this.props.users.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>id</th>
@@ -50,7 +50,7 @@ export default class OwnerIndexPage extends Component {
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.users.map((user, index) => {
+                                    this.props.users.map((user, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
                                             <td>{user.name}</td>
@@ -79,3 +79,20 @@ export default class OwnerIndexPage extends Component {
 
 
 }
+
+const mapStateToProps = state => {
+    return {
+        users: state.workerReducer
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        loadWorkers: payload => {
+            dispatch({
+                type: LOAD_USERS, payload: payload
+            })
+        }
+    });
+};
+export default connect(mapStateToProps, mapDispatchToProps)(OwnerIndexPage);

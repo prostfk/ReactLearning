@@ -3,14 +3,11 @@ import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import CreateAuto from "./modal/createAuto";
 import EditAuto from "./modal/editAuto";
+import connect from "react-redux/es/connect/connect";
+import {LOAD_AUTOS} from "../../constants/autoActionType";
 
 
-export default class AdminAutos extends Component {
-
-
-    state = {
-        autos: []
-    };
+export class AdminAutos extends Component {
 
     componentDidMount(){
         this.getAutos();
@@ -21,9 +18,7 @@ export default class AdminAutos extends Component {
             return response.json();
         }).then(data=>{
             if (data.error===undefined){
-                this.setState({
-                    autos: data
-                });
+                this.props.loadAutos(data);
             }else{
                 NotificationManager.error(data.error);
             }
@@ -38,7 +33,7 @@ export default class AdminAutos extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'6'}>
-                        {this.state.autos.length > 0 ? <Table>
+                        {this.props.autos.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>id</th>
@@ -51,7 +46,7 @@ export default class AdminAutos extends Component {
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.autos.map((auto, index) => {
+                                    this.props.autos.map((auto, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
                                             <td>{auto.name}</td>
@@ -76,3 +71,22 @@ export default class AdminAutos extends Component {
 
 
 }
+
+
+const mapStateToProps = state => {
+    return {
+        autos: state.autoReducer
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        loadAutos: payload => {
+            dispatch({
+                type: LOAD_AUTOS, payload: payload
+            })
+        }
+    });
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminAutos);

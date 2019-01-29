@@ -3,14 +3,17 @@ import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import { Link } from 'react-router-dom'
 import CommonUtil from "../../lib/commontUtil";
+import {LOAD_STOCKS} from "../../constants/stockActionType";
+import connect from "react-redux/es/connect/connect";
+import {LOAD_ORDERS} from "../../constants/orderActionType";
 
 
-export default class DispatcherIndexPage extends Component {
+export class DispatcherIndexPage extends Component {
 
 
     state = {
-        orders: [],
         selectedOrder: {},
+        orders: []
     };
 
     componentDidMount() {
@@ -21,13 +24,13 @@ export default class DispatcherIndexPage extends Component {
         fetch('/api/dispatcher/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
-            if (data.error === undefined) {
-                this.setState({
-                    orders: data
-                });
+            if (!data.error) {
+                this.props.loadOrders(data);
             } else {
                 NotificationManager.warning(data.error);
             }
+        }).catch(()=>{
+            NotificationManager.warning('Server error')
         })
     };
 
@@ -37,7 +40,7 @@ export default class DispatcherIndexPage extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'8'}>
-                        {this.state.orders.length > 0 ? <Table>
+                        {this.props.orders.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
                                     <th>id</th>
@@ -50,7 +53,7 @@ export default class DispatcherIndexPage extends Component {
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.state.orders.map((order, index) => {
+                                    this.props.orders.map((order, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                                 <td>{index + 1}</td>
                                                 <td>{order.name}</td>
@@ -74,3 +77,21 @@ export default class DispatcherIndexPage extends Component {
 
 
 }
+
+const mapStateToProps = state => {
+    return {
+        orders: state.stockReducer
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        loadOrders: payload => {
+            dispatch({
+                type: LOAD_ORDERS, payload: payload
+            })
+        }
+    });
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DispatcherIndexPage);

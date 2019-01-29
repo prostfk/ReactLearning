@@ -1,10 +1,10 @@
 const mysql = require('mysql');
-
+const configuration = require('../constants/config');
 let config = {
     host: 'localhost',
-    user: 'prostrmk',
-    password: '0',
-    database: 'truck'
+    user: configuration.user,
+    password: configuration.password,
+    database: configuration.database
 };
 
 class Database {

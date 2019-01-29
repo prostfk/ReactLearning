@@ -46,8 +46,8 @@ class Auth extends Component {
         let ref = this;
         if (this.validate) {
             let formData = new FormData();
-            formData.append('username', CommonUtil.getStringFromUnknownObject(this.state.username));
-            formData.append('password', CommonUtil.getStringFromUnknownObject(this.state.password));
+            formData.append('username', this.state.username);
+            formData.append('password', this.state.password);
             fetch('http://localhost:3001/api/auth', {method: 'post', body: formData}).then(response => {
                 return response.json();
             }).then(data => {

@@ -3,9 +3,12 @@ import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import { Link } from 'react-router-dom'
 import CommonUtil from "../../lib/commontUtil";
+import {LOAD_ORDERS} from "../../constants/orderActionType";
+import connect from "react-redux/es/connect/connect";
+import ManagerIndexPage from "../roleManager/managerIndexPage";
 
 
-export default class DispatcherIndexPage extends Component {
+export class DriverIndexPage extends Component {
 
 
     state = {
@@ -73,3 +76,21 @@ export default class DispatcherIndexPage extends Component {
 
 
 }
+
+const mapStateToProps = state => {
+    return {
+        orders: state.stockReducer
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        loadOrders: payload => {
+            dispatch({
+                type: LOAD_ORDERS, payload: payload
+            })
+        }
+    });
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DriverIndexPage);
