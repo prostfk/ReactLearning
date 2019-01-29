@@ -22,10 +22,8 @@ export class ManagerIndexPage extends Component {
         fetch('/api/manager/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
-            if (data.error === undefined) {
-                this.setState({
-                    orders: data
-                });
+            if (!data.error) {
+                this.props.loadOrders(data);
             } else {
                 NotificationManager.warning(data.error);
             }

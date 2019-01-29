@@ -85,7 +85,6 @@ const mapStateToProps = state => {
         users: state.workerReducer
     };
 };
-
 const mapDispatchToProps = dispatch => {
     return ({
         loadWorkers: payload => {

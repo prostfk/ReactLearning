@@ -5,27 +5,19 @@ const router = express.Router();
 const Database = require('../util/database');
 const security = require('../util/security');
 
-router.get('/orders', (req, resp) => {
+// router.get('/orders', (req, resp) => {
+//
+//     security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
+//         let db = new Database();
+//         let userDetails = security.getUserInfo(req);
+//         db.executeQuery(`SELECT *
+//                          FROM orders WHERE company =${userDetails.companyId}`).then(data => {
+//             resp.json(data);
+//         })
+//     });
+// });
 
-    security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
-        let db = new Database();
-        let userDetails = security.getUserInfo(req);
-        db.executeQuery(`SELECT *
-                         FROM orders WHERE company =${userDetails.companyId}`).then(data => {
-            resp.json(data);
-        })
-    });
-});
 
-router.get('/stocks', (req,resp)=>{
-    security.checkRole(req,resp,'ROLE_DISPATCHER', ()=>{
-        let db = new Database();
-        let userDetails = security.getUserInfo(req);
-        db.executeQuery('SELECT * FROM stock WHERE companyId=?', userDetails.companyId).then(data=>{
-            resp.json(data);
-        })
-    })
-});
 
 router.get('/freeDrivers', (req, resp) => {
     let params = require('url').parse(req.url,true).query;

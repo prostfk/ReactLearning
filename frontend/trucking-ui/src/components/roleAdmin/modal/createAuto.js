@@ -32,7 +32,7 @@ export default class CreateAuto extends Component {
         });
     };
 
-    validateUser = () => {
+    validateAuto = () => {
         let nameVal = ValidationUtil.validateStringForLength(this.state.newAutoName, 3, 49);
         let typeVal = ValidationUtil.validateStringForLength(this.state.newAutoType, 5, 19);
         let carNumberVal = ValidationUtil.validateStringForLength(this.state.newAutoNumber, 3, 20);
@@ -71,7 +71,7 @@ export default class CreateAuto extends Component {
 
     saveAuto = () => {
         let ref = this;
-        if (this.validateUser()) {
+        if (this.validateAuto()) {
             let formData = new FormData();
             formData.append('name', this.state.newAutoName);
             formData.append('fuel', this.state.newAutoFuel);

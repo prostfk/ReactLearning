@@ -3,9 +3,11 @@ import {
     Container, Button, Modal, ModalBody, ModalHeader, ModalFooter, MDBRow, MDBCol, Animation,
     MDBCard, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput, MDBContainer,
 } from 'mdbreact';
+// import {Col, Input, Row} from 'react-materialize'
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
 import {NotificationManager} from "react-notifications";
+import $ from "jquery";
 
 export default class CreateUser extends Component {
 
@@ -189,6 +191,7 @@ export default class CreateUser extends Component {
                                                         success="right"
                                                     />
                                                     <span className="error-span" id="error-surname-span"/>
+                                                    {/*<Input type={'date'} onChange={this.changeInput}/>*/}
                                                     <MDBInput
                                                         // label="Birth date"
                                                         onChange={this.changeInput}

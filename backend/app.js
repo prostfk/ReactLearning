@@ -13,6 +13,7 @@ const dispatcherRouter = require('./routes/dispatcher');
 const ownerAndAdminRouter = require('./routes/adminAndOwner');
 const driverRouter = require('./routes/driver');
 const managerRouter = require('./routes/manager');
+const commonRouter = require('./routes/common');
 const app = express();
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //URLS
+app.use('/api', commonRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/registration', registrationRouter);
 app.use('/api/users', usersRouter);

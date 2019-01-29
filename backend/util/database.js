@@ -4,7 +4,8 @@ let config = {
     host: 'localhost',
     user: configuration.user,
     password: configuration.password,
-    database: configuration.database
+    database: configuration.database,
+    port: 3306
 };
 
 class Database {

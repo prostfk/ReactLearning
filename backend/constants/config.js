@@ -1,5 +1,5 @@
 const user = 'prostrmk';
-const password = '1234';
+const password = '0';
 const database = 'truck';
 
 module.exports.password = password;

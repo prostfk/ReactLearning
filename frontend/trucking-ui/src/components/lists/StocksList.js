@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
-import CommonUtil from "../../lib/commontUtil";
+import {MDBCol, MDBRow, Table, TableBody, TableHead} from "mdbreact";
+import {ROLE_ADMIN, ROLE_DISPATCHER} from "../../constants/roles/userRoles";
 import {Link} from "react-router-dom";
-import {ROLE_DISPATCHER, ROLE_MANAGER} from "../../constants/roles/userRoles";
 
-export class OrdersList extends Component {
+export default class StocksList extends Component {
 
     render() {
         return (
@@ -12,30 +11,27 @@ export class OrdersList extends Component {
                 <MDBRow>
                     <MDBCol/>
                     <MDBCol size={'8'}>
-                        {this.props.orders.length > 0 ? <Table>
+                        {this.props.stocks.length > 0 ? <Table>
                             <TableHead color="grey">
                                 <tr className={'animated fadeIn'}>
-                                    <th>id</th>
+                                    <th>Id</th>
                                     <th>Name</th>
-                                    <th>Client</th>
-                                    <th>Departure</th>
-                                    <th>Arrival</th>
+                                    <th>Address</th>
                                     {
                                         this.__renderFunctionalLabel()
                                     }
-
                                 </tr>
                             </TableHead>
                             <TableBody>
                                 {
-                                    this.props.orders.map((order, index) => {
+                                    this.props.stocks.map((stock, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{order.name}</td>
-                                            <td>{order.client}</td>
-                                            <td>{CommonUtil.getLocalDate(order.date_departure, 'ru')}</td>
-                                            <td>{CommonUtil.getLocalDate(order.date_arrival, 'ru')}</td>
-                                            <td>{this.__renderFunctionalButton(order.id)}</td>
+                                            <td>{stock.name}</td>
+                                            <td>{stock.address}</td>
+                                            {
+                                                this.__renderFunctionalButton()
+                                            }
                                         </tr>
                                     })
                                 }
@@ -55,7 +51,7 @@ export class OrdersList extends Component {
     __renderFunctionalLabel = () =>{
         let jsx = ``;
         switch (this.props.role) {
-            case ROLE_DISPATCHER:
+            case ROLE_ADMIN:
                 jsx = <th>Edit</th>;
                 break;
             default:
@@ -64,11 +60,11 @@ export class OrdersList extends Component {
         return jsx;
     };
 
-    __renderFunctionalButton = (orderId) =>{
+    __renderFunctionalButton = (stockId) => {
         let jsx = ``;
         switch (this.props.role) {
-            case ROLE_DISPATCHER:
-                jsx = <Link to={`/editOrder/${orderId}`} className='btn-sm btn-warning'>Edit</Link>;
+            case ROLE_ADMIN:
+                jsx = <Link to={`/editStock/${stockId}`} className='btn-sm btn-warning'>Edit</Link>;
                 break;
             default:
                 break;
@@ -79,8 +75,8 @@ export class OrdersList extends Component {
     __renderSideButton = () =>{
         let jsx = ``;
         switch(this.props.role){
-            case ROLE_DISPATCHER:
-                jsx = <Link to={'/createOrder'} className='btn btn-success'>Create order</Link>;
+            case ROLE_ADMIN:
+                jsx = <Link to={'/сreateStock'} className='btn btn-success'>Create stock</Link>;
                 break;
             default:
                 break;

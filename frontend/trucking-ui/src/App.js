@@ -18,11 +18,11 @@ import Notifications from "./components/common/index/notifications";
 import AdminAutos from "./components/roleAdmin/adminAutos";
 import OwnerClients from "./components/roleOwner/ownerClients";
 import CreateOrder from './components/roleDispatcher/modal/createOrder';
-import DispatcherStocks from "./components/roleDispatcher/dispatcherStocks";
 import DriverOrder from "./components/roleDriver/driverOrderPage";
 import ManagerOrder from "./components/roleManager/managerOrderPage";
 import OwnerOrders from "./components/roleOwner/ownerOrders";
 import OwnerCharts from "./components/roleOwner/ownerCharts";
+import StocksPage from "./components/common/StocksPage";
 
 class App extends Component {
   render() {
@@ -39,7 +39,7 @@ class App extends Component {
           <Route exact path={'/orders'} component={OwnerOrders}/>
           <Route exact path={'/charts'} component={OwnerCharts}/>
           <Route exact path={'/createOrder'} component={CreateOrder}/>
-          <Route exact path={'/stocks'} component={DispatcherStocks}/>
+          <Route exact path={'/stocks'} component={StocksPage}/>
           <Route exact path={'/route/:id'} component={DriverOrder}/>
           <Route exact path={'/setRoute/:id'} component={ManagerOrder}/>
         </div>
