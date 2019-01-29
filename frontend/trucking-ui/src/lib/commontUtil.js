@@ -96,6 +96,10 @@ class CommonUtil {
         return Array.isArray(obj) ? obj.join('') : obj;
     }
 
+    static getLocalDate(date, locale = "ru"){
+        return new Date(date).toLocaleDateString(locale);
+    }
+
 }
 
 export default CommonUtil;

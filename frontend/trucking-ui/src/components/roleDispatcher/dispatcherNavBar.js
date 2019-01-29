@@ -34,9 +34,9 @@ export default class DispatcherNavBar extends Component {
                         <NavItem>
                             <NavLink to="/">Orders</NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink to="/calendar">Calendar</NavLink>
-                        </NavItem>
+                        {/*<NavItem>*/}
+                            {/*<NavLink to="/calendar">Calendar</NavLink>*/}
+                        {/*</NavItem>*/}
                         <NavItem>
                             <NavLink to="/stocks">Stocks</NavLink>
                         </NavItem>

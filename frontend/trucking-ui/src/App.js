@@ -21,6 +21,8 @@ import CreateOrder from './components/roleDispatcher/modal/createOrder';
 import DispatcherStocks from "./components/roleDispatcher/dispatcherStocks";
 import DriverOrder from "./components/roleDriver/driverOrderPage";
 import ManagerOrder from "./components/roleManager/managerOrderPage";
+import OwnerOrders from "./components/roleOwner/ownerOrders";
+import OwnerCharts from "./components/roleOwner/ownerCharts";
 
 class App extends Component {
   render() {
@@ -34,6 +36,8 @@ class App extends Component {
           <Route exact path={'/registration'} component={Registration}/>
           <Route exact path={'/auth'} component={Auth}/>
           <Route exact path={'/clients'} component={OwnerClients}/>
+          <Route exact path={'/orders'} component={OwnerOrders}/>
+          <Route exact path={'/charts'} component={OwnerCharts}/>
           <Route exact path={'/createOrder'} component={CreateOrder}/>
           <Route exact path={'/stocks'} component={DispatcherStocks}/>
           <Route exact path={'/route/:id'} component={DriverOrder}/>

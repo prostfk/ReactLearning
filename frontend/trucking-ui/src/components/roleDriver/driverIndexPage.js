@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
 import { Link } from 'react-router-dom'
+import CommonUtil from "../../lib/commontUtil";
 
 
 export default class DispatcherIndexPage extends Component {
@@ -54,8 +55,8 @@ export default class DispatcherIndexPage extends Component {
                                             <td>{index + 1}</td>
                                             <td>{order.name}</td>
                                             <td>{order.client}</td>
-                                            <td>{order.date_departure}</td>
-                                            <td>{order.date_arrival}</td>
+                                            <td>{CommonUtil.getLocalDate(order.date_departure)}</td>
+                                            <td>{CommonUtil.getLocalDate(order.date_arrival)}</td>
                                             <td>Check</td>
                                         </tr>
                                     })

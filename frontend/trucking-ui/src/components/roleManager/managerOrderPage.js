@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Map, Marker, MarkerLayout} from 'yandex-map-react';
 import {NotificationManager} from "react-notifications";
+import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown} from 'reactstrap';
+import MarkerModal from "./markerModal";
 
 export default class ManagerOrder extends Component {
 
@@ -37,7 +39,6 @@ export default class ManagerOrder extends Component {
     };
 
     componentDidMount() {
-        // this.loadInfo();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setLocation);
         } else {
@@ -46,7 +47,6 @@ export default class ManagerOrder extends Component {
     }
 
     render() {
-        console.log(this.state);
         const markerStyles = {
             width: '40px',
             height: '40px',
@@ -57,16 +57,18 @@ export default class ManagerOrder extends Component {
 
         return (
             <div style={{width: '100%'}}>
-                <Map onAPIAvailable={() => console.log('api loaded')} center={[55.75, 47.57]}
+                <Map onAPIAvailable={() => console.log('api loaded')} center={this.state.center}
                      state={{controls: ['default']}} zoom={10} height={window.innerHeight}
-                     width={'100%'}>
+                     width={'100%'} onClick={()=>console.log('map clicked')}>
                     {
                         this.state.points ?
                             this.state.points.map((point, index) => {
-                                return <Marker key={`marker_${index}`} lat={point.lat} lon={point.lng}>
+                                let open = false;
+                                return <Marker key={`marker_${index}`} lat={point.lat} lon={point.lng}  onClick={()=>open=!open}>
                                     <MarkerLayout>
                                         <div>
-                                            <img src="/red-marker.png" alt="marker"/>
+                                            <MarkerModal open={open}/>
+                                            {/*<img src="/red-marker.png" alt="marker"/>*/}
                                         </div>
                                     </MarkerLayout>
                                 </Marker>

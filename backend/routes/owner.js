@@ -5,6 +5,17 @@ const jwt = require('jwt-simple');
 const Database = require('../util/database');
 const security = require('../util/security');
 
+router.get('/users', (req,resp)=>{
+    security.checkRole(req,resp,'ROLE_OWNER', ()=>{
+        let db = new Database();
+        let userData = security.getUserInfo(req);
+        db.executeQuery('SELECT * FROM users WHERE company_id=?', userData.companyId)
+            .then(data=>{
+                resp.json(data);
+            })
+    })
+});
+
 router.get('/clients', (req, resp) => {
     security.checkRole(req, resp, "ROLE_OWNER", () => {
         let db = new Database();
@@ -28,6 +39,16 @@ router.post('/addClient', (req, resp) => {
             resp.json({error: 'check data'});
         }
     });
+});
+
+router.get('/orders', (req,resp)=>{
+    security.checkRole(req,resp, 'ROLE_OWNER', () => {
+        let db = new Database();
+        let userInfo = security.getUserInfo(req);
+        db.executeQuery('SELECT * FROM orders WHERE company=?', userInfo.companyId).then(data=>{
+            resp.json(data);
+        })
+    })
 });
 
 module.exports = router;

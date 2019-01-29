@@ -54,8 +54,8 @@ export default class ManagerIndexPage extends Component {
                                             <td>{index + 1}</td>
                                             <td>{order.name}</td>
                                             <td>{order.client}</td>
-                                            <td>{order.date_departure}</td>
-                                            <td>{order.date_arrival}</td>
+                                            <td>{new Date(order.date_departure).toLocaleString("ru").split(',')[0]}</td>
+                                            <td>{new Date(order.date_arrival).toLocaleString("ru").split(',')[0]}</td>
                                             <td><Link to={`/setRoute/${order.id}`} style={{height: '10%'}} className={'btn btn-secondary'}>Map</Link></td>
                                         </tr>
                                     })

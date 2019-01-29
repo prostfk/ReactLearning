@@ -7,7 +7,6 @@ checkRole = (req, resp, role, callback) => {
         result = false;
     } else {
         let data = jwt.decode(token, 'SECRET');
-        console.log(data);
         if (Array.isArray(role)) {
             for (let i = 0; i < role.length; i++) {
                 if (data.role === role[i]) {
