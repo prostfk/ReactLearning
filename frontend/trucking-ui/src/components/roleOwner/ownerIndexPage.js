@@ -27,8 +27,10 @@ export class OwnerIndexPage extends Component {
             if (data.error===undefined){
                 this.props.loadWorkers(data);
             }else{
-                NotificationManager.warn(data.error);
+                NotificationManager.warning(data.error);
             }
+        }).catch(()=>{
+            NotificationManager.warning("No connection to server")
         })
     };
 

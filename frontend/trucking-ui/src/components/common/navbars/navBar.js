@@ -5,6 +5,7 @@ import AdminNavBar from "../../roleAdmin/adminNavBar";
 import DispatcherNavBar from "../../roleDispatcher/dispatcherNavBar";
 import DriverNavBar from "../../roleDriver/driverNavBar";
 import ManagerNavBar from "../../roleManager/managerNavBar";
+import SysAdminNavBar from "../../roleSysAdmin/sysAdminNavBar";
 
 export default class NavBar extends Component {
 
@@ -15,6 +16,7 @@ export default class NavBar extends Component {
             case 'ROLE_DISPATCHER': return <DispatcherNavBar/>;
             case 'ROLE_DRIVER': return <DriverNavBar/>;
             case 'ROLE_MANAGER': return <ManagerNavBar/>;
+            case 'ROLE_SYS_ADMIN': return <SysAdminNavBar/>;
             default: return <AnonNavBar/>
         }
     };

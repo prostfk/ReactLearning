@@ -3,6 +3,7 @@ import OwnerIndexPage from "../../roleOwner/ownerIndexPage";
 import DispatcherIndexPage from "../../roleDispatcher/dispatcherIndexPage";
 import DriverIndexPage from "../../roleDriver/driverIndexPage";
 import ManagerIndexPage from "../../roleManager/managerIndexPage";
+import SysAdminIndexPage from "../../roleSysAdmin/sysAdminIndexPage";
 
 
 export default class IndexPage extends Component {
@@ -19,6 +20,8 @@ export default class IndexPage extends Component {
                 return <DriverIndexPage/>;
             case 'ROLE_MANAGER':
                 return <ManagerIndexPage/>;
+            case 'ROLE_SYS_ADMIN':
+                return <SysAdminIndexPage/>;
             default:
                 return <div/>;
         }
