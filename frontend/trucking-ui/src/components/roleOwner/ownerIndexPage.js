@@ -5,6 +5,7 @@ import {NotificationManager} from "react-notifications";
 import EditUser from "../common/adminAndOwner/editUser";
 import {LOAD_USERS} from "../../constants/workersActionType";
 import connect from "react-redux/es/connect/connect";
+import UsersList from "../lists/UsersList";
 
 
 export class OwnerIndexPage extends Component {
@@ -16,67 +17,36 @@ export class OwnerIndexPage extends Component {
         toggle: false
     };
 
-    componentDidMount(){
+    componentDidMount() {
         this.updateUsers();
     }
 
     updateUsers = () => {
-        fetch('/api/ownerAndAdmin/users',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
+        fetch('/api/ownerAndAdmin/users', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
-        }).then(data=>{
-            if (data.error===undefined){
+        }).then(data => {
+            if (data.error === undefined) {
                 this.props.loadWorkers(data);
-            }else{
+            } else {
                 NotificationManager.warning(data.error);
             }
-        }).catch(()=>{
+        }).catch(() => {
             NotificationManager.warning("No connection to server")
         })
     };
 
     render() {
         return (
-            <div className={'container'}>
-                <MDBRow>
-                    <MDBCol/>
-                    <MDBCol size={'6'}>
-                        {this.props.users.length > 0 ? <Table>
-                            <TableHead color="grey">
-                                <tr className={'animated fadeIn'}>
-                                    <th>id</th>
-                                    <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Role</th>
-                                    <th>Edit</th>
-                                </tr>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    this.props.users.map((user, index) => {
-                                        return <tr className={'animated fadeInUp'} key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.surname}</td>
-                                            <td>{this.__processRole(user.role)}</td>
-                                            <td><EditUser user={user} renderUsers={this.updateUsers}/></td>
-                                        </tr>
-                                    })
-                                }
-                            </TableBody>
-                        </Table> : <h1 className={'animated fadeInUp'}>No users yet</h1>}
-                    </MDBCol>
-                    <MDBCol>
-                        <CreateUser renderUsers={this.updateUsers}/>
-                    </MDBCol>
-                </MDBRow>
+            <div className={'row margin-container'}>
+
+                <div className="offset-md-2 col-md-5">
+                        <UsersList users={this.props.users}/>
+                </div>
+                <div className="offset-md-2 col-md-2">
+                    <CreateUser renderUsers={this.updateUsers}/>
+                </div>
             </div>
         );
-    }
-
-
-    __processRole = (role) => {
-        let array = role.split('_');
-        return array[1].toLowerCase();
     }
 
 

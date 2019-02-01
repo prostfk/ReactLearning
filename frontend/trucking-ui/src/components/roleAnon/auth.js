@@ -76,9 +76,9 @@ class Auth extends Component {
                         <MDBRow>
                             <MDBCol md="">
                                 <MDBCard>
-                                    <MDBCardBody>
-                                        <MDBCardHeader className="form-header warm-flame-gradient rounded">
-                                            <h3 className="my-3">
+                                    <MDBCardBody className={'grey darken-3'}>
+                                        <MDBCardHeader className="form-header grey darken-2 rounded">
+                                            <h3 className="my-3" style={{color: 'white'}}>
                                                 <MDBIcon icon="lock"/> Auth
                                             </h3>
                                         </MDBCardHeader>
