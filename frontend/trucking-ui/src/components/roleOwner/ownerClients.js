@@ -30,14 +30,14 @@ export class OwnerClients extends Component {
 
     render() {
         return (
-            <div className={'row margin-container'}>
+            <div>
+                <h3 style={{textAlign:'center', color: 'white'}} className={'animated fadeInDown'}>Clients</h3>
+                <div className={'row margin-container'}>
 
-                <div className="offset-md-2 col-md-8">
-                    <ClientsList clients={this.props.clients}/>
+                    <div className="offset-md-2 col-md-8">
+                        <ClientsList clients={this.props.clients}/>
+                    </div>
                 </div>
-                {/*<div className="offset-md-2 col-md-2">*/}
-                    {/*<CreateUser renderUsers={this.updateUsers}/>*/}
-                {/*</div>*/}
             </div>
         );
     }

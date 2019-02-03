@@ -66,3 +66,8 @@ body {
     margin-top: 3%;
     width: 100%;
 }
+
+.form-input {
+    background-color: #212529;
+    color: white;
+}

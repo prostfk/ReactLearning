@@ -5,12 +5,11 @@ const security = require('../util/security');
 
 router.get('/:role/orders', (req, resp) => {
     let role = req.params.role;
-    if (role === 'admin' || role === 'dispatcher'){
-        security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
+    if (role === 'admin' || role === 'dispatcher' || role === 'owner' || role === 'manager'){
+        security.checkRole(req, resp, ['ROLE_DISPATCHER', 'ROLE_OWNER', 'ROLE_MANAGER'], () => {
             let db = new Database();
             let userDetails = security.getUserInfo(req);
-            db.executeQuery(`SELECT *
-                         FROM orders WHERE company =${userDetails.companyId}`).then(data => {
+            db.executeQuery(`SELECT * FROM orders WHERE company=${userDetails.companyId}`).then(data => {
                 resp.json(data);
             })
         });

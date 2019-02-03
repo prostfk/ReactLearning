@@ -3,7 +3,6 @@ import {
     Container, Button, Modal, ModalBody, ModalHeader, ModalFooter, MDBRow, MDBCol, Animation,
     MDBCard, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput, MDBContainer,
 } from 'mdbreact';
-// import {Col, Input, Row} from 'react-materialize'
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
 import {NotificationManager} from "react-notifications";

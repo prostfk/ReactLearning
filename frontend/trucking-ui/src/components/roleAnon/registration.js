@@ -11,8 +11,13 @@ import {
     MDBCardHeader,
     MDBBtn
 } from "mdbreact";
+import {MuiPickersUtilsProvider} from 'material-ui-pickers';
+import {DatePicker} from 'material-ui-pickers';
+import {Input} from 'reactstrap';
 // import {DatePicker as MaterialDatePicker } from 'material-ui-pickers';
 import CommonUtil from "../../lib/commontUtil";
+import DateFnsUtils from "@date-io/date-fns";
+import {NotificationManager} from 'react-notifications';
 
 
 export default class Registration extends Component {
@@ -24,13 +29,19 @@ export default class Registration extends Component {
         username: '',
         firstName: '',
         secondName: '',
-        birthDay: '',
+        birthDay: new Date(),
         companyName: ''
     };
 
     changeInput = (event) => {
         this.setState({
-            [event.target.id]: [event.target.value]
+            [event.target.id]: event.target.value
+        });
+    };
+
+    changeDate = (id, date) => {
+        this.setState({
+            [id]: date
         });
     };
 
@@ -53,15 +64,17 @@ export default class Registration extends Component {
             formData.append('username', CommonUtil.getStringFromUnknownObject(this.state.username));
             formData.append('firstName', CommonUtil.getStringFromUnknownObject(this.state.firstName));
             formData.append('secondName', CommonUtil.getStringFromUnknownObject(this.state.secondName));
-            formData.append('birthDate', CommonUtil.getStringFromUnknownObject(this.state.birthDay));
+            formData.append('birthDate', CommonUtil.dateToDataBaseString(this.state.birthDay));
             formData.append('password', CommonUtil.getStringFromUnknownObject(this.state.password));
             formData.append('companyName', CommonUtil.getStringFromUnknownObject(this.state.companyName));
+            formData.append('email', this.state.email);
             fetch('/api/registration', {method: 'post', body: formData}).then(response => {
                 return response.json();
             }).then(data => {
                 console.log(data);
                 if (data.error === undefined) {
-                    // history.pushState('/');
+                    NotificationManager.success("Success");
+                    this.props.history.push("/");
                 }
             })
         }
@@ -77,7 +90,7 @@ export default class Registration extends Component {
                         <MDBRow>
                             <MDBCol md="">
                                 <MDBCard>
-                                    <MDBCardBody>
+                                    <MDBCardBody className={'grey darken-3'} style={{color:'white'}}>
                                         <MDBCardHeader className="form-header warm-flame-gradient rounded">
                                             <h3 className="my-3">
                                                 <MDBIcon icon="lock"/> Registration
@@ -88,6 +101,7 @@ export default class Registration extends Component {
                                             onChange={this.changeInput}
                                             id={'companyName'}
                                             group
+                                            style={{color: 'white'}}
                                             type="text"
                                             validate
                                             error="wrong"
@@ -98,6 +112,7 @@ export default class Registration extends Component {
                                             onChange={this.changeInput}
                                             id={'email'}
                                             group
+                                            style={{color: 'white'}}
                                             type="text"
                                             validate
                                             error="wrong"
@@ -108,6 +123,7 @@ export default class Registration extends Component {
                                             onChange={this.changeInput}
                                             id={'username'}
                                             group
+                                            style={{color: 'white'}}
                                             type="text"
                                             validate
                                             error="wrong"
@@ -118,6 +134,7 @@ export default class Registration extends Component {
                                             onChange={this.changeInput}
                                             id={'firstName'}
                                             group
+                                            style={{color: 'white'}}
                                             type="text"
                                             validate
                                             error="wrong"
@@ -128,26 +145,23 @@ export default class Registration extends Component {
                                             onChange={this.changeInput}
                                             id={'secondName'}
                                             group
+                                            style={{color: 'white'}}
                                             type="text"
                                             validate
                                             error="wrong"
                                             success="right"
                                         />
-                                        <MDBInput
-                                            // label="Birth date"
-                                            onChange={this.changeInput}
-                                            id={'birthDay'}
-                                            group
-                                            type="date"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                        />
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <DatePicker id={'birthDay'} value={this.state.birthDay}
+                                                        style={{width: '100%', color: 'white'}}
+                                                        onChange={(e) => this.changeDate('birthDay', e)}/>
+                                        </MuiPickersUtilsProvider>
                                         <MDBInput
                                             label="Password"
                                             onChange={this.changeInput}
                                             id={'password'}
                                             group
+                                            style={{color: 'white'}}
                                             type="password"
                                             validate
                                             error="wrong"
@@ -158,6 +172,7 @@ export default class Registration extends Component {
                                             onChange={this.changeInput}
                                             id={'passwordAgain'}
                                             group
+                                            style={{color: 'white'}}
                                             type="password"
                                             validate
                                             error="wrong"

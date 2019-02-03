@@ -88,6 +88,7 @@ class Auth extends Component {
                                             value={this.state.username}
                                             id={'username'}
                                             group
+                                            style={{color: 'white'}}
                                             type="text"
                                             validate
                                             error="wrong"
@@ -99,6 +100,7 @@ class Auth extends Component {
                                             value={this.state.password}
                                             id={'password'}
                                             group
+                                            style={{color: 'white'}}
                                             type="password"
                                             validate
                                             error="wrong"

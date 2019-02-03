@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Animation, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput} from 'mdbreact';
+import {Input, Table} from 'reactstrap';
 import {MuiPickersUtilsProvider} from 'material-ui-pickers';
 import {DatePicker} from 'material-ui-pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -49,7 +50,7 @@ export default class CreateOrder extends Component {
             return resp.json();
         }).then(data => {
             if (singleId) {
-                if (singleId === 'stock'){
+                if (singleId === 'stock') {
                     this.setState({
                         newOrderReceiver: data[0].id,
                         newOrderSender: data[0].id
@@ -102,17 +103,42 @@ export default class CreateOrder extends Component {
     };
 
     addProduct = () => {
-        let product = {
-            name: this.state.newProductName,
-            description: this.state.newProductDescription,
-            count: this.state.newProductCount,
-            price: this.state.newProductPrice
-        };
-        this.setState({
-            consignment: [...this.state.consignment, product]
-        });
-        document.getElementById('newProductName').focus();
+        if (this.validateProduct()){
+            let product = {
+                name: this.state.newProductName,
+                description: this.state.newProductDescription,
+                count: this.state.newProductCount,
+                price: this.state.newProductPrice
+            };
+            this.setState({
+                consignment: [...this.state.consignment, product]
+            });
+            document.getElementById('newProductName').focus();
+        }
+    };
 
+    validateProduct = () => {
+        let nameVal = ValidationUtil.validateStringForLength(this.state.newProductName, 2,15);
+        let descVal = ValidationUtil.validateStringForLength(this.state.newProductDescription, 2, 50);
+        let priceVal = ValidationUtil.validateNumberInTheRage(this.state.newProductPrice, 0.1, 10000000);
+        let countVal = ValidationUtil.validateNumberInTheRage(this.state.newProductCount, 1, 10000000);
+        let span = document.getElementById('product-span');
+        if (!nameVal){
+            span.innerText = "Incorrect name";
+        }
+        if (!descVal){
+            span.innerText = "Incorrect description";
+        }
+        if (!priceVal){
+            span.innerText = "Incorrect price";
+        }
+        if (!countVal){
+            span.innerText = "Incorrect count";
+        }
+        if (nameVal && descVal && priceVal && countVal){
+            span.innerText = "";
+        }
+        return nameVal && descVal && priceVal && countVal;
     };
 
     deleteProduct(index) {
@@ -135,7 +161,7 @@ export default class CreateOrder extends Component {
             document.getElementById('error-client-span').innerText = "";
         }
         if (!nameValidation) {
-            document.getElementById('error-name-span').innerText = `Incorrect value ${this.state.name}`;
+            document.getElementById('error-name-span').innerText = `Incorrect value`;
         } else {
             document.getElementById('error-name-span').innerText = "";
         }
@@ -189,36 +215,40 @@ export default class CreateOrder extends Component {
 
     saveOrder = () => {
         let ref = this;
-        if (this.validateOrder) {
-            const formData = new FormData();
-            formData.append('name', this.state.newOrderName);
-            formData.append('client', this.state.newOrderClient);
-            formData.append('auto', this.state.newOrderAuto);
-            formData.append('driver', this.state.newOrderDriver);
-            formData.append('sender', this.state.newOrderSender);
-            formData.append('receiver', this.state.newOrderReceiver);
-            formData.append('dd', CommonUtil.dateToString(this.state.newOrderDD));
-            formData.append('da', CommonUtil.dateToString(this.state.newOrderDA));
-            formData.append('status', this.state.newOrderStatus);
-            formData.append('consignment', JSON.stringify(this.state.consignment));
-            fetch('/api/dispatcher/addOrder', {
-                method: 'post',
-                headers: {authorization: localStorage.getItem('authorization')},
-                body: formData
-            }).then(resp => {
-                return resp.json();
-            }).then(data => {
-                if (data.error === undefined){
-                    NotificationManager.success('Created');
-                    this.props.history.push('/');
-                }else{
-                    NotificationManager.error(data.error);
-                }
-            }).catch((err) => {
-                NotificationManager.warning(err);
-            })
-        } else {
-            NotificationManager.warning("check your data");
+        if (this.state.consignment.length > 0){
+            if (this.validateOrder() && this.validateFirstForm()) {
+                const formData = new FormData();
+                formData.append('name', this.state.newOrderName);
+                formData.append('client', this.state.newOrderClient);
+                formData.append('auto', this.state.newOrderAuto);
+                formData.append('driver', this.state.newOrderDriver);
+                formData.append('sender', this.state.newOrderSender);
+                formData.append('receiver', this.state.newOrderReceiver);
+                formData.append('dd', CommonUtil.dateToString(this.state.newOrderDD));
+                formData.append('da', CommonUtil.dateToString(this.state.newOrderDA));
+                formData.append('status', this.state.newOrderStatus);
+                formData.append('consignment', JSON.stringify(this.state.consignment));
+                fetch('/api/dispatcher/addOrder', {
+                    method: 'post',
+                    headers: {authorization: localStorage.getItem('authorization')},
+                    body: formData
+                }).then(resp => {
+                    return resp.json();
+                }).then(data => {
+                    if (data.error === undefined) {
+                        NotificationManager.success('Created');
+                        this.props.history.push('/');
+                    } else {
+                        NotificationManager.error(data.error);
+                    }
+                }).catch(() => {
+                    NotificationManager.warning("Try again later", "Something went wrong");
+                })
+            } else {
+                NotificationManager.warning("check your data");
+            }
+        }else {
+            NotificationManager.warning("Cannot save empty consignment");
         }
     };
 
@@ -233,231 +263,249 @@ export default class CreateOrder extends Component {
     };
 
     render() {
+        let inputStyle = {
+            backgroundColor: '#212529',
+            color: 'white'
+        };
+
         return (
             <div className={'animated fadeIn'}>
 
                 <form className="container">
-                    <MDBCardBody>
-                        <MDBCardHeader className="form-header warm-flame-gradient rounded">
+                    <div className={'stylish-color-dark'}>
+                        <MDBCardHeader className="form-header rounded">
                             <h3 className="my-3">Create order</h3>
                         </MDBCardHeader>
 
-                        <div id={'first-form'} className={'animated fadeIn'}>
-                            <MDBInput
-                                label="Name"
-                                onChange={this.changeInput}
-                                id={'newOrderName'}
-                                value={this.state.newOrderName}
-                                group
-                                type="text"
-                                validate
-                                error="wrong"
-                                success="right"
-                            />
-                            <span className="error-span" id="error-name-span"/><br/>
-                            <label htmlFor="newOrderClient">Client</label>
-                            <Select style={{width: '100%'}} id={'newOrderClient'}
-                                    native={true}
-                                    value={this.state.newOrderClient}
-                                    onChange={this.changeInput}>
-                                {/*<option disabled selected>Client</option>*/}
-                                {
-                                    this.state.clients.map((client, index) => {
-                                        return <option value={client.id}
-                                                       key={index}>{client.name}</option>
-                                    })
-                                }
-                            </Select>
-                            <span className="error-span" id="error-client-span"/><br/>
-                            <label htmlFor="newOrderStatus">Status</label>
-                            <Select style={{width: '100%'}} id={'newOrderStatus'}
-                                    native={true}
-                                    value={this.state.newOrderStatus}
-                                    onChange={this.changeInput}>
-                                <option value={'1'}>Accepted</option>
-                                <option value={'2'}>Checked</option>
-                                <option value={'3'}>Lost</option>
-                            </Select>
-                            <span className="error-span" id="error-status-span"/><br/>
-                            <label htmlFor="newOrderSender">Sender</label>
-                            <Select style={{width: '100%'}} id={'newOrderSender'}
-                                    native={true}
-                                    value={this.state.newOrderSender}
-                                    onChange={this.changeInput}>
-                                {
-                                    this.state.stocks.map((stock, index) => {
-                                        return <option value={stock.id}
-                                                       key={index}>{stock.name}</option>
-                                    })
-                                }
-                            </Select>
-                            <label htmlFor="newOrderReceiver">Receiver</label>
-                            <Select style={{width: '100%'}} id={'newOrderReceiver'}
-                                    native={true}
-                                    value={this.state.newOrderReceiver}
-                                    onChange={this.changeInput}>
-                                {
-                                    this.state.stocks.map((stock, index) => {
-                                        return <option value={stock.id}
-                                                       key={index}>{stock.name}</option>
-                                    })
-                                }
-                            </Select>
-                            <span className="error-span" id="error-stocks-span"/><br/>
-                            <Button color="secondary"
-                                    onClick={() => {
-                                        // this.setDefault();
-                                        if (this.validateFirstForm()) {
-                                            this.changeForm(2);
-                                        }
-                                    }}>Continue</Button>
-                        </div>
-
-                        <div id="second-form" className={'animated fadeIn'}
-                             style={{display: 'none'}}>
-                            <label htmlFor="dates">Dates</label>
-
-                            <div id="dates" style={{display: 'flex', justifyContent: 'center'}}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker id={'newOrderDD'} value={this.state.newOrderDD}
-                                                onChange={(e) => this.changeDate('newOrderDD', e)}/>
-                                    <DatePicker id={'newOrderDA'} value={this.state.newOrderDA}
-                                                onChange={(e) => this.changeDate('newOrderDA', e)}/>
-
-                                </MuiPickersUtilsProvider>
+                        <div style={{margin: '0 2% 0 2%'}}>
+                            <div id={'first-form'} className={'animated fadeIn'}>
+                                <label htmlFor="newOrderName">Name</label>
+                                <Input className={'form-input'} style={inputStyle}
+                                       placeholder={'Name'}
+                                       onChange={this.changeInput}
+                                       id={'newOrderName'}
+                                       value={this.state.newOrderName}
+                                       group
+                                       type="text"
+                                       validate
+                                       error="wrong"
+                                       success="right"
+                                />
+                                <span className="error-span" id="error-name-span"/><br/>
+                                <label htmlFor="newOrderClient">Client</label>
+                                <Input type={'select'} style={inputStyle}
+                                       id={'newOrderClient'}
+                                       value={this.state.newOrderClient}
+                                       onChange={this.changeInput}>
+                                    {/*<option disabled selected>Client</option>*/}
+                                    {
+                                        this.state.clients.map((client, index) => {
+                                            return <option value={client.id}
+                                                           key={index}>{client.name}</option>
+                                        })
+                                    }
+                                </Input>
+                                <span className="error-span" id="error-client-span"/><br/>
+                                <label htmlFor="newOrderStatus">Status</label>
+                                <Input type={'select'} className={'form-input'} style={inputStyle}
+                                       id={'newOrderStatus'}
+                                       native={true}
+                                       value={this.state.newOrderStatus}
+                                       onChange={this.changeInput}>
+                                    <option value={'1'}>Accepted</option>
+                                    <option value={'2'}>Checked</option>
+                                    <option value={'3'}>Lost</option>
+                                </Input>
+                                <span className="error-span" id="error-status-span"/><br/>
+                                <label htmlFor="newOrderSender">Sender</label>
+                                <Input type={'select'} className={'form-input'} style={inputStyle}
+                                       id={'newOrderSender'}
+                                       native={true}
+                                       value={this.state.newOrderSender}
+                                       onChange={this.changeInput}>
+                                    {
+                                        this.state.stocks.map((stock, index) => {
+                                            return <option value={stock.id}
+                                                           key={index}>{stock.name}</option>
+                                        })
+                                    }
+                                </Input>
+                                <label htmlFor="newOrderReceiver">Receiver</label>
+                                <Input type={'select'} className={'form-input'} style={inputStyle}
+                                       id={'newOrderReceiver'}
+                                       native={true}
+                                       value={this.state.newOrderReceiver}
+                                       onChange={this.changeInput}>
+                                    {
+                                        this.state.stocks.map((stock, index) => {
+                                            return <option value={stock.id}
+                                                           key={index}>{stock.name}</option>
+                                        })
+                                    }
+                                </Input>
+                                <span className="error-span" id="error-stocks-span"/><br/>
+                                <button className={'btn btn-primary'} onClick={this.props.cancelFunc}>Cancel</button>
+                                <Button color="secondary"
+                                        onClick={() => {
+                                            // this.setDefault();
+                                            if (this.validateFirstForm()) {
+                                                this.changeForm(2);
+                                            }
+                                        }}>Continue</Button>
                             </div>
 
-                            <span className="error-span" id="error-dates-span"/><br/>
+                            <div id="second-form" className={'animated fadeIn'}
+                                 style={{display: 'none'}}>
+                                <label htmlFor="dates">Dates</label>
 
-                            <label htmlFor="newOrderAuto">Auto</label>
-                            <Select style={{width: '100%'}} id={'newOrderAuto'}
-                                    native={true}
-                                    value={this.state.newOrderAuto}
-                                    onChange={this.changeInput}>
-                                {
-                                    this.state.autos.map((auto, index) => {
-                                        return <option value={auto.id}
-                                                       key={index}>{auto.name}</option>
-                                    })
-                                }
-                            </Select>
-                            <span className="error-span" id="error-auto-span"/><br/>
+                                <div id="dates" style={{display: 'flex', justifyContent: 'center'}}>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DatePicker id={'newOrderDD'} value={this.state.newOrderDD}
+                                                    style={{width: '50%', color: 'white'}}
+                                                    onChange={(e) => this.changeDate('newOrderDD', e)}/>
+                                        <DatePicker id={'newOrderDA'} value={this.state.newOrderDA}
+                                                    style={{width: '50%', color: 'white'}}
+                                                    onChange={(e) => this.changeDate('newOrderDA', e)}/>
 
-                            <label htmlFor="newOrderDriver">Driver</label>
-                            <Select style={{width: '100%'}} id={'newOrderDriver'}
-                                    native={true}
-                                    value={this.state.newOrderDriver}
-                                    onChange={this.changeInput}>
-                                {
-                                    this.state.drivers.map((driver, index) => {
-                                        return <option value={driver.id}
-                                                       key={index}>{driver.name}</option>
-                                    })
-                                }
-                            </Select>
-                            <span className="error-span" id="error-driver-span"/><br/>
+                                    </MuiPickersUtilsProvider>
+                                </div>
 
-                            <button className={'btn btn-primary'} type={'button'}
-                                    onClick={() => this.changeForm(1)}>Back to order
-                            </button>
+                                <span className="error-span" id="error-dates-span"/><br/>
 
-                            <Button color="secondary"
-                                    onClick={() => {
-                                        // this.setDefault();
-                                        if (this.validateOrder()) {
-                                        this.changeForm(3);
-                                        }
-                                    }}>Continue</Button>
-                        </div>
+                                <label htmlFor="newOrderAuto">Auto</label>
+                                <Input type={'select'} style={inputStyle} id={'newOrderAuto'}
+                                       value={this.state.newOrderAuto}
+                                       onChange={this.changeInput}>
+                                    {
+                                        this.state.autos.map((auto, index) => {
+                                            return <option value={auto.id}
+                                                           key={index}>{auto.name}</option>
+                                        })
+                                    }
+                                </Input>
+                                <span className="error-span" id="error-auto-span"/><br/>
 
-                        <div id="third-form" style={{display: 'none'}}>
-                            <div className="product-row">
-                                <MDBInput
-                                    label="Name"
-                                    onChange={this.changeInput}
-                                    id={'newProductName'}
-                                    value={this.state.newProductName}
-                                    group
-                                    type="text"
-                                    validate
-                                    error="wrong"
-                                    success="right"/>
-                                <MDBInput
-                                    label="Description"
-                                    onChange={this.changeInput}
-                                    id={'newProductDescription'}
-                                    value={this.state.newProductDescription}
-                                    group
-                                    type="text"
-                                    validate
-                                    error="wrong"
-                                    success="right"/>
-                                <MDBInput
-                                    label="Count"
-                                    onChange={this.changeInput}
-                                    id={'newProductCount'}
-                                    value={this.state.newProductCount}
-                                    group
-                                    type="number"
-                                    validate
-                                    error="wrong"
-                                    success="right"/>
-                                <MDBInput
-                                    label="Price"
-                                    onChange={this.changeInput}
-                                    id={'newProductPrice'}
-                                    value={this.state.newProductPrice}
-                                    group
-                                    type="number"
-                                    validate
-                                    error="wrong"
-                                    success="right"/>
+                                <label htmlFor="newOrderDriver">Driver</label>
+                                <Input type={'select'} style={inputStyle} id={'newOrderDriver'}
+                                       value={this.state.newOrderDriver}
+                                       onChange={this.changeInput}>
+                                    {
+                                        this.state.drivers.map((driver, index) => {
+                                            return <option value={driver.id}
+                                                           key={index}>{driver.name}</option>
+                                        })
+                                    }
+                                </Input>
+                                <span className="error-span" id="error-driver-span"/><br/>
 
-                                <button type="button" style={{height: '50px'}} onClick={this.addProduct}
-                                        className="btn btn-success">Add product
+                                <button className={'btn btn-primary'} type={'button'}
+                                        onClick={() => this.changeForm(1)}>Back to order
                                 </button>
+
+                                <Button color="secondary"
+                                        onClick={() => {
+                                            // this.setDefault();
+                                            if (this.validateOrder()) {
+                                                this.changeForm(3);
+                                            }
+                                        }}>Continue</Button>
                             </div>
-                            {
-                                this.state.consignment.length > 0 ? <div>
-                                    <div className="product-row animated fadeInUp" style={{backgroundColor: '#DCDCDC'}}>
-                                        <div className="col-md-2">Id</div>
-                                        <div className="col-md-2">Name</div>
-                                        <div className="col-md-2">Description</div>
-                                        <div className="col-md-2">Count</div>
-                                        <div className="col-md-2">Price</div>
-                                        <div className="col-md-1">Remove</div>
 
-                                    </div>
-                                </div> : <div/>
-                            }
+                            <div id="third-form" style={{display: 'none'}}>
+                                <span className="error-span" id="product-span"/>
+                                <div className="product-row">
+                                    <MDBInput
+                                        style={{color: 'white'}}
+                                        label="Name"
+                                        onChange={this.changeInput}
+                                        id={'newProductName'}
+                                        value={this.state.newProductName}
+                                        group
+                                        type="text"
+                                        validate
+                                        error="wrong"
+                                        success="right"/>
+                                    <MDBInput
+                                        style={{color: 'white'}}
+                                        label="Description"
+                                        onChange={this.changeInput}
+                                        id={'newProductDescription'}
+                                        value={this.state.newProductDescription}
+                                        group
+                                        type="text"
+                                        validate
+                                        error="wrong"
+                                        success="right"/>
+                                    <MDBInput
+                                        style={{color: 'white'}}
+                                        label="Count"
+                                        onChange={this.changeInput}
+                                        id={'newProductCount'}
+                                        value={this.state.newProductCount}
+                                        group
+                                        type="number"
+                                        validate
+                                        error="wrong"
+                                        success="right"/>
+                                    <MDBInput
+                                        style={{color: 'white'}}
+                                        label="Price"
+                                        onChange={this.changeInput}
+                                        id={'newProductPrice'}
+                                        value={this.state.newProductPrice}
+                                        group
+                                        type="number"
+                                        validate
+                                        error="wrong"
+                                        success="right"/>
 
-                            <div style={{maxHeight: '300px', 'overflowX': 'hidden', 'overflowY': 'scroll'}}>
+                                    <button type="button" style={{height: '50px'}} onClick={this.addProduct}
+                                            className="btn btn-info">Add product
+                                    </button>
+                                </div>
+
                                 {
-                                    this.state.consignment.map((product, index) => {
-                                        return <div className="product-row animated fadeInUp" key={index}
-                                                    style={{backgroundColor: 'white'}}>
-                                            <div className="col-md-2">{index + 1}</div>
-                                            <div className="col-md-2">{product.name}</div>
-                                            <div className="col-md-2">{product.description}</div>
-                                            <div className="col-md-2">{product.count}</div>
-                                            <div className="col-md-2">{product.price}</div>
-                                            <div className="col-md-1">
-                                                <MDBIcon icon="remove" style={{color: 'red'}}
-                                                         onClick={this.deleteProduct.bind(this, index)}/>
-                                                {/*<button className="table-button" style={{backgroundColor: '#F0AAAA'}} type="button" */}
-                                                {/*onClick={this.deleteProduct.bind(this,index)}>-</button>*/}
-                                            </div>
-                                        </div>
-                                    })
+                                    this.state.consignment.length > 0 ?
+                                        <Table dark style={{backgroundColor: '#3F4752'}}>
+                                            <thead className={'animated fadeIn'}>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Count</th>
+                                                <th>Price</th>
+                                                <th>Remove</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody style={{maxHeight: '300px', 'overflowX': 'hidden', 'overflowY': 'scroll'}}>
+                                            {
+                                                this.state.consignment.map((product, index) => {
+                                                    return <tr className="animated fadeInUp" key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{product.name}</td>
+                                                        <td>{product.description}</td>
+                                                        <td>{product.count}</td>
+                                                        <td>{product.price}</td>
+                                                        <td>
+                                                            <MDBIcon icon="remove" style={{color: 'red'}}
+                                                                     onClick={this.deleteProduct.bind(this, index)}/>
+                                                        </td>
+                                                    </tr>
+                                                })
+                                            }
+                                            </tbody>
+                                        </Table> : <div/>
+
                                 }
+
+
+                                <button className={'btn btn-primary'} type={'button'}
+                                        onClick={() => this.changeForm(2)}>Back to waybill
+                                </button>
+                                <button className={'btn btn-success'} onClick={this.saveOrder} type={'button'}>Create
+                                </button>
+
                             </div>
-
-                            <button className={'btn btn-primary'} type={'button'}
-                                    onClick={() => this.changeForm(2)}>Back to waybill
-                            </button>
-                            <button className={'btn btn-success'} onClick={this.saveOrder} type={'button'}>Create
-                            </button>
-
                         </div>
 
 
@@ -465,7 +513,7 @@ export default class CreateOrder extends Component {
                             <span id={'pass-span'} className="error-span"/>
                         </Animation>
 
-                    </MDBCardBody>
+                    </div>
                 </form>
 
             </div>

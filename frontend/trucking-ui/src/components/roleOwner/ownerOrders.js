@@ -20,14 +20,19 @@ export class OwnerOrders extends Component {
                 } else {
                     NotificationManager.warning(data.error);
                 }
-            })
+            }).catch(()=>{
+                NotificationManager.warning("Connection error");
+        })
     };
 
 
     render() {
         return (
-            <div className={'container'}>
-                <OrdersList style={{width: '100%'}} role={ROLE_OWNER} orders={this.props.orders}/>
+            <div>
+                <h3 style={{textAlign:'center', color: 'white'}} className={'animated fadeInDown'}>Orders</h3>
+                <div className={'container'}>
+                    <OrdersList style={{width: '100%'}} role={ROLE_OWNER} orders={this.props.orders}/>
+                </div>
             </div>
         );
     }

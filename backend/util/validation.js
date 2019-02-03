@@ -8,11 +8,16 @@ class ValidationUtil {
     static validateOrder(order) {
         let {name, client, status, sender, receiver, driver, auto, consignment} = order;
         console.log(this.validateForNumber(client));
-        return this.validateStringForLength(name, 2, 11) &&
-            this.validateForNumber(client) && this.validateForNumber(status) &&
+        console.log(this.validateStringForLength(name, 2, 11), name);
+        console.log(this.validateForNumber(auto));
+        console.log(this.validateForNumber(receiver));
+        console.log(this.validateForNumber(consignment), consignment);
+        console.log(this.validateForNumber(driver));
+        console.log(this.validateForNumber(sender));
+        return this.validateStringForLength(name, 2, 20) &&
+            this.validateForNumber(client) && this.validateForNumber(auto) &&
             this.validateForNumber(sender) && this.validateForNumber(receiver) &&
-            this.validateForNumber(driver) && this.validateForNumber(auto) &&
-            this.validateForArray(consignment);
+            this.validateForNumber(driver);
     }
 
     static validateAuto(auto) {

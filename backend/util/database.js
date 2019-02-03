@@ -10,12 +10,16 @@ let config = {
 
 class Database {
     constructor() {
-        this.connection = mysql.createConnection(config);
+        this.connection = mysql.createPool(config);
     }
 
 
     executeQuery(sql, args) {
-        return this.query(sql,args).then(data=>{
+        return this.query(sql,args).then((data, err)=>{
+            if (err) {
+                this.connection.rollback(()=>{console.log()});
+                throw err;
+            }
             return data
         }).then(data=>{
             return data;
@@ -38,6 +42,18 @@ class Database {
             if (err) console.log(err);
             console.log(sql);
         })
+    }
+
+    beginTransaction(callback){
+        this.connection.beginTransaction(callback);
+    }
+
+    commit(callback){
+        this.connection.commit(callback);
+    }
+
+    rollback(callback){
+        this.connection.rollback(callback);
     }
 
     close() {

@@ -22,7 +22,7 @@ export class OwnerIndexPage extends Component {
     }
 
     updateUsers = () => {
-        fetch('/api/ownerAndAdmin/users', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+        fetch('/api/owner/users', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
             if (data.error === undefined) {
@@ -37,13 +37,17 @@ export class OwnerIndexPage extends Component {
 
     render() {
         return (
-            <div className={'row margin-container'}>
+            <div>
+                <h3 style={{textAlign:'center', color: 'white'}} className={'animated fadeInDown'}>Users</h3>
 
-                <div className="offset-md-2 col-md-5">
+                <div className={'row margin-container'}>
+
+                    <div className="offset-md-2 col-md-5">
                         <UsersList users={this.props.users}/>
-                </div>
-                <div className="offset-md-2 col-md-2">
-                    <CreateUser renderUsers={this.updateUsers}/>
+                    </div>
+                    <div className="offset-md-2 col-md-2">
+                        <CreateUser renderUsers={this.updateUsers}/>
+                    </div>
                 </div>
             </div>
         );
