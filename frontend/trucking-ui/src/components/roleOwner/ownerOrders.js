@@ -8,6 +8,12 @@ import {ROLE_OWNER} from "../../constants/roles/userRoles";
 
 export class OwnerOrders extends Component {
 
+    constructor(props) {
+        super(props);
+        document.title = 'Orders';
+    }
+
+
     componentDidMount() {
         this.updateFunc();
     }

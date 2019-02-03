@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ROLE_ADMIN, ROLE_DISPATCHER} from "../../constants/roles/userRoles";
+import {ROLE_ADMIN} from "../../constants/roles/userRoles";
 import {Link} from "react-router-dom";
 import {Table} from 'reactstrap';
 
@@ -7,8 +7,7 @@ export default class StocksList extends Component {
 
     render() {
         return (
-            <Table>
-
+            <div>
                 {this.props.stocks.length > 0 ? <Table dark style={{backgroundColor: '#3F4752'}}>
                     <thead color="grey">
                     <tr className={'animated fadeIn'}>
@@ -28,17 +27,14 @@ export default class StocksList extends Component {
                                 <td>{stock.name}</td>
                                 <td>{stock.address}</td>
                                 {
-                                    this.__renderFunctionalButton()
+                                    this.__renderFunctionalButton(stock.id)
                                 }
                             </tr>
                         })
                     }
                     </tbody>
                 </Table> : <h1 className={'animated fadeInUp'}>No orders yet</h1>}
-                {
-                    this.__renderSideButton()
-                }
-            </Table>
+            </div>
         );
     }
 
@@ -65,17 +61,5 @@ export default class StocksList extends Component {
         }
         return jsx;
     };
-
-    __renderSideButton = () => {
-        let jsx = ``;
-        switch (this.props.role) {
-            case ROLE_ADMIN:
-                jsx = <Link to={'/сreateStock'} className='btn btn-success'>Create stock</Link>;
-                break;
-            default:
-                break;
-        }
-        return jsx;
-    }
 
 }

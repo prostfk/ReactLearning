@@ -13,6 +13,11 @@ import CreateOrder from "./modal/createOrder";
 
 export class DispatcherIndexPage extends Component {
 
+    constructor(props) {
+        super(props);
+        document.title = 'Orders';
+    }
+
 
     state = {
         selectedOrder: {},

@@ -13,7 +13,7 @@ router.get('/freeDrivers', (req, resp) => {
         security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
             let userDetails = security.getUserInfo(req);
             db.executeQuery(`SELECT DISTINCT d.id, username,name, surname FROM users d 
-            LEFT JOIN waybill w2 on d.id = w2.driver
+            LEFT JOIN waybill w2 on d.id = w2.driver_id
             WHERE ((w2.date_departure NOT BETWEEN ${dd} AND ${da}) AND
                    (w2.date_arrival NOT BETWEEN ${dd} AND ${da}) 
                      OR (w2.date_arrival IS NULL AND w2.date_departure IS NULL )) 
@@ -70,7 +70,7 @@ router.get('/stocks', (req,resp)=>{
     });
 });
 
-router.post('/addOrder', (req, resp) => { //todo: add transactions and ORM operations!
+router.post('/addOrder', (req, resp) => {
 
     security.checkRole(req, resp, 'ROLE_DISPATCHER', () => {
         let {name, client, status, sender, receiver, dd, da, waybill_status, driver, auto, consignment} = req.body;
@@ -80,27 +80,9 @@ router.post('/addOrder', (req, resp) => { //todo: add transactions and ORM opera
         console.log(req.body);
         let userInfo = security.getUserInfo(req);
         if (ValidationUtil.validateOrder({name,client,status,sender,receiver,dd, da, waybill_status, driver, auto, consignment})){
-            let db = new Database();
-            db.beginTransaction(
-                db.query('INSERT INTO waybill(status, driver, auto, date_departure, date_arrival, user_id) VALUES (?,?,?,?,?,?)',
-                    [1,driver,auto, dd,da,null]).then(data=>{
-                    db.executeQuery('SELECT * FROM waybill ORDER BY id DESC LIMIT 1').then(data=>{
-                        let wayId = data[0].id;
-                        db.query('INSERT INTO orders(name, client, status, sender, receiver, date_departure, date_arrival, waybill, company) VALUES (?,?,?,?,?,?,?,?,?)',
-                            [name,client,status,sender,receiver,dd,da,wayId,userInfo.companyId]).then(data=>{
-                            db.executeQuery("SELECT orders.id as oId FROM orders ORDER BY id DESC LIMIT 1").then(orderData=>{
-                                db.query('INSERT INTO consignment(name, order_id) VALUES (?,?)',[new Date().toLocaleDateString('ru'), orderData.oId]).then(()=>{
-                                    __saveProducts(consignment);
-                                    return resp.json({status: 'ok'})
-                                })
-                            })
-                        });
-
-
-                    });
-                })
-            );
-            db.commit(()=>console.log('commit'));
+            //todo add saving with transactions
+            //todo add default route points
+            resp.json({status: 'saved'});
         }else{
             resp.json({error: 'Check data'});
         }
@@ -109,19 +91,5 @@ router.post('/addOrder', (req, resp) => { //todo: add transactions and ORM opera
 });
 
 
-__saveProducts = (consignment) => {
-    let db = new Database();
-    try{
-        db.executeQuery('SELECT id FROM consignment ORDER BY id DESC LIMIT 1').then(data=>{
-            consignment.forEach(product=>{
-                db.executeQuery('INSERT INTO product(name, status, description, product_consignment, cancellation_act, price, count, cancelled_count) VALUES (name, status, description, product_consignment, cancellation_act, price, count, cancelled_count)',
-                    [product.name, product.status, product.description, data.id, null, product.price, product.count, 0]);
-            });
-        });
-    }catch (e) {
-        db.rollback(()=>console.log("rollback"));
-        return "ok";
-    }
-};
 
 module.exports = router;

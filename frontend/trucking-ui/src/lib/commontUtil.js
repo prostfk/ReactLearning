@@ -3,6 +3,8 @@ DOES NOT EXTENDS FROM REACT COMPONENT
 UTIL CLASS FOR DATA PROCESSING
 ALL METHODS ARE STATIC
 */
+import {ROLE_ADMIN, ROLE_MANAGER, ROLE_OWNER} from "../constants/roles/userRoles";
+
 class CommonUtil {
 
     static dateToString(date){
@@ -112,6 +114,14 @@ class CommonUtil {
 
     static getLocalDate(date, locale = "ru"){
         return new Date(date).toLocaleDateString(locale);
+    }
+
+    static getCurrentUserRole(){
+        return localStorage.getItem('role');
+    }
+
+    static capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
 }

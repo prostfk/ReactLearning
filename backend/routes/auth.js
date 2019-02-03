@@ -11,8 +11,6 @@ const User = require("../model/User.model");
 router.post('/', (req, resp) => {
     let username = req.body.username;
     let password = req.body.password;
-    const db = new Database();
-    // console.log(username, password);
     if (username.length >= 4 && username.length <= 25 && password.length >= 6 && password.length <= 20) {
         User.findOne({
             where: {username: username}
@@ -40,15 +38,15 @@ router.post('/', (req, resp) => {
                         });
                     } else {
                         console.log("failed");
-                        return resp.status(401).json({message: "Auth Failed"})
+                        return resp.status(401).json({error: "Invalid password"})
                     }
                 })
             } else {
-                resp.json({error: 'no such user'});
+                resp.json({error: 'No such user'});
             }
         });
     } else {
-        resp.json({error: 'validation'});
+        resp.json({error: 'Validation'});
     }
 
 });

@@ -3,6 +3,12 @@ import {NotificationManager} from "react-notifications";
 
 export default class SysAdminIndexPage extends Component {
 
+    constructor(props) {
+        super(props);
+        document.title = 'Users';
+    }
+
+
     state = {
         users: []
     };

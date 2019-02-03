@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import { YMaps, Map } from 'react-yandex-maps';
+import {Map, Marker, MarkerLayout} from 'yandex-map-react';
 import {NotificationManager} from "react-notifications";
+import {Table} from "reactstrap";
+import MarkerModal from "../roleManager/markerModal";
 
 export default class DriverOrder extends Component {
 
@@ -9,8 +11,9 @@ export default class DriverOrder extends Component {
         this.state = {
             center: [55.75,47.57],
             order: undefined,
-            points: undefined
-        }
+            points: []
+        };
+        document.title = 'Order';
     }
 
     loadInfo = () => {
@@ -40,7 +43,7 @@ export default class DriverOrder extends Component {
     };
 
     componentDidMount(){
-        this.loadInfo();
+        // this.loadInfo();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setLocation);
         } else {
@@ -49,12 +52,48 @@ export default class DriverOrder extends Component {
     }
 
     render() {
-        console.log(this.state);
         return (
-            <div style={{width: '100%'}}>
-                <YMaps>
-                    <Map defaultState={{center: this.state.center, zoom: 9}} height={window.innerHeight} width={window.innerWidth}/>
-                </YMaps>
+            <div className={'row'} style={{width: '100%', height: window.innerHeight}}>
+                <div className={'col-md-4'}>
+                    <Table dark style={{backgroundColor: '#4B525D', width: '100%', marginTop: '1%'}}>
+                        <thead>
+                        <tr className={'animated fadeInLeft'}>
+                            <th>Name</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            this.state.points.map((point, index)=>{
+                                return <tr className={'animated fadeInLeft'} key={index}>
+                                    <td>{point.name}</td>
+                                    <td>{point.status}</td>
+                                </tr>
+                            })
+                        }
+                        </tbody>
+                    </Table>
+                </div>
+                <div className={'col-md-8 animated fadeIn'}>
+                    <Map onAPIAvailable={() => console.log('api loaded')} center={this.state.center}
+                         state={{controls: ['default']}} zoom={10} height={window.innerHeight}
+                         width={'100%'} onClick={()=>console.log('map clicked')} style={{width: '100%'}}>
+                        {
+                            this.state.points ?
+                                this.state.points.map((point, index) => {
+                                    let open = false;
+                                    return <Marker key={`marker_${index}`} lat={point.lat} lon={point.lng}  onClick={()=>open=!open}>
+                                        <MarkerLayout>
+                                            <div>
+                                                <MarkerModal open={open}/>
+                                                {/*<img src="/red-marker.png" alt="marker"/>*/}
+                                            </div>
+                                        </MarkerLayout>
+                                    </Marker>
+                                }) : <></>
+                        }
+                    </Map>
+                </div>
             </div>
         );
     }

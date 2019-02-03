@@ -8,7 +8,8 @@ export default class OwnerCharts extends Component {
         this.state = {
             users: [],
             orders: []
-        }
+        };
+        document.title = 'Statistics';
     }
 
     componentDidMount(){

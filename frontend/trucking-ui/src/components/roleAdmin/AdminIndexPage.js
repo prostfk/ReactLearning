@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import CreateUser from "../common/adminAndOwner/createUser";
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
-import EditUser from "../common/adminAndOwner/editUser";
 import {LOAD_USERS} from "../../constants/workersActionType";
 import connect from "react-redux/es/connect/connect";
 import UsersList from "../lists/UsersList";
-import {ROLE_OWNER} from "../../constants/roles/userRoles";
+import {ROLE_ADMIN} from "../../constants/roles/userRoles";
 
 
-export class OwnerIndexPage extends Component {
+export class AdminIndexPage extends Component {
 
     constructor(props) {
         super(props);
@@ -28,10 +27,10 @@ export class OwnerIndexPage extends Component {
     }
 
     updateUsers = () => {
-        fetch('/api/owner/users', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+        fetch('/api/admin/users', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
-            if (data.error === undefined) {
+            if (!data.error) {
                 this.props.loadWorkers(data);
             } else {
                 NotificationManager.warning(data.error);
@@ -49,10 +48,10 @@ export class OwnerIndexPage extends Component {
                 <div className={'row margin-container'}>
 
                     <div className="offset-md-2 col-md-5">
-                        <UsersList users={this.props.users} role={ROLE_OWNER}/>
+                        <UsersList users={this.props.users} role={ROLE_ADMIN}/>
                     </div>
                     <div className="offset-md-2 col-md-2">
-                        <CreateUser renderUsers={this.updateUsers} updateFunc={this.updateUsers}/>
+                        <CreateUser renderUsers={this.updateUsers}/>
                     </div>
                 </div>
             </div>
@@ -76,4 +75,4 @@ const mapDispatchToProps = dispatch => {
         }
     });
 };
-export default connect(mapStateToProps, mapDispatchToProps)(OwnerIndexPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminIndexPage);

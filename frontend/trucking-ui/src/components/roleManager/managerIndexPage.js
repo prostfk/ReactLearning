@@ -5,9 +5,16 @@ import { Link } from 'react-router-dom'
 import connect from "react-redux/es/connect/connect";
 import {LOAD_ORDERS} from "../../constants/orderActionType";
 import {OrdersList} from "../lists/OrdersList";
+import {ROLE_MANAGER} from "../../constants/roles/userRoles";
 
 
 export class ManagerIndexPage extends Component {
+
+
+    constructor(props) {
+        super(props);
+        document.title = 'Orders';
+    }
 
 
     state = {
@@ -35,7 +42,7 @@ export class ManagerIndexPage extends Component {
         return (
             <div className={'container'}>
                 <h3 style={{textAlign:'center', color: 'white'}} className={'animated fadeInDown'}>Orders</h3>
-                <OrdersList orders={this.props.orders}/>
+                <OrdersList orders={this.props.orders} role={ROLE_MANAGER}/>
             </div>
         );
     }

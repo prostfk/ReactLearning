@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import CommonUtil from "../../lib/commontUtil";
 import {Link} from "react-router-dom";
-import {ROLE_DISPATCHER, ROLE_MANAGER} from "../../constants/roles/userRoles";
+import {ROLE_DISPATCHER, ROLE_DRIVER, ROLE_MANAGER} from "../../constants/roles/userRoles";
 import {Table} from 'reactstrap';
 
 export class OrdersList extends Component {
@@ -47,6 +47,9 @@ export class OrdersList extends Component {
             case ROLE_DISPATCHER:
                 jsx = <th>Edit</th>;
                 break;
+            case ROLE_MANAGER || ROLE_DRIVER:
+                jsx = <th>Route</th>;
+                break;
             default:
                 break;
         }
@@ -59,22 +62,15 @@ export class OrdersList extends Component {
             case ROLE_DISPATCHER:
                 jsx = <Link to={`/editOrder/${orderId}`} className='btn-sm btn-warning'>Edit</Link>;
                 break;
+            case ROLE_MANAGER:
+                jsx = <Link to={`/setRoute/${orderId}`} className='btn-sm btn-warning'>Route</Link>;
+                break;
             default:
+            case ROLE_DRIVER:
+                jsx = <Link to={`/route/${orderId}`} className='btn-sm btn-info'>Route</Link>;
                 break;
         }
         return jsx;
     };
-
-    __renderSideButton = () => {
-        let jsx = ``;
-        switch (this.props.role) {
-            case ROLE_DISPATCHER:
-                jsx = <Link to={'/createOrder'} className='btn btn-success'>Create order</Link>;
-                break;
-            default:
-                break;
-        }
-        return jsx;
-    }
 
 }

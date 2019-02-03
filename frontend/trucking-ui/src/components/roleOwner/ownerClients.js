@@ -10,6 +10,12 @@ import ClientsList from "../lists/ClientsList";
 
 export class OwnerClients extends Component {
 
+    constructor(props) {
+        super(props);
+        document.title = 'Clients';
+    }
+
+
     componentDidMount(){
         this.getClients();
     }

@@ -22,6 +22,12 @@ import {NotificationManager} from 'react-notifications';
 
 export default class Registration extends Component {
 
+    constructor(props) {
+        super(props);
+        document.title = 'Registration';
+    }
+
+
     state = {
         email: '',
         password: '',

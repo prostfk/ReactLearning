@@ -18,6 +18,12 @@ import {AUTH_SUCCESS} from "../../constants/userActionType";
 
 class Auth extends Component {
 
+    constructor(props) {
+        super(props);
+        document.title = 'Auth';
+    }
+
+
     state = {
         username: '',
         password: '',
@@ -52,19 +58,18 @@ class Auth extends Component {
                 return response.json();
             }).then(data => {
                 console.log(data);
-                if (data.error === undefined) {
+                if (!data.error) {
                     ref.props.authUser([
-                        data.userRole,data.token, data.userId, data.companyId
+                        data.userRole, data.token, data.userId, data.companyId
                     ]);
                     localStorage.setItem('role', data.userRole);
                     localStorage.setItem('authorization', data.token);
                     this.props.history.push('/');
-                }else{
+                } else {
                     document.getElementById('pass-span').innerText = data.error;
                 }
             })
         }
-
 
     };
 
@@ -79,7 +84,7 @@ class Auth extends Component {
                                     <MDBCardBody className={'grey darken-3'}>
                                         <MDBCardHeader className="form-header grey darken-2 rounded">
                                             <h3 className="my-3" style={{color: 'white'}}>
-                                                <MDBIcon icon="lock"/> Auth
+                                                <MDBIcon icon="lock"/> Auth <span className={'animated fadeIn'} id={'pass-span'} style={{color: 'red', textAlign: 'center'}}/>
                                             </h3>
                                         </MDBCardHeader>
                                         <MDBInput
@@ -106,9 +111,6 @@ class Auth extends Component {
                                             error="wrong"
                                             success="right"
                                         />
-                                        <Animation type="fadeIn" count={1}>
-                                            <span id={'pass-span'} className="error-span"/>
-                                        </Animation>
                                         <div className="text-center mt-4">
                                             <MDBBtn color="deep-orange" className="mb-3" type="submit"
                                                     onClick={this.addUser}>
@@ -139,8 +141,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return ({
         authUser: payload => {
-            dispatch({type: AUTH_SUCCESS,payload: payload})
+            dispatch({type: AUTH_SUCCESS, payload: payload})
         }
     })
 };
-export default connect(mapStateToProps,mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

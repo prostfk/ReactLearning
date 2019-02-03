@@ -6,6 +6,7 @@ import {
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
 import {NotificationManager} from "react-notifications";
+import {Input} from 'reactstrap';
 
 export default class CreateAuto extends Component {
 
@@ -37,10 +38,10 @@ export default class CreateAuto extends Component {
         let typeVal = ValidationUtil.validateStringForLength(this.state.newAutoType, 5, 19);
         let carNumberVal = ValidationUtil.validateStringForLength(this.state.newAutoNumber, 3, 20);
         let fuelVal = ValidationUtil.validateNumberInTheRage(this.state.newAutoFuel, 2, 50);
-        if (!typeVal){
+        if (!typeVal) {
             document.getElementById('newAutoType').classList.add('is-invalid');
             document.getElementById('error-type-span').innerText = 'Type is incorrect';
-        }else{
+        } else {
             document.getElementById('newAutoType').classList.remove("is-invalid");
             document.getElementById('error-type-span').innerText = '';
         }
@@ -77,14 +78,18 @@ export default class CreateAuto extends Component {
             formData.append('fuel', this.state.newAutoFuel);
             formData.append('number', this.state.newAutoNumber);
             formData.append('type', this.state.newAutoType);
-            fetch('/api/admin/addAuto', {body: formData, method: 'post', headers:{authorization: localStorage.getItem('authorization')}}).then(response=>{
+            fetch('/api/admin/addAuto', {
+                body: formData,
+                method: 'post',
+                headers: {authorization: localStorage.getItem('authorization')}
+            }).then(response => {
                 return response.json();
-            }).then(data=>{
-                if (data.error === undefined){
+            }).then(data => {
+                if (data.error === undefined) {
                     ref.props.renderAutos();
                     this.toggle();
                     NotificationManager.success('Auto added');
-                }else{
+                } else {
                     NotificationManager.error(data.error);
                 }
             })
@@ -94,82 +99,79 @@ export default class CreateAuto extends Component {
     };
 
     render() {
+        let whiteColor = {color: 'white'};
         return (
             <div className={'animated fadeIn'}>
                 <Container>
                     <Button color="success" onClick={this.toggle}>Create auto</Button>
                     <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                        <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
-                        <ModalBody>
+                        <ModalHeader className={'stylish-color-dark'} toggle={this.toggle} style={whiteColor}>Create
+                            auto</ModalHeader>
+                        <ModalBody className={'stylish-color-dark'}>
                             <form>
-                                <MDBContainer>
-                                    <MDBRow>
-                                        <MDBCol md="">
-                                            <MDBCard>
-                                                <MDBCardBody>
-                                                    <MDBCardHeader className="form-header warm-flame-gradient rounded">
-                                                        <h3 className="my-3">
-                                                            <MDBIcon icon="lock"/> Add new auto
-                                                        </h3>
-                                                    </MDBCardHeader>
-                                                    <MDBInput
-                                                        label="Name"
-                                                        onChange={this.changeInput}
-                                                        id={'newAutoName'}
-                                                        group
-                                                        type="text"
-                                                        validate
-                                                        error="wrong"
-                                                        success="right"
-                                                    />
-                                                    <span className="error-span" id="error-name-span"/>
-                                                    <MDBInput
-                                                        label="Car number"
-                                                        onChange={this.changeInput}
-                                                        id={'newAutoNumber'}
-                                                        group
-                                                        type="text"
-                                                        validate
-                                                        error="wrong"
-                                                        success="right"
-                                                    />
-                                                    <span className="error-span" id="error-number-span"/>
-                                                    <MDBInput
-                                                        label="Fuel consumption"
-                                                        onChange={this.changeInput}
-                                                        id={'newAutoFuel'}
-                                                        group
-                                                        type="number"
-                                                        validate
-                                                        error="wrong"
-                                                        success="right"
-                                                    />
-                                                    <span className="error-span" id="error-fuel-span"/>
-                                                    <Select style={{width: '100%'}} id={'newAutoType'} native={true}
-                                                            value={this.state.newAutoType}
-                                                            onChange={this.changeInput}>
-                                                        <option value={'Hatchback'}>Hatchback</option>
-                                                        <option value={'Sedan'}>Sedan</option>
-                                                        <option value={'MPV'}>MPV</option>
-                                                        <option value={'SUV'}>SUV</option>
-                                                        <option value={'Crossover'}>Crossover</option>
-                                                        <option value={'Coupe'}>Coupe</option>
-                                                        <option value={'Convertible'}>Convertible</option>
-                                                    </Select>
-                                                    <span className="error-span" id="error-type-span"/>
+                                <MDBRow>
+                                    <MDBCol md="">
+                                        <MDBInput
+                                            label="Name"
+                                            onChange={this.changeInput}
+                                            id={'newAutoName'}
+                                            group
+                                            style={whiteColor}
+                                            type="text"
+                                            validate
+                                            className={'stylish-color-dark'}
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <span className="error-span" id="error-name-span"/>
+                                        <MDBInput
+                                            label="Car number"
+                                            onChange={this.changeInput}
+                                            id={'newAutoNumber'}
+                                            group
+                                            style={whiteColor}
+                                            className={'stylish-color-dark'}
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <span className="error-span" id="error-number-span"/>
+                                        <MDBInput
+                                            label="Fuel consumption"
+                                            onChange={this.changeInput}
+                                            id={'newAutoFuel'}
+                                            group
+                                            style={whiteColor}
+                                            type="number"
+                                            validate
+                                            className={'stylish-color-dark'}
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <span className="error-span" id="error-fuel-span"/>
+                                        <Input type={'select'} style={whiteColor} className={'stylish-color-dark'}
+                                               id={'newAutoType'} native={true}
+                                               value={this.state.newAutoType}
+                                               onChange={this.changeInput}>
+                                            <option value={'Hatchback'}>Hatchback</option>
+                                            <option value={'Sedan'}>Sedan</option>
+                                            <option value={'MPV'}>MPV</option>
+                                            <option value={'SUV'}>SUV</option>
+                                            <option value={'Crossover'}>Crossover</option>
+                                            <option value={'Coupe'}>Coupe</option>
+                                            <option value={'Convertible'}>Convertible</option>
+                                        </Input>
+                                        <span className="error-span" id="error-type-span"/>
 
-                                                    <Animation type="fadeIn" infinite>
-                                                        <span id={'pass-span'} className="error-span"/>
-                                                    </Animation>
-
-                                                </MDBCardBody>
-                                            </MDBCard>
-                                        </MDBCol>
-                                    </MDBRow>
-                                </MDBContainer>
+                                        <Animation type="fadeIn" infinite>
+                                            <span id={'pass-span'} className="error-span"/>
+                                        </Animation>
+                                    </MDBCol>
+                                </MDBRow>
                             </form>
                         </ModalBody>
-                        <ModalFooter>
+                        <ModalFooter className={'stylish-color-dark'}>
                             <Button color="secondary" onClick={this.toggle}>Close</Button>{' '}
                             <Button color="primary" onClick={this.saveAuto}>Add Auto</Button>
                         </ModalFooter>

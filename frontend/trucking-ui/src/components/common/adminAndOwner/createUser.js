@@ -3,10 +3,12 @@ import {
     Container, Button, Modal, ModalBody, ModalHeader, ModalFooter, MDBRow, MDBCol, Animation,
     MDBCard, MDBCardBody, MDBCardHeader, MDBIcon, MDBInput, MDBContainer,
 } from 'mdbreact';
-import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
 import {NotificationManager} from "react-notifications";
 import $ from "jquery";
+import {Input} from 'reactstrap';
+import DateFnsUtils from "@date-io/date-fns";
+import {DatePicker, MuiPickersUtilsProvider} from "material-ui-pickers";
 
 export default class CreateUser extends Component {
 
@@ -19,7 +21,7 @@ export default class CreateUser extends Component {
             newUserUsername: '',
             newUserPassword: '',
             newUserPasswordAgain: '',
-            newUserBirthDate: '',
+            newUserBirthDate: new Date(),
             newUserFirstName: '',
             newUserSecondName: '',
             newUserPassport: '',
@@ -46,10 +48,10 @@ export default class CreateUser extends Component {
         let nameVal = ValidationUtil.validateStringForLength(this.state.newUserFirstName, 2, 40);
         let surnameVal = ValidationUtil.validateStringForLength(this.state.newUserSecondName, 4, 40);
         let passportVal = this.state.newUserRole === 'ROLE_DRIVER' ? ValidationUtil.validateStringForLength(this.state.newUserPassport, 5, 20) : true;
-        if (!emailVal){
+        if (!emailVal) {
             document.getElementById('newUserEmail').classList.add('is-invalid');
             document.getElementById('error-email-span').innerText = 'Email is incorrect';
-        }else{
+        } else {
             document.getElementById('newUserEmail').classList.remove("is-invalid");
             document.getElementById('error-email-span').innerText = '';
         }
@@ -111,14 +113,18 @@ export default class CreateUser extends Component {
             formData.append('name', this.state.newUserFirstName);
             formData.append('surname', this.state.newUserSecondName);
             formData.append('passport', this.state.newUserPassport);
-            fetch('/api/ownerAndAdmin/addUser', {body: formData,method: 'post', headers:{authorization: localStorage.getItem('authorization')}}).then(response=>{
+            fetch('/api/ownerAndAdmin/addUser', {
+                body: formData,
+                method: 'post',
+                headers: {authorization: localStorage.getItem('authorization')}
+            }).then(response => {
                 return response.json();
-            }).then(data=>{
-                if (data.error === undefined){
+            }).then(data => {
+                if (data.error === undefined) {
                     ref.props.renderUsers();
                     this.toggle();
                     NotificationManager.success(data.status);
-                }else{
+                } else {
                     NotificationManager.error(data.error);
                 }
             })
@@ -127,30 +133,33 @@ export default class CreateUser extends Component {
         }
     };
 
+    changeDate = (id, date) => {
+        this.setState({
+            [id]: date
+        });
+    };
+
     render() {
         return (
-            <div className={'animated fadeIn'} >
+            <div className={'animated fadeIn'}>
                 <Container>
                     <Button color="success" onClick={this.toggle}>Create user</Button>
                     <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                        <ModalHeader toggle={this.toggle}>Create user</ModalHeader>
-                        <ModalBody>
+                        <ModalHeader className={'stylish-color-dark'} toggle={this.toggle} style={{color: 'white'}}>Create user</ModalHeader>
+                        <ModalBody className={'stylish-color-dark'}>
                             <form>
                                 <MDBContainer>
                                     <MDBRow>
                                         <MDBCol md="">
-                                            <MDBCard>
+                                            <div className={'stylish-color-dark'}
+                                                 style={{borderRadius: '5px', margin: '0 1% 0 1%'}}>
                                                 <MDBCardBody>
-                                                    <MDBCardHeader className="form-header warm-flame-gradient rounded">
-                                                        <h3 className="my-3">
-                                                            <MDBIcon icon="lock"/> Add new user
-                                                        </h3>
-                                                    </MDBCardHeader>
                                                     <MDBInput
                                                         label="Email"
                                                         onChange={this.changeInput}
                                                         id={'newUserEmail'}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="text"
                                                         validate
                                                         error="wrong"
@@ -162,6 +171,7 @@ export default class CreateUser extends Component {
                                                         onChange={this.changeInput}
                                                         id={'newUserUsername'}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="text"
                                                         validate
                                                         error="wrong"
@@ -173,6 +183,7 @@ export default class CreateUser extends Component {
                                                         onChange={this.changeInput}
                                                         id={'newUserFirstName'}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="text"
                                                         validate
                                                         error="wrong"
@@ -184,29 +195,25 @@ export default class CreateUser extends Component {
                                                         onChange={this.changeInput}
                                                         id={'newUserSecondName'}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="text"
                                                         validate
                                                         error="wrong"
                                                         success="right"
                                                     />
                                                     <span className="error-span" id="error-surname-span"/>
-                                                    {/*<Input type={'date'} onChange={this.changeInput}/>*/}
-                                                    <MDBInput
-                                                        // label="Birth date"
-                                                        onChange={this.changeInput}
-                                                        id={'newUserBirthDate'}
-                                                        group
-                                                        type="date"
-                                                        validate
-                                                        error="wrong"
-                                                        success="right"
-                                                    />
+                                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                        <DatePicker id={'newUserBirthDate'} value={this.state.newUserBirthDate}
+                                                                    style={{width: '100%', color: 'white'}}
+                                                                    onChange={(e) => this.changeDate('newUserBirthDate', e)}/>
+                                                    </MuiPickersUtilsProvider>
                                                     <span className="error-span" id="error-date-span"/>
                                                     <MDBInput
                                                         label="Password"
                                                         onChange={this.changeInput}
                                                         id={'newUserPassword'}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="password"
                                                         validate
                                                         error="wrong"
@@ -218,20 +225,22 @@ export default class CreateUser extends Component {
                                                         onChange={this.changeInput}
                                                         id={'newUserPasswordAgain'}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="password"
                                                         validate
                                                         error="wrong"
                                                         success="right"
                                                     />
                                                     <span className="error-span" id="error-again-password-span"/>
-                                                    <Select style={{width: '100%'}} id={'newUserRole'} native={true}
-                                                            value={this.state.newUserRole}
-                                                            onChange={this.changeInput}>
+                                                    <Input type={'select'} style={{width: '100%', color: 'white', border: '0px solid'}} id={'newUserRole'}
+                                                           className={'stylish-color-dark'}
+                                                           value={this.state.newUserRole}
+                                                           onChange={this.changeInput}>
                                                         <option value={'ROLE_ADMIN'}>Admin</option>
                                                         <option value={'ROLE_DRIVER'}>Driver</option>
                                                         <option value={'ROLE_MANAGER'}>Manager</option>
                                                         <option value={'ROLE_DISPATCHER'}>Dispatcher</option>
-                                                    </Select>
+                                                    </Input>
                                                     <div style={this.state.newUserRole === 'ROLE_DRIVER' ?
                                                         {display: ''} : {display: 'none'}
                                                     }>
@@ -240,6 +249,7 @@ export default class CreateUser extends Component {
                                                             onChange={this.changeInput}
                                                             id={'newUserPassport'}
                                                             group
+                                                            style={{color: 'white'}}
                                                             type="text"
                                                             validate
                                                             error="wrong"
@@ -253,16 +263,20 @@ export default class CreateUser extends Component {
                                                     </Animation>
 
                                                 </MDBCardBody>
-                                            </MDBCard>
+                                            </div>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBContainer>
                             </form>
+                            <div className={'stylish-color-dark'}>
+                                <Button color="secondary" onClick={this.toggle}>Close</Button>{' '}
+                                <Button color="primary" onClick={this.saveUser}>Add user</Button>
+                            </div>
                         </ModalBody>
-                        <ModalFooter>
-                            <Button color="secondary" onClick={this.toggle}>Close</Button>{' '}
-                            <Button color="primary" onClick={this.saveUser}>Add user</Button>
-                        </ModalFooter>
+                        {/*<ModalFooter className={'stylish-color-dark'}>*/}
+                        {/*<Button color="secondary" onClick={this.toggle}>Close</Button>{' '}*/}
+                        {/*<Button color="primary" onClick={this.saveUser}>Add user</Button>*/}
+                        {/*</ModalFooter>*/}
                     </Modal>
                 </Container>
             </div>

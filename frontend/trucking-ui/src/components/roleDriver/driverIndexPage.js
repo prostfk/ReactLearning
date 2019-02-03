@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 import {MDBRow, MDBCol, Table, TableBody, TableHead} from 'mdbreact';
 import {NotificationManager} from "react-notifications";
-import { Link } from 'react-router-dom'
-import CommonUtil from "../../lib/commontUtil";
 import {LOAD_ORDERS} from "../../constants/orderActionType";
 import connect from "react-redux/es/connect/connect";
-import ManagerIndexPage from "../roleManager/managerIndexPage";
+import {OrdersList} from "../lists/OrdersList";
+import {ROLE_DRIVER} from "../../constants/roles/userRoles";
 
 
 export class DriverIndexPage extends Component {
+
+    constructor(props) {
+        super(props);
+        document.title = 'Orders';
+    }
 
 
     state = {
@@ -24,52 +28,22 @@ export class DriverIndexPage extends Component {
         fetch('/api/driver/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
-            if (data.error === undefined) {
-                this.setState({
-                    orders: data
-                });
+            if (!data.error) {
+                this.props.setOrders(data);
             } else {
                 NotificationManager.warning(data.error);
             }
-        })
+        }).catch(err=>NotificationManager.error(err.toString()))
     };
 
     render() {
         return (
-            <div className={'container'}>
-                <MDBRow>
-                    <MDBCol/>
-                    <MDBCol size={'8'}>
-                        {this.state.orders.length > 0 ? <Table>
-                            <TableHead color="grey">
-                                <tr className={'animated fadeIn'}>
-                                    <th>id</th>
-                                    <th>Name</th>
-                                    <th>Client</th>
-                                    <th>Departure</th>
-                                    <th>Arrival</th>
-                                    <th>Edit</th>
-                                </tr>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    this.state.orders.map((order, index) => {
-                                        return <tr className={'animated fadeInUp'} key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{order.name}</td>
-                                            <td>{order.client}</td>
-                                            <td>{CommonUtil.getLocalDate(order.date_departure)}</td>
-                                            <td>{CommonUtil.getLocalDate(order.date_arrival)}</td>
-                                            <td>Check</td>
-                                        </tr>
-                                    })
-                                }
-                            </TableBody>
-                        </Table> : <h1 className={'animated fadeInUp'}>No orders yet</h1>}
-                    </MDBCol>
-                    <MDBCol>
-                    </MDBCol>
-                </MDBRow>
+            <div>
+                <h3 style={{textAlign: 'center', color: 'white'}}
+                    className={'animated fadeInDown'}>Orders</h3>
+                <div className={'container'}>
+                    <OrdersList orders={this.props.orders} role={ROLE_DRIVER}/>
+                </div>
             </div>
         );
     }
@@ -79,13 +53,13 @@ export class DriverIndexPage extends Component {
 
 const mapStateToProps = state => {
     return {
-        orders: state.stockReducer
+        orders: state.orderReducer
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return ({
-        loadOrders: payload => {
+        setOrders: payload => {
             dispatch({
                 type: LOAD_ORDERS, payload: payload
             })

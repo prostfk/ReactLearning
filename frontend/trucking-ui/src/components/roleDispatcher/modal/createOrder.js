@@ -36,6 +36,8 @@ export default class CreateOrder extends Component {
             drivers: [],
             consignment: []
         };
+        document.title = 'Create order';
+
     }
 
     componentDidMount() {
