@@ -20,18 +20,28 @@ export class ManagerIndexPage extends Component {
     state = {
         orders: [],
         selectedOrder: {},
+        activePage: 1,
+        totalSize: 1
     };
 
     componentDidMount() {
         this.updateOrders();
     }
 
-    updateOrders = () => {
-        fetch('/api/manager/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+    changePage = page => {
+        this.setState({activePage: page})
+        this.updateUsers(page);
+    }
+
+    updateOrders = (page = this.state.activePage) => {
+        fetch(`/api/manager/orders?page=${page}`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
             if (!data.error) {
-                this.props.loadOrders(data);
+                this.props.loadOrders(data.content);
+                this.setState({
+                    totalSize: data.totalElements,
+                });
             } else {
                 NotificationManager.warning(data.error);
             }
@@ -42,7 +52,8 @@ export class ManagerIndexPage extends Component {
         return (
             <div className={'container'}>
                 <h3 style={{textAlign:'center', color: 'white'}} className={'animated fadeInDown'}>Orders</h3>
-                <OrdersList orders={this.props.orders} role={ROLE_MANAGER}/>
+                <OrdersList orders={this.props.orders} role={ROLE_MANAGER} onPageChanged={this.changePage}
+                            activePage={this.state.activePage} totalSize={this.state.totalSize}/>
             </div>
         );
     }

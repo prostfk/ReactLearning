@@ -27,12 +27,25 @@ export class OwnerIndexPage extends Component {
         this.updateUsers();
     }
 
-    updateUsers = () => {
-        fetch('/api/owner/users', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+    state = {
+        activePage: 1,
+        totalSize: 1
+    }
+
+    changePage = page => {
+        this.setState({activePage: page})
+        this.updateUsers(page);
+    }
+
+    updateUsers = (page = this.state.activePage) => {
+        fetch(`/api/users?page=${page}`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
             if (data.error === undefined) {
-                this.props.loadWorkers(data);
+                this.props.loadWorkers(data.content);
+                this.setState({
+                    totalSize: data.totalElements,
+                });
             } else {
                 NotificationManager.warning(data.error);
             }
@@ -49,7 +62,8 @@ export class OwnerIndexPage extends Component {
                 <div className={'row margin-container'}>
 
                     <div className="offset-md-2 col-md-5">
-                        <UsersList users={this.props.users} role={ROLE_OWNER}/>
+                        <UsersList users={this.props.users} role={ROLE_OWNER} onPageChanged={this.changePage}
+                            activePage={this.state.activePage} totalSize={this.state.totalSize}/>
                     </div>
                     <div className="offset-md-2 col-md-2">
                         <CreateUser renderUsers={this.updateUsers} updateFunc={this.updateUsers}/>

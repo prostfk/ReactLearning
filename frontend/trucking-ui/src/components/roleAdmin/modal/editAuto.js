@@ -11,6 +11,7 @@ import {
     MDBInput,
     MDBContainer,
 } from 'mdbreact';
+import {Input} from 'reactstrap';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import Select from '@material-ui/core/Select';
 import ValidationUtil from "../../../lib/validationUtil";
@@ -120,25 +121,26 @@ export default class EditAuto extends Component {
                 <Container>
                     <MDBIcon icon="edit" onClick={this.toggle}/>
                     <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                        <ModalHeader toggle={this.toggle}>Edit auto</ModalHeader>
-                        <ModalBody>
+                        <ModalHeader className={'stylish-color-dark'} style={{color: 'white'}} toggle={this.toggle}>Edit auto</ModalHeader>
+                        <ModalBody className={'stylish-color-dark'}>
                             <form>
-                                <MDBContainer>
+                                {/* <MDBContainer> */}
                                     <MDBRow>
                                         <MDBCol md="">
-                                            <MDBCard>
+                                            {/* <MDBCard> */}
                                                 <MDBCardBody>
-                                                    <MDBCardHeader className="form-header warm-flame-gradient rounded">
+                                                    {/* <MDBCardHeader className="form-header warm-flame-gradient rounded">
                                                         <h3 className="my-3">
                                                             <MDBIcon icon="lock"/> Add new auto
                                                         </h3>
-                                                    </MDBCardHeader>
+                                                    </MDBCardHeader> */}
                                                     <MDBInput
                                                         label="Name"
                                                         onChange={this.changeInput}
                                                         id={'newAutoName'}
                                                         value={this.state.newAutoName}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="text"
                                                         validate
                                                         error="wrong"
@@ -151,6 +153,7 @@ export default class EditAuto extends Component {
                                                         id={'newAutoNumber'}
                                                         value={this.state.newAutoNumber}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="text"
                                                         validate
                                                         error="wrong"
@@ -163,13 +166,14 @@ export default class EditAuto extends Component {
                                                         id={'newAutoFuel'}
                                                         value={this.state.newAutoFuel}
                                                         group
+                                                        style={{color: 'white'}}
                                                         type="number"
                                                         validate
                                                         error="wrong"
                                                         success="right"
                                                     />
                                                     <span className="error-span" id="error-fuel-span"/>
-                                                    <Select style={{width: '100%'}} id={'newAutoType'} native={true}
+                                                    <Input className={'stylish-color-dark'} type='select' style={{color: 'white'}} id={'newAutoType'} native={true}
                                                             value={this.state.newAutoType}
                                                             onChange={this.changeInput}>
                                                         <option value={'Hatchback'}>Hatchback</option>
@@ -179,7 +183,7 @@ export default class EditAuto extends Component {
                                                         <option value={'Crossover'}>Crossover</option>
                                                         <option value={'Coupe'}>Coupe</option>
                                                         <option value={'Convertible'}>Convertible</option>
-                                                    </Select>
+                                                    </Input>
                                                     <span className="error-span" id="error-type-span"/>
 
                                                     <Animation type="fadeIn" infinite>
@@ -187,13 +191,13 @@ export default class EditAuto extends Component {
                                                     </Animation>
 
                                                 </MDBCardBody>
-                                            </MDBCard>
+                                            {/* </MDBCard> */}
                                         </MDBCol>
                                     </MDBRow>
-                                </MDBContainer>
+                                {/* </MDBContainer> */}
                             </form>
                         </ModalBody>
-                        <ModalFooter>
+                        <ModalFooter className={'stylish-color-dark'}>
                             <Button color="secondary" onClick={this.toggle}>Close</Button>{' '}
                             <Button color="primary" onClick={this.saveAuto}>Edit Auto</Button>
                         </ModalFooter>

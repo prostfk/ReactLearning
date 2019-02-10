@@ -19,10 +19,10 @@ export default class ManagerOrder extends Component { //todo markers
     loadInfo = () => {
         let link = window.location.href.split('/');
         let id = link[link.length - 1];
-        fetch(`/api/manager/order/${id}`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+        fetch(`/api/manager/routeList/${id}`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
-            if (data.error === undefined) {
+            if (!data.error) {
                 this.setState({
                     points: data
                 });
@@ -41,6 +41,7 @@ export default class ManagerOrder extends Component { //todo markers
     };
 
     componentDidMount() {
+        this.loadInfo();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setLocation);
         } else {
@@ -71,8 +72,8 @@ export default class ManagerOrder extends Component { //todo markers
                             {
                                 this.state.points.map((point, index)=>{
                                     return <tr className={'animated fadeInLeft'} key={index}>
-                                        <td>{point.name}</td>
-                                        <td>{point.status}</td>
+                                        <td>{point.point}</td>
+                                        <td>{(point.marked === null || point.marked === false) ? 'Not passed': 'Passed'}</td>
                                     </tr>
                                 })
                             }

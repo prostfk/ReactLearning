@@ -29,7 +29,7 @@ export default class AutoList extends Component {
                         {
                             this.props.autos.map((auto, index) => {
                                 return <tr key={index} className={'animated fadeInUp'}>
-                                    <th scope="row">{index + 1}</th>
+                                    <th scope="row">{((this.props.activePage-1) * 5) + index + 1}</th>
                                     <td>{auto.name}</td>
                                     <td>{auto.carNumber}</td>
                                     <td>{auto.type}</td>

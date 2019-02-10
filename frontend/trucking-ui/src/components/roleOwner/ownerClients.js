@@ -15,22 +15,35 @@ export class OwnerClients extends Component {
         document.title = 'Clients';
     }
 
-
-    componentDidMount(){
-        this.getClients();
+    state = {
+        activePage: 1,
+        totalSize: 1
     }
 
-    getClients = () => {
-        fetch('/api/owner/clients',{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
+    changePage = page => {
+        this.setState({activePage: page})
+        this.updateClients(page);
+    }
+
+    componentDidMount(){
+        this.updateClients();
+    }
+
+    updateClients = (page = this.state.activePage) => {
+        fetch(`/api/company/clients?page=${this.state.activePage}`,{headers:{'authorization': localStorage.getItem('authorization')}}).then(response=>{
             return response.json();
         }).then(data=>{
-            if (data.error===undefined){
-                this.props.loadClients(data);
+            if (!data.error){
+                this.props.loadClients(data.clients);
+                this.setState({
+                    totalSize: data.totalElements,
+                });
             }else{
                 NotificationManager.error(data.error);
             }
         }).catch(err=>{
-            NotificationManager.error('Server error');
+            console.log(err)
+            NotificationManager.error(err.toString());
         });
     };
 
@@ -41,7 +54,8 @@ export class OwnerClients extends Component {
                 <div className={'row margin-container'}>
 
                     <div className="offset-md-2 col-md-8">
-                        <ClientsList clients={this.props.clients}/>
+                        <ClientsList clients={this.props.clients} onPageChanged={this.changePage}
+                            activePage={this.state.activePage} totalSize={this.state.totalSize}/>
                     </div>
                 </div>
             </div>

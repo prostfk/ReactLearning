@@ -24,6 +24,7 @@ import OwnerOrders from "./components/roleOwner/ownerOrders";
 import OwnerCharts from "./components/roleOwner/ownerCharts";
 import StocksPage from "./components/common/StocksPage";
 import CommonUtil from "./lib/commontUtil";
+import OwnerStatistics from './components/roleOwner/OwnerStatistics';
 
 class App extends Component {
 
@@ -41,6 +42,7 @@ class App extends Component {
                     <Route exact path={'/orders'} component={OwnerOrders}/>
                     <Route exact path={'/charts'} component={OwnerCharts}/>
                     <Route exact path={'/createOrder'} component={CreateOrder}/>
+                    <Route exact path={'/stats'} component={OwnerStatistics}/>
                     <Route exact path={'/stocks'} component={StocksPage}/>
                     <Route exact path={'/route/:id'} component={DriverOrder}/>
                     <Route exact path={'/setRoute/:id'} component={ManagerOrder}/>

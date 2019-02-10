@@ -13,16 +13,28 @@ export class OwnerOrders extends Component {
         document.title = 'Orders';
     }
 
-
-    componentDidMount() {
-        this.updateFunc();
+    state = {
+        activePage: 1,
+        totalSize: 1
     }
 
-    updateFunc = () => {
-        fetch('/api/owner/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => response.json())
+    changePage = page => {
+        this.setState({activePage: page})
+        this.updateOrders(page);
+    }
+
+    componentDidMount() {
+        this.updateOrders();
+    }
+
+    updateOrders = (page = this.state.activePage) => {
+        fetch(`/api/orders?page=${page}`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => response.json())
             .then(data => {
                 if (!data.error) {
-                    this.props.setOrders(data);
+                    this.props.setOrders(data.content);
+                    this.setState({
+                        totalSize: data.totalElements,
+                    });
                 } else {
                     NotificationManager.warning(data.error);
                 }
@@ -37,7 +49,8 @@ export class OwnerOrders extends Component {
             <div>
                 <h3 style={{textAlign:'center', color: 'white'}} className={'animated fadeInDown'}>Orders</h3>
                 <div className={'container'}>
-                    <OrdersList style={{width: '100%'}} role={ROLE_OWNER} orders={this.props.orders}/>
+                    <OrdersList style={{width: '100%'}} role={ROLE_OWNER} orders={this.props.orders} onPageChanged={this.changePage}
+                            activePage={this.state.activePage} totalSize={this.state.totalSize}/>
                 </div>
             </div>
         );

@@ -27,7 +27,7 @@ export default class StocksList extends Component {
                                 {
                                     this.props.stocks.map((stock, index) => {
                                         return <tr className={'animated fadeInUp'} key={index}>
-                                            <td>{index + 1}</td>
+                                            <td>{((this.props.activePage-1) * 5) + index + 1}</td>
                                             <td>{stock.name}</td>
                                             <td>{stock.address}</td>
                                             {

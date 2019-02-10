@@ -19,14 +19,14 @@ export default class DriverOrder extends Component {
     loadInfo = () => {
         let link = window.location.href.split('/');
         let id = link[link.length-1];
-        fetch(`/api/driver/order/${id}`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+        fetch(`/api/orders/getMyOrders/${id}/routelist`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
             console.log(data);
             if (!data.error) {
                 this.setState({
-                    order: data.order,
-                    points: data.points
+                    // order: data.order,
+                    points: data
                 });
             } else {
                 NotificationManager.warning("Error ", data.error);
@@ -70,7 +70,7 @@ export default class DriverOrder extends Component {
                         {
                             this.state.points.map((point, index)=>{
                                 return <tr className={'animated fadeInLeft'} key={index}>
-                                    <td>{point.name}</td>
+                                    <td>{point.point}</td>
                                     <td style={{color: (point.status === 1 ? "green" : "red")}}>{point.status === 1 ? "Passed" : "Not passed"}</td>
                                 </tr>
                             })

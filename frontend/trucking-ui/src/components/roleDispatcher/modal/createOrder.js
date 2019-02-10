@@ -41,30 +41,33 @@ export default class CreateOrder extends Component {
     }
 
     componentDidMount() {
-        this.loadInfo('/api/dispatcher/clients', 'clients', 'newOrderClient');
+        this.loadInfo('/api/clients/findClientsByNameLike?name=', 'clients', 'newOrderClient');
         this.loadInfo('/api/dispatcher/stocks', 'stocks', 'stock');
-        this.loadInfo(`/api/dispatcher/freeAutos?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'autos', 'newOrderAuto');
-        this.loadInfo(`/api/dispatcher/freeDrivers?dd=${CommonUtil.dateToString(this.state.newOrderDD)}&&da=${CommonUtil.dateToString(this.state.newOrderDA)}`, 'drivers', 'newOrderDriver');
+        this.loadInfo(`/api/dispatcher/findFreeAutos?dateFrom=${CommonUtil.dateToString(this.state.newOrderDD, '/')}&&dateTo=${CommonUtil.dateToString(this.state.newOrderDA, '/')}`, 'autos', 'newOrderAuto');
+        this.loadInfo(`/api/dispatcher/findFreeDrivers?dateFrom=${CommonUtil.dateToString(this.state.newOrderDD, '/')}&&dateTo=${CommonUtil.dateToString(this.state.newOrderDA, '/')}`, 'drivers', 'newOrderDriver');
     }
 
     loadInfo = (url, id, singleId = undefined) => {
         fetch(url, {headers: {authorization: localStorage.getItem('authorization')}}).then(resp => {
             return resp.json();
         }).then(data => {
-            if (singleId) {
-                if (singleId === 'stock') {
+            if (data.length > 0){
+                if (singleId) {
+                    if (singleId === 'stock') {
+                        this.setState({
+                            newOrderReceiver: data[0].id,
+                            newOrderSender: data[0].id
+                        });
+                    }
+                    console.log(data);
                     this.setState({
-                        newOrderReceiver: data[0].id,
-                        newOrderSender: data[0].id
+                        [singleId]: data[0].id
                     });
                 }
                 this.setState({
-                    [singleId]: data[0].id
+                    [id]: data
                 });
             }
-            this.setState({
-                [id]: data
-            });
         })
     };
 
@@ -95,6 +98,13 @@ export default class CreateOrder extends Component {
         this.setState({
             [id]: date
         });
+        if (id === 'newOrderDA'){
+            this.loadInfo(`/api/dispatcher/findFreeAutos?dateFrom=${CommonUtil.dateToString(this.state.newOrderDD, '/')}&&dateTo=${CommonUtil.dateToString(date, '/')}`, 'autos', 'newOrderAuto');
+            this.loadInfo(`/api/dispatcher/findFreeDrivers?dateFrom=${CommonUtil.dateToString(this.state.newOrderDD, '/')}&&dateTo=${CommonUtil.dateToString(date, '/')}`, 'drivers', 'newOrderDriver');
+        }else{
+            this.loadInfo(`/api/dispatcher/findFreeAutos?dateFrom=${CommonUtil.dateToString(date, '/')}&&dateTo=${CommonUtil.dateToString(this.state.newOrderDA, '/')}`, 'autos', 'newOrderAuto');
+            this.loadInfo(`/api/dispatcher/findFreeDrivers?dateFrom=${CommonUtil.dateToString(date, '/')}&&dateTo=${CommonUtil.dateToString(this.state.newOrderDA, '/')}`, 'drivers', 'newOrderDriver');
+        }
     };
 
     changeInput = (event) => {
@@ -123,7 +133,8 @@ export default class CreateOrder extends Component {
         let nameVal = ValidationUtil.validateStringForLength(this.state.newProductName, 2,15);
         let descVal = ValidationUtil.validateStringForLength(this.state.newProductDescription, 2, 50);
         let priceVal = ValidationUtil.validateNumberInTheRage(this.state.newProductPrice, 0.1, 10000000);
-        let countVal = ValidationUtil.validateNumberInTheRage(this.state.newProductCount, 1, 10000000);
+        let countVal = ValidationUtil.validateNumberInTheRage(this.state.newProductCount, 1, 10000000) &&
+         ValidationUtil.validateForInteger(this.state.newProductCount);
         let span = document.getElementById('product-span');
         if (!nameVal){
             span.innerText = "Incorrect name";
@@ -221,25 +232,26 @@ export default class CreateOrder extends Component {
             if (this.validateOrder() && this.validateFirstForm()) {
                 const formData = new FormData();
                 formData.append('name', this.state.newOrderName);
-                formData.append('client', this.state.newOrderClient);
-                formData.append('auto', this.state.newOrderAuto);
-                formData.append('driver', this.state.newOrderDriver);
-                formData.append('sender', this.state.newOrderSender);
-                formData.append('receiver', this.state.newOrderReceiver);
-                formData.append('dd', CommonUtil.dateToString(this.state.newOrderDD));
-                formData.append('da', CommonUtil.dateToString(this.state.newOrderDA));
+                formData.append('clientId', this.state.newOrderClient);
+                formData.append('autoId', this.state.newOrderAuto);
+                formData.append('driverId', this.state.newOrderDriver);
+                formData.append('departureStock', this.state.newOrderSender);
+                formData.append('deliveryStock', this.state.newOrderReceiver);
+                formData.append('dateDeparture', CommonUtil.dateToString(this.state.newOrderDD,'/'));
+                formData.append('dateArrival', CommonUtil.dateToString(this.state.newOrderDA,'/'));
                 formData.append('status', this.state.newOrderStatus);
                 formData.append('consignment', JSON.stringify(this.state.consignment));
-                fetch('/api/dispatcher/addOrder', {
+                fetch('/api/orders/createOrder', {
                     method: 'post',
                     headers: {authorization: localStorage.getItem('authorization')},
                     body: formData
                 }).then(resp => {
                     return resp.json();
                 }).then(data => {
-                    if (data.error) {
+                    if (!data.error) {
                         NotificationManager.success('Created');
-                        this.props.history.push('/');
+                        this.props.cancelFunc();
+                        this.props.updateFunc();
                     } else {
                         NotificationManager.error(data.error);
                     }

@@ -7,7 +7,7 @@ import {ROLE_ADMIN, ROLE_MANAGER, ROLE_OWNER} from "../constants/roles/userRoles
 
 class CommonUtil {
 
-    static dateToString(date){
+    static dateToString(date, separator = '-'){
         let day = date.getDate();
         let month = date.getMonth() + 1;
         let year = date.getFullYear();
@@ -17,9 +17,9 @@ class CommonUtil {
         if (month < 10){
             month = `0${month}`;
         }
-        return `${day}-${month}-${year}`;
-
+        return `${day}${separator}${month}${separator}${year}`;
     }
+    
 
     static dateToDataBaseString(date){
         let day = date.getDate();

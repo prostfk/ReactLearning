@@ -25,10 +25,11 @@ export class DriverIndexPage extends Component {
     }
 
     updateOrders = () => {
-        fetch('/api/driver/orders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+        fetch('/api/orders/getMyOrders', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
             if (!data.error) {
+                console.log(data)
                 this.props.setOrders(data);
             } else {
                 NotificationManager.warning(data.error);

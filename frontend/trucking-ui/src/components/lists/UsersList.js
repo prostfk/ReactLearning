@@ -27,7 +27,7 @@ export default class UsersList extends Component {
                         {
                             this.props.users.map((user, index) => {
                                 return <tr key={index} className={'animated fadeInUp'}>
-                                    <th scope="row">{index + 1}</th>
+                                    <th scope="row">{((this.props.activePage-1) * 5) + index + 1}</th>
                                     <td>{user.firstName}</td>
                                     <td>{user.secondName}</td>
                                     <td>{this.__processRole(user.userRole)}</td>
