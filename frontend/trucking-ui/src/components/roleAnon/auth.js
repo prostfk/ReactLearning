@@ -54,15 +54,15 @@ class Auth extends Component {
             let formData = new FormData();
             formData.append('username', this.state.username);
             formData.append('password', this.state.password);
-            fetch('http://localhost:3001/api/auth', {method: 'post', body: formData}).then(response => {
+            fetch('/auth', {method: 'post', body: formData}).then(response => {
                 return response.json();
             }).then(data => {
                 console.log(data);
                 if (!data.error) {
                     ref.props.authUser([
-                        data.userRole, data.token, data.userId, data.companyId
+                        data.role, data.token, data.userId, data.companyId
                     ]);
-                    localStorage.setItem('role', data.userRole);
+                    localStorage.setItem('role', data.role);
                     localStorage.setItem('authorization', data.token);
                     this.props.history.push('/');
                 } else {

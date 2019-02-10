@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const connection = require('./Connection');
 
-const CompanyModel = connection.define('company', {
+const ConsignmentModel = connection.define('consignment', {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -13,13 +13,13 @@ const CompanyModel = connection.define('company', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    active: {
-        type: Sequelize.BOOLEAN,
+    order_id: {
+        type: Sequelize.INTEGER,
         allowNull: false
     }
 }, {
     timestamps: false,
-    tableName: 'company'
+    tableName: 'consignment'
 });
 
-module.exports = CompanyModel;
+module.exports = ConsignmentModel;

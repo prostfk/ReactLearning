@@ -3,6 +3,7 @@ import {Table} from 'reactstrap';
 import EditUser from "../common/adminAndOwner/editUser";
 import {ROLE_ADMIN, ROLE_OWNER} from "../../constants/roles/userRoles";
 import EditAuto from "../roleAdmin/modal/editAuto";
+import Pagination from "react-js-pagination";
 
 export default class AutoList extends Component {
 
@@ -10,7 +11,8 @@ export default class AutoList extends Component {
         return (
             this.props.autos ? (
                 this.props.autos.length > 0 ?
-                    <Table dark style={{backgroundColor: '#3F4752'}}>
+                    <div>
+                        <Table dark style={{backgroundColor: '#3F4752'}}>
                         <thead className={'animated fadeIn'}>
                         <tr>
                             <th>Id</th>
@@ -39,7 +41,27 @@ export default class AutoList extends Component {
                             })
                         }
                         </tbody>
-                    </Table> : <h1 className={'animated fadeInUp'}>No autos yet</h1>
+                        </Table>
+                        <div>
+                        {
+                            this.props.totalSize && this.props.activePage ? 
+                                <Pagination
+                                activePage={this.props.activePage}
+                                totalItemsCount={this.props.totalSize}
+                                itemsCountPerPage={5}
+                                pageRangeDisplayed={5}
+                                hideDisabled={true}
+                                itemClass={"page-item white-back-grey-font"}
+                                linkClass={"page-link white-font"}
+                                activeClass={"activePage"}
+                                style={{border: '1px solid grey', backgroundColor: 'grey'}}
+                                onChange={this.props.onPageChanged}
+                                /> : <div/>  
+                        }  
+                        </div>
+                    </div>
+                    
+                    : <h1 className={'animated fadeInUp'}>No autos yet</h1>
             ) : <div/>
         );
     }

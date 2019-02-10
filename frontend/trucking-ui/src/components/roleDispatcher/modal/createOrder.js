@@ -237,7 +237,7 @@ export default class CreateOrder extends Component {
                 }).then(resp => {
                     return resp.json();
                 }).then(data => {
-                    if (data.error === undefined) {
+                    if (data.error) {
                         NotificationManager.success('Created');
                         this.props.history.push('/');
                     } else {

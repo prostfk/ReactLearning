@@ -13,7 +13,7 @@ router.get('/:role/orders', (req, resp) => {
         security.checkRole(req, resp, ['ROLE_DISPATCHER', 'ROLE_OWNER', 'ROLE_MANAGER', "ROLE_DISPATCHER"], () => {
             let db = new Database();
             db.executeQuery(`SELECT *
-                             FROM orders WHERE company =${userDetails.companyId}`).then(data => {
+                             FROM orders WHERE company_id =${userDetails.companyId}`).then(data => {
                 resp.json(data);
             })
         });

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Table} from 'reactstrap';
 import EditUser from "../common/adminAndOwner/editUser";
 import {ROLE_ADMIN, ROLE_OWNER} from "../../constants/roles/userRoles";
+import Pagination from "react-js-pagination";
 
 export default class UsersList extends Component {
 
@@ -9,7 +10,8 @@ export default class UsersList extends Component {
         return (
             this.props.users ? (
                 this.props.users.length > 0 ?
-                    <Table dark style={{backgroundColor: '#3F4752'}}>
+                   <div>
+                        <Table dark style={{backgroundColor: '#3F4752'}}>
                         <thead className={'animated fadeIn'}>
                         <tr>
                             <th>Id</th>
@@ -26,9 +28,9 @@ export default class UsersList extends Component {
                             this.props.users.map((user, index) => {
                                 return <tr key={index} className={'animated fadeInUp'}>
                                     <th scope="row">{index + 1}</th>
-                                    <td>{user.name}</td>
-                                    <td>{user.surname}</td>
-                                    <td>{this.__processRole(user.role)}</td>
+                                    <td>{user.firstName}</td>
+                                    <td>{user.secondName}</td>
+                                    <td>{this.__processRole(user.userRole)}</td>
                                     {
                                         this.__renderSideButton(user)
                                     }
@@ -36,7 +38,26 @@ export default class UsersList extends Component {
                             })
                         }
                         </tbody>
-                    </Table> : <h1 className={'animated fadeInUp'}>No users yet</h1>
+                        </Table>
+                        <div>
+                            {
+                                this.props.totalSize && this.props.activePage ? 
+                                    <Pagination
+                                    activePage={this.props.activePage}
+                                    totalItemsCount={this.props.totalSize}
+                                    itemsCountPerPage={5}
+                                    pageRangeDisplayed={5}
+                                    hideDisabled={true}
+                                    itemClass={"page-item white-back-grey-font"}
+                                    linkClass={"page-link white-font"}
+                                    activeClass={"activePage"}
+                                    style={{border: '1px solid grey', backgroundColor: 'grey'}}
+                                    onChange={this.props.onPageChanged}
+                                    /> : <div/>  
+                            }  
+                        </div>
+                   </div>
+                     : <h1 className={'animated fadeInUp'}>No users yet</h1>
             ) : <div/>
         );
     }

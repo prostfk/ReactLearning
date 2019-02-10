@@ -18,17 +18,29 @@ export class AdminAutos extends Component {
         document.title = 'Autos';
     }
 
-
-    componentDidMount() {
-        this.getAutos();
+    state = {
+        activePage: 1,
+        totalSize: 1
     }
 
-    getAutos = () => {
-        fetch('/api/admin/autos', {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
+    changePage = page => {
+        this.setState({activePage: page})
+        this.updateAutos(page);
+    }
+
+    componentDidMount() {
+        this.updateAutos();
+    }
+
+    updateAutos = (page = this.state.activePage) => {
+        fetch(`/api/autos?page=${page}`, {headers: {'authorization': localStorage.getItem('authorization')}}).then(response => {
             return response.json();
         }).then(data => {
             if (data.error === undefined) {
-                this.props.loadAutos(data);
+                this.props.loadAutos(data.content);
+                this.setState({
+                    totalSize: data.totalElements,
+                });
             } else {
                 NotificationManager.error(data.error);
             }
@@ -46,7 +58,8 @@ export class AdminAutos extends Component {
                 <div className={'row margin-container'}>
 
                     <div className="offset-md-2 col-md-5">
-                        <AutoList autos={this.props.autos} role={ROLE_ADMIN}/>
+                        <AutoList autos={this.props.autos} role={ROLE_ADMIN} onPageChanged={this.changePage}
+                            activePage={this.state.activePage} totalSize={this.state.totalSize}/>
                     </div>
                     <div className="offset-md-2 col-md-2">
                         <CreateAuto renderAutos={this.getAutos}/>

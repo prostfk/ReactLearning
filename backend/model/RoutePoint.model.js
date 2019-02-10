@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const connection = require('./Connection');
 
-const CompanyModel = connection.define('company', {
+const RoutePointModel = connection.define('routePoint', {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -13,13 +13,25 @@ const CompanyModel = connection.define('company', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    active: {
+    marked: {
         type: Sequelize.BOOLEAN,
         allowNull: false
-    }
+    },
+    lat: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+    },
+    lng: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+    },
+    waybill: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
 }, {
     timestamps: false,
-    tableName: 'company'
+    tableName: 'route_points'
 });
 
-module.exports = CompanyModel;
+module.exports = RoutePointModel;

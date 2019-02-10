@@ -23,17 +23,21 @@ export default class DriverOrder extends Component {
             return response.json();
         }).then(data => {
             console.log(data);
-            if (data.error === undefined) {
+            if (!data.error) {
                 this.setState({
                     order: data.order,
                     points: data.points
                 });
             } else {
-                NotificationManager.warning(data.error);
+                NotificationManager.warning("Error ", data.error);
             }
         }).catch(()=>{
             NotificationManager.warning('Cannot get data');
         })
+    };
+
+    drawRoute = () => {
+
     };
 
     setLocation = (position) => {
@@ -43,7 +47,7 @@ export default class DriverOrder extends Component {
     };
 
     componentDidMount(){
-        // this.loadInfo();
+        this.loadInfo();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setLocation);
         } else {
@@ -67,7 +71,7 @@ export default class DriverOrder extends Component {
                             this.state.points.map((point, index)=>{
                                 return <tr className={'animated fadeInLeft'} key={index}>
                                     <td>{point.name}</td>
-                                    <td>{point.status}</td>
+                                    <td style={{color: (point.status === 1 ? "green" : "red")}}>{point.status === 1 ? "Passed" : "Not passed"}</td>
                                 </tr>
                             })
                         }

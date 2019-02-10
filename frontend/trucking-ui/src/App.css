@@ -71,3 +71,12 @@ body {
     background-color: #212529;
     color: white;
 }
+
+.white-back-grey-font{
+    background-color: rgb(63, 71, 82);
+    color: white;
+}
+
+.white-font{
+    color: white !important
+}

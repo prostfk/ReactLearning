@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/yandex/*
+/yandex
+api.conf.js
 /.pnp
 .pnp.js
 .idea/

@@ -38,6 +38,10 @@ const OrderModel = connection.define('order', {
         type: Sequelize.STRING,
         allowNull: true
     },
+    company_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
     // waybill: {
     //     type: Sequelize.INTEGER,
     //     allowNull: true,
@@ -50,7 +54,7 @@ const OrderModel = connection.define('order', {
 }, {
     timestamps: false
 });
-OrderModel.belongsTo(Company, {foreignKey: 'id'});
+OrderModel.belongsTo(Company, {foreignKey: 'company_id'});
 OrderModel.belongsTo(Waybill, {foreignKey: 'waybill_id', target: 'waybill'});
 
 module.exports = OrderModel;

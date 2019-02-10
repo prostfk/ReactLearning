@@ -10,43 +10,6 @@ router.get('/', (req, res, next) => {
     res.render('auth', {action: '/registration', method: 'post'});
 });
 
-// router.post('/', (req, resp) => {
-//     const db = new Database();
-//     let {username, password, firstName, email, secondName, birthDate, companyName} = req.body;
-//     if (username.length >= 4 && username.length <= 25 && password.length >= 6 && password.length <= 20) {
-//         bcrypt.hash(password, 10, (err, hash) => {
-//                 console.log(username, password);
-//                 User.findOne({where: {username}}).then(userInBase => {
-//                     Company.findOne({
-//                         where: {name: companyName}
-//                     }).then(companyInBase => {
-//                         console.log(userInBase, companyInBase);
-//                         if (!userInBase && !companyInBase) {
-//                             Company.create({
-//                                 name: companyName
-//                             }).then(savedCompany => {
-//                                 User.create({
-//                                     username,
-//                                     password,
-//                                     role: 'ROLE_OWNER',
-//                                     name: firstName,
-//                                     surname: secondName,
-//                                     email,
-//                                     birth_day: birthDate,
-//                                     companyId: savedCompany.id
-//                                 }).then(result => {
-//                                     resp.json({status: result});
-//                                 })
-//                             });
-//                         }
-//                     })
-//                 }).catch(err => resp.json({error: err}))
-//
-//             }
-//         );
-//     }
-// });
-
 router.post('/', async (req, resp) => {
     let {username, password, firstName, email, secondName, birthDate, companyName} = req.body;
     console.log({username, password, firstName, email, secondName, birthDate, companyName});
